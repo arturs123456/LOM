@@ -224,13 +224,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .calib-bottom-bar:nth-child(8){background:#000}
 .calib-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:26px;color:rgba(255,255,255,0.75);letter-spacing:8px;background:rgba(0,0,0,0.45);padding:8px 24px}
 
-/* LED MARQUEE DISPLEJS — zem TV */
+/* ČATA JOSLA — zem TV */
 .led-marquee-wrap{
   position:fixed;bottom:0;left:0;right:0;z-index:50;
-  display:none; /* Rādīsim tikai kad TV ieslēgts */
+  display:none;
   justify-content:center;
-  padding:0 12px 6px;
-  pointer-events:none;
+  padding:0 12px 4px;
+  pointer-events:auto;
 }
 .led-marquee-wrap.on{display:flex}
 .led-marquee-housing{
@@ -247,7 +247,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   overflow:hidden;
 }
 .led-marquee-viewport{
-  width:100%;height:32px;
+  width:100%;height:28px;
   background:#0f0a1e;
   border-radius:3px;
   overflow:hidden;
@@ -259,17 +259,46 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   display:flex;align-items:center;
   white-space:nowrap;
   font-family:'VT323',monospace;
-  font-size:26px;
+  font-size:22px;
   color:#e8a832;
   text-shadow:0 0 8px rgba(232,168,50,0.5),0 0 2px rgba(232,168,50,0.8);
-  letter-spacing:2px;
+  letter-spacing:1px;
   animation:ledScroll 40s linear infinite;
   padding-left:100%;
 }
+.led-marquee-text .chat-name{color:#8be9fd;text-shadow:0 0 6px rgba(139,233,253,0.5)}
+.led-marquee-text .chat-sep{color:rgba(232,168,50,0.3);margin:0 12px}
 @keyframes ledScroll{
   0%{transform:translateX(0)}
   100%{transform:translateX(-100%)}
 }
+/* Čata input rinda */
+.led-chat-input-row{
+  display:flex;gap:4px;margin-top:4px;align-items:center;
+}
+.led-chat-name{
+  width:90px;flex-shrink:0;
+  padding:4px 8px;border-radius:4px;border:1px solid rgba(139,233,253,0.2);
+  background:rgba(139,233,253,0.06);color:#8be9fd;font-family:'VT323',monospace;font-size:15px;
+  outline:none;transition:border-color .2s;
+}
+.led-chat-name:focus{border-color:rgba(139,233,253,0.5)}
+.led-chat-name::placeholder{color:rgba(139,233,253,0.3)}
+.led-chat-msg{
+  flex:1;min-width:0;
+  padding:4px 8px;border-radius:4px;border:1px solid rgba(232,168,50,0.2);
+  background:rgba(232,168,50,0.06);color:#e8a832;font-family:'VT323',monospace;font-size:15px;
+  outline:none;transition:border-color .2s;
+}
+.led-chat-msg:focus{border-color:rgba(232,168,50,0.5)}
+.led-chat-msg::placeholder{color:rgba(232,168,50,0.3)}
+.led-chat-send{
+  flex-shrink:0;padding:4px 12px;border-radius:4px;
+  border:1px solid rgba(155,77,255,0.4);background:rgba(155,77,255,0.12);
+  color:var(--neon-purple);font-family:'VT323',monospace;font-size:15px;
+  cursor:pointer;transition:all .15s;letter-spacing:1px;
+}
+.led-chat-send:hover{background:rgba(155,77,255,0.25);border-color:var(--neon-purple)}
 
 /* MAIN APP */
 #app{position:fixed;inset:12px 12px 44px;display:none}
@@ -1845,13 +1874,16 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   </div>
 </div>
 
-<!-- LED MARQUEE DISPLEJS — zem TV -->
+<!-- ČATA JOSLA — zem TV -->
 <div class="led-marquee-wrap" id="ledMarqueeWrap">
   <div class="led-marquee-housing">
     <div class="led-marquee-viewport">
-      <div class="led-marquee-text" id="ledMarqueeText">
-        LOM TV — LATVIJAS ONLINE MŪZIKAS KANĀLS ★ KLAUSIES LABĀKO MŪZIKU 24/7 ★ PĀRSLĒDZ KANĀLUS — POP, ROKS, ŠLĀGERI, RAP, JAZZ ★ SŪTI SMS UN IESAKI DZIESMAS ★ LOM.TV ★
-      </div>
+      <div class="led-marquee-text" id="ledMarqueeText"></div>
+    </div>
+    <div class="led-chat-input-row">
+      <input type="text" class="led-chat-name" id="ledChatName" placeholder="Vārds" maxlength="15">
+      <input type="text" class="led-chat-msg" id="ledChatMsg" placeholder="Raksti ziņu..." maxlength="280">
+      <button class="led-chat-send" id="ledChatSend">SŪTĪT</button>
     </div>
   </div>
 </div>
@@ -2884,9 +2916,22 @@ function initSMS(){
   if(n&&t){n.addEventListener('input',checkSMSForm);t.addEventListener('input',checkSMSForm);checkSMSForm()}
 }
 function renderTicker(){
+  // TV ekrāna ticker
   const t=document.getElementById('smsTicker');let h='';
   for(let r=0;r<2;r++)smsMessages.forEach(m=>{h+='<span class="sms-item"><span class="sms-name">'+m.name+':</span> <span class="sms-text">'+m.text+'</span><span class="sms-sep">|</span></span>'});
   t.innerHTML=h;t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
+  // LED čata josla apakšā
+  renderLedChat();
+}
+function renderLedChat(){
+  const el=document.getElementById('ledMarqueeText');if(!el)return;
+  let h='';
+  const msgs=smsMessages.length>0?smsMessages:[{name:'LOM TV',text:'Sūti ziņu — tā parādīsies šeit!'}];
+  for(let r=0;r<2;r++)msgs.forEach(m=>{
+    h+='<span class="chat-name">'+m.name+':</span> '+m.text+'<span class="chat-sep">★</span>';
+  });
+  el.innerHTML=h;
+  el.style.animationDuration=Math.max(30,el.scrollWidth/2/40)+'s';
 }
 function checkSMSForm(){
   const n=document.getElementById('smsName'),t=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
@@ -2915,7 +2960,32 @@ function sendSMS(){
   const elapsed=Date.now()-smsStartTime;
   if(elapsed<120000){setTimeout(()=>{smsMessages.push(msg);renderTicker()},30000)}
   n.value='';t.value='';checkSMSForm();
+  // Sinhronizēt ar LED čata vārdu lauku
+  const ledN=document.getElementById('ledChatName');
+  if(ledN&&cleanName)ledN.value=cleanName;
 }
+// LED ČATA JOSLA — sūtīšana no apakšas
+function sendLedChat(){
+  if(!isPoweredOn)return;
+  const n=document.getElementById('ledChatName'),t=document.getElementById('ledChatMsg');
+  if(!n||!t)return;
+  if(!n.value.trim()||!t.value.trim())return;
+  const cleanName=sanitizeChat(n.value.trim()).substring(0,15);
+  const cleanText=sanitizeChat(t.value.trim()).substring(0,280);
+  if(!cleanName||!cleanText)return;
+  const msg={name:cleanName,text:cleanText,ts:Date.now(),real:true};
+  smsMessages.push(msg);renderTicker();
+  try{let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');stored.push(msg);stored=stored.filter(m=>m.ts>Date.now()-3600000);localStorage.setItem('lom_chat',JSON.stringify(stored))}catch(e){}
+  t.value='';
+  // Sinhronizēt ar panelī esošo vārdu
+  const smsN=document.getElementById('smsName');if(smsN)smsN.value=cleanName;
+}
+document.getElementById('ledChatSend').addEventListener('click',sendLedChat);
+document.getElementById('ledChatMsg').addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();sendLedChat()}});
+// Sinhronizēt vārdu starp abiem input laukiem
+document.getElementById('ledChatName').addEventListener('change',function(){
+  const smsN=document.getElementById('smsName');if(smsN)smsN.value=this.value;
+});
 function shareApp(){const u=location.href;if(navigator.share)navigator.share({title:'LOM TV',text:'LOM TV — Latvijas Online Mūzika 📺🇱🇻',url:u}).catch(()=>{});else navigator.clipboard.writeText(u).catch(()=>{})}
 // Click on screen = toggle mute
 document.getElementById('tvScreen').addEventListener('click',(e)=>{
@@ -2924,7 +2994,7 @@ document.getElementById('tvScreen').addEventListener('click',(e)=>{
   toggleMute();
 });
 document.addEventListener('keydown',(e)=>{
-  if(e.target.tagName==='INPUT')return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   if(e.key==='Enter'&&(e.target.id==='smsName'||e.target.id==='smsText')){if(document.getElementById('smsSendBtn').classList.contains('active'))sendSMS();return}
   const n=parseInt(e.key);if(n>=1&&n<=9&&n<=channels.length)switchChannel(n-1);if(e.key==='0'&&channels.length>=10)switchChannel(9);
   // Kad spēle aktīva — bultiņas kontrolē tikai spēli, ne skaļumu/kanālus
