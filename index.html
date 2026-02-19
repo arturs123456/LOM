@@ -743,8 +743,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:rgba(0,0,0,0.35);color:rgba(53,237,126,0.85);cursor:pointer;font-size:20px;
   display:flex;align-items:center;justify-content:center;transition:all .15s}
 .info-popup-close:hover{background:rgba(53,237,126,0.18);color:#35ed7e;border-color:#35ed7e}
-.info-popup-body{padding:32px 30px 38px;font-family:var(--font-main);font-size:26px;line-height:1.9;
-  color:rgba(202,235,210,0.9);position:relative;z-index:1;letter-spacing:0.6px;overflow:auto}
+.info-popup-body{padding:32px 30px 38px;font-family:'Handjet',var(--font-main),sans-serif;font-size:28px;font-weight:500;line-height:1.9;
+  color:rgba(202,235,210,0.9);position:relative;z-index:1;letter-spacing:1px;overflow:auto}
 .info-popup-body p{margin-bottom:22px}
 .info-popup-body .info-strap{display:inline-flex;align-items:center;gap:12px;
   padding:10px 14px;border-radius:4px;border:1px solid rgba(53,237,126,0.5);
@@ -959,6 +959,121 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .vc-input{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);
   opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;margin:0;
   border-radius:50%;z-index:10}
+
+/* ====== SYNTHWAVE GAME CHANNEL ====== */
+.game-slot{position:absolute;inset:0;z-index:6;overflow:hidden;background:#0a0014}
+.sw-scene{position:absolute;inset:0;overflow:hidden}
+/* Stars */
+.sw-stars{position:absolute;inset:0;z-index:0}
+.sw-star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:0.6;
+  animation:swStarTwinkle 3s ease-in-out infinite alternate}
+@keyframes swStarTwinkle{0%{opacity:0.3;transform:scale(0.8)}100%{opacity:0.9;transform:scale(1.2)}}
+/* Sun */
+.sw-sun{position:absolute;bottom:38%;left:50%;transform:translateX(-50%);width:220px;height:220px;z-index:1;
+  background:radial-gradient(circle,#ff2975 0%,#ff6b2b 30%,#f5a623 50%,transparent 70%);
+  border-radius:50%;box-shadow:0 0 80px rgba(255,41,117,0.5),0 0 160px rgba(255,107,43,0.3);
+  mask-image:linear-gradient(to bottom,#000 45%,transparent 45%,transparent 48%,#000 48%,#000 52%,transparent 52%,transparent 55%,#000 55%,#000 59%,transparent 59%,transparent 62%,#000 62%,#000 66%,transparent 66%,transparent 70%,#000 70%,#000 76%,transparent 76%,transparent 82%,#000 82%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent 45%,transparent 48%,#000 48%,#000 52%,transparent 52%,transparent 55%,#000 55%,#000 59%,transparent 59%,transparent 62%,#000 62%,#000 66%,transparent 66%,transparent 70%,#000 70%,#000 76%,transparent 76%,transparent 82%,#000 82%)}
+/* Grid floor */
+.sw-grid-wrap{position:absolute;bottom:0;left:-20%;width:140%;height:48%;z-index:2;overflow:hidden;
+  perspective:300px;perspective-origin:50% 70%}
+.sw-grid{position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(155,77,255,0.4) 1px,transparent 1px) 0 0 / 80px 40px,
+    linear-gradient(90deg,rgba(155,77,255,0.4) 1px,transparent 1px) 0 0 / 80px 40px;
+  transform:rotateX(65deg) translateZ(0);transform-origin:center top;
+  animation:swGridMove 1.5s linear infinite}
+@keyframes swGridMove{0%{background-position:0 0,0 0}100%{background-position:0 40px,0 0}}
+/* Road — 3 lanes */
+.sw-road{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:48%;z-index:3;
+  border-left:220px solid transparent;border-right:220px solid transparent;
+  border-bottom:none;
+  background:linear-gradient(to top,rgba(10,0,20,0.85),rgba(10,0,20,0.2));
+  clip-path:polygon(35% 0%,65% 0%,85% 100%,15% 100%)}
+.sw-lane{position:absolute;bottom:0;width:3px;height:100%;
+  background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 20px,transparent 20px,transparent 40px)}
+.sw-lane-l{position:absolute;bottom:0;left:38%;width:2px;height:48%;z-index:4;
+  background:repeating-linear-gradient(to top,rgba(255,41,117,0.5) 0px,rgba(255,41,117,0.5) 15px,transparent 15px,transparent 30px)}
+.sw-lane-r{position:absolute;bottom:0;left:62%;width:2px;height:48%;z-index:4;
+  background:repeating-linear-gradient(to top,rgba(255,41,117,0.5) 0px,rgba(255,41,117,0.5) 15px,transparent 15px,transparent 30px)}
+/* Car */
+.sw-car{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);z-index:10;
+  width:60px;height:80px;transition:left 0.15s ease-out}
+.sw-car::before{content:'';position:absolute;bottom:0;left:5px;width:50px;height:20px;
+  background:linear-gradient(90deg,#ff2975,#9b4dff);border-radius:3px;
+  box-shadow:0 0 20px rgba(255,41,117,0.8),0 0 40px rgba(155,77,255,0.4)}
+.sw-car::after{content:'';position:absolute;bottom:18px;left:12px;width:36px;height:45px;
+  background:linear-gradient(180deg,#19d0e8 0%,#1a1a2e 40%);
+  clip-path:polygon(10% 100%,90% 100%,80% 30%,70% 0%,30% 0%,20% 30%);
+  box-shadow:0 -4px 15px rgba(25,208,232,0.5)}
+/* Car headlights */
+.sw-car-lights{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);width:70px;height:120px;z-index:9;
+  background:linear-gradient(to top,rgba(25,208,232,0.3),transparent);
+  clip-path:polygon(30% 100%,70% 100%,90% 0%,10% 0%);pointer-events:none;
+  filter:blur(4px);opacity:0.6}
+/* Obstacles */
+.sw-obstacle{position:absolute;z-index:8;transition:none;pointer-events:none}
+.sw-palm{width:40px;height:70px}
+.sw-palm .sw-palm-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:8px;height:40px;background:linear-gradient(90deg,#4a2800,#6b3900,#4a2800);border-radius:2px}
+.sw-palm .sw-palm-top{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:40px;height:35px;
+  background:radial-gradient(ellipse at center bottom,#0a6e0a 0%,#0d9e0d 50%,transparent 70%);
+  filter:drop-shadow(0 0 4px rgba(53,237,126,0.4))}
+.sw-building{background:linear-gradient(180deg,#ff2975 0%,#9b4dff 50%,#1a1a2e 100%);
+  border:1px solid rgba(155,77,255,0.5);position:relative}
+.sw-building::before{content:'';position:absolute;inset:4px;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,0.15) 0px,rgba(255,255,255,0.15) 6px,transparent 6px,transparent 12px);
+  opacity:0.5}
+.sw-mountain{clip-path:polygon(50% 0%,0% 100%,100% 100%);
+  background:linear-gradient(180deg,#2a1a4e,#0a0014);
+  border-bottom:2px solid rgba(155,77,255,0.4)}
+/* Score */
+.sw-score{position:absolute;top:16px;right:20px;z-index:15;
+  font-family:'Handjet',var(--font-main),sans-serif;font-size:42px;font-weight:700;
+  color:#35ed7e;letter-spacing:4px;
+  text-shadow:0 0 16px rgba(53,237,126,0.7),0 0 32px rgba(53,237,126,0.3)}
+.sw-score::before{content:'SCORE';display:block;font-size:16px;letter-spacing:6px;
+  color:rgba(53,237,126,0.5);margin-bottom:2px}
+/* LOM brand */
+.sw-lom{position:absolute;top:16px;left:20px;z-index:15;
+  font-family:'Russo One',var(--font-display),sans-serif;font-size:28px;
+  color:var(--neon-purple);letter-spacing:8px;
+  text-shadow:0 0 20px rgba(155,77,255,0.7),0 0 40px rgba(155,77,255,0.3)}
+/* Bonus flash */
+.sw-bonus{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;
+  font-family:'Handjet',var(--font-main),sans-serif;font-size:60px;font-weight:700;
+  color:#f5a623;letter-spacing:8px;
+  text-shadow:0 0 20px rgba(245,166,35,0.8);
+  animation:swBonusPop 0.8s ease-out forwards;pointer-events:none}
+@keyframes swBonusPop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) translateY(-30px)}}
+/* Car hit flash */
+@keyframes swCarHit{0%,100%{opacity:1}25%,75%{opacity:0.3}}
+.sw-car.hit{animation:swCarHit 0.4s ease}
+/* Mobile game controls */
+.sw-touch-controls{position:absolute;bottom:0;left:0;right:0;height:50%;z-index:12;display:flex;pointer-events:auto}
+.sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
+
+/* ====== INFO POPUP TEXT HIGHLIGHT ====== */
+.text-highlight{all:unset;
+  background-repeat:no-repeat;background-size:0% 100%;
+  background-image:linear-gradient(rgba(53,237,126,0.22),rgba(53,237,126,0.22));
+  transition:color 0.4s ease,background-size 0.8s cubic-bezier(.25,1,.5,1);color:inherit}
+.text-highlight.active{background-size:100% 100%;color:#35ed7e}
+/* Info popup progress bar */
+.info-popup-progress{position:sticky;top:0;left:0;width:100%;height:3px;z-index:10;
+  background:rgba(53,237,126,0.12);flex-shrink:0}
+.info-popup-progress-fill{height:100%;width:0%;
+  background:linear-gradient(90deg,#35ed7e,#19d0e8);transition:width 0.15s linear}
+/* Magic stars on popup title */
+.info-popup-title{position:relative;display:inline-block}
+.magic-star{--size:clamp(12px,1.2vw,18px);display:block;height:var(--size);width:var(--size);
+  position:absolute;left:var(--star-left);top:var(--star-top);
+  animation:starScale 700ms ease forwards;pointer-events:none}
+.magic-star svg{animation:starRotate 1s linear infinite;display:block;opacity:0.7;width:100%;height:100%}
+.magic-star svg path{fill:#35ed7e}
+@keyframes starScale{from,to{transform:scale(0)}50%{transform:scale(1)}}
+@keyframes starRotate{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
 </style>
 </head>
 <body>
@@ -1005,6 +1120,22 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         <div class="scanlines"></div>
         <div id="yt-slot-a" class="yt-slot"></div>
         <div id="yt-slot-b" class="yt-slot yt-hidden"></div>
+        <!-- GAME CHANNEL SLOT -->
+        <div id="game-slot" class="game-slot" style="display:none">
+          <div class="sw-scene">
+            <div class="sw-stars" id="swStars"></div>
+            <div class="sw-sun"></div>
+            <div class="sw-grid-wrap"><div class="sw-grid"></div></div>
+            <div class="sw-lane-l"></div><div class="sw-lane-r"></div>
+            <div class="sw-car" id="swCar">
+              <div class="sw-car-lights"></div>
+            </div>
+            <div id="swObstacles"></div>
+            <div class="sw-score" id="swScore">0</div>
+            <div class="sw-lom">LOM</div>
+            <div class="sw-touch-controls"><div class="sw-touch-left" id="swTouchL"></div><div class="sw-touch-right" id="swTouchR"></div></div>
+          </div>
+        </div>
         <div class="yt-blocker" id="ytBlocker"></div>
         <div class="yt-bottom-hide"></div>
         <div class="era-overlay-vintage"></div>
@@ -1179,15 +1310,20 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 <div class="info-popup-overlay" id="infoOverlay" onclick="if(event.target===this)toggleInfoPopup()">
   <div class="info-popup">
     <div class="info-popup-header">
-      <span class="info-popup-title">/// SYS.INFO _</span>
+      <span class="info-popup-title" id="infoTitle">/// SYS.INFO _
+        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
+        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
+        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
+      </span>
       <button class="info-popup-close" onclick="toggleInfoPopup()">✕</button>
     </div>
-    <div class="info-popup-body">
+    <div class="info-popup-body" id="infoBody">
+      <div class="info-popup-progress"><div class="info-popup-progress-fill" id="infoProgressFill"></div></div>
       <div class="info-strap">ON AIR — LOM TV Paziņojums</div>
-      <p><strong>LOM TV</strong> — Latvijas Online Mūzikas Kanāls.</p>
-      <p>Retro televīzijas formātā vari baudīt labāko latviešu un ārzemju mūziku — no klasiskiem šlāgeriem līdz jaunākajiem hitiem. Sākam ar POP, ROKS un RETRO, bet vienmēr var pārslēgties uz ko košāku.</p>
-      <p>Kanālu pārslēgšana, SMS rindas un dalīšanās pogas ir veidotas kā TV paziņojumi, lai sajūta būtu tieši kā pie ekrāna: spied MUTE, VOL vai CH, un pamanīsi spilgtus ziņojumus, kas iegrimst fonā, bet paliek skaidri salasāmi.</p>
-      <p>Ja kas nestrādā vai vēlies ieteikumus nākamajai laidienai, dod ziņu — uzturam ēteru kopā.</p>
+      <p><strong>LOM TV</strong> — <mark class="text-highlight">Latvijas Online Mūzikas</mark> Kanāls.</p>
+      <p>Retro televīzijas formātā vari baudīt <mark class="text-highlight">labāko latviešu un ārzemju</mark> mūziku — no klasiskiem šlāgeriem līdz jaunākajiem hitiem. Sākam ar POP, ROKS un RETRO, bet vienmēr var pārslēgties uz ko košāku.</p>
+      <p>Kanālu pārslēgšana, SMS rindas un dalīšanās pogas ir veidotas kā <mark class="text-highlight">TV paziņojumi</mark>, lai sajūta būtu tieši kā pie ekrāna: spied MUTE, VOL vai CH, un pamanīsi spilgtus ziņojumus, kas iegrimst fonā, bet <mark class="text-highlight">paliek skaidri salasāmi</mark>.</p>
+      <p>Ja kas nestrādā vai vēlies ieteikumus nākamajai laidienai, <mark class="text-highlight">dod ziņu</mark> — uzturam ēteru kopā.</p>
       <span class="info-version">/// ver 2.0 — kopš 2003 _</span>
     </div>
   </div>
@@ -1203,7 +1339,7 @@ const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT22_gZF
 // Kanālu konfigurācija (secība, nosaukumi, krāsas)
 // csvPrefix — kolonnas nosaukuma sākums, pēc kura meklē CSV headerī
 const CHANNEL_CONFIG = [
-  // 12 kanāli: 8 pēc stila + 1 ārzemju + 3 pēc gada
+  // 14 kanāli: 8 pēc stila + 1 ārzemju + 3 pēc gada + 1 spēle + 1 klasika
   {key:'POP',     name:'POP',     label:'Pop',              color:'#9b4dff',  icon:'🎵', csvPrefix:'POP'},
   {key:'ROKS',    name:'ROKS',    label:'Roks',             color:'#19d0e8',  icon:'🎸', csvPrefix:'SMAGAIS'},
   {key:'ŠLĀGERI', name:'ŠLĀGERI', label:'Šlāgeri',         color:'#ff4cd2',  icon:'🎶', csvPrefix:'ŠLĀGERIS'},
@@ -1216,7 +1352,10 @@ const CHANNEL_CONFIG = [
   // Gada kanāli (automātiski pēc gada)
   {key:'RETRO',   name:'RETRO',   label:'Retro',            color:'#35ed7e',  icon:'📻', csvPrefix:'RETRO'},   // līdz 1990
   {key:'ATMODA',  name:'ATMODA',  label:'Atmoda',           color:'#ff8a65',  icon:'🌅', csvPrefix:'_ATMODA'},  // 1991-2021
-  {key:'JAUNUMI', name:'JAUNUMI', label:'Jaunumi',          color:'#7a2ed9',  icon:'🔥', csvPrefix:'JAUNUMI'}   // 2022+
+  {key:'JAUNUMI', name:'JAUNUMI', label:'Jaunumi',          color:'#7a2ed9',  icon:'🔥', csvPrefix:'JAUNUMI'},  // 2022+
+  // Spēle + Klasika
+  {key:'SPĒLE',   name:'SPĒLE',   label:'Spēle',            color:'#ff2975',  icon:'🎮', type:'game'},
+  {key:'KLASIKA', name:'KLASIKA', label:'Klasika',           color:'#d4af37',  icon:'🎻', csvPrefix:'KLASIKA'}
 ];
 
 // Fallback dati (izmanto, ja Google Sheets nav pieejams)
@@ -1350,8 +1489,12 @@ function sheetsToChannels(rows){
       if(year>=2022&&!addedTo.has('JAUNUMI')){channelMap['JAUNUMI'].videos.push(video);addedTo.add('JAUNUMI')}
     }
   });
-  // Filtrē tukšos kanālus
-  return CHANNEL_CONFIG.map(cfg=>channelMap[cfg.key]).filter(ch=>ch.videos.length>0);
+  // Filtrē tukšos kanālus (bet saglabā game kanālus)
+  return CHANNEL_CONFIG.map((cfg,i)=>{
+    const ch=channelMap[cfg.key];
+    if(cfg.type==='game'){ch._isGame=true;ch.videos=[{id:'_game_',title:'Synthwave Racer',artist:'LOM',song:'Game',duration:9999}]}
+    return ch;
+  }).filter(ch=>ch.videos.length>0||ch._isGame);
 }
 
 // Ielādē datus no Google Sheets vai izmanto fallback
@@ -1676,6 +1819,7 @@ function startProgressTracker(){
   if(progressInterval)clearInterval(progressInterval);
   progressInterval=setInterval(()=>{
     if(!playerReady||!isPoweredOn)return;
+    if(isGameChannel(currentChannel))return; // Spēlei nav progress tracking
     try{
       const ap=activeSlot==='a'?playerA:playerB;
       const d=ap.getDuration(),c=ap.getCurrentTime();
@@ -1704,14 +1848,26 @@ document.getElementById('channelGrid').addEventListener('click',(e)=>{
   const btn=e.target.closest('.ch-btn');if(!btn||!isPoweredOn)return;
   const ch=parseInt(btn.dataset.ch);if(ch===currentChannel)return;switchChannel(ch);
 });
+function isGameChannel(ch){
+  const c=channels[ch];if(!c)return false;
+  return c._isGame||CHANNEL_CONFIG.find(cfg=>cfg.key===c.name&&cfg.type==='game');
+}
 function switchChannel(ch){
   if(ch<0||ch>=channels.length)return;
+  // Ja iepriekšējais bija spēle — apstādināt
+  if(isGameChannel(currentChannel)){stopGame()}
   currentChannel=ch;
-  // Pseudo-live: sync uz pašreizējo pozīciju šajā kanālā
-  const live=getLivePosition(ch);
-  currentVideoIdx[ch]=live.videoIdx;
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
+  if(isGameChannel(ch)){
+    // Spēles kanāls — pauzēt YouTube, startēt spēli
+    try{const ap=activeSlot==='a'?playerA:playerB;if(ap)ap.pauseVideo()}catch(e){}
+    showStatic(()=>{startGame()});
+    return;
+  }
+  // Parastais YouTube kanāls
+  const live=getLivePosition(ch);
+  currentVideoIdx[ch]=live.videoIdx;
   showStatic(()=>{
     const v=channels[ch].videos[live.videoIdx];
     playVideoLive(v,live.seekTo);
@@ -1728,6 +1884,7 @@ function togglePower(){
   const btn=document.getElementById('powerBtnHorizontal'),off=document.getElementById('powerOff'),led=document.getElementById('ledPower'),bars=document.querySelectorAll('.indicator-bar'),pt=document.getElementById('powerText');
   if(isPoweredOn){
     isPoweredOn=false;btn.classList.remove('active');led.classList.add('off');
+    if(typeof stopGame==='function'){try{stopGame()}catch(e){}}
     try{if(playerAReady)playerA.pauseVideo()}catch(e){}
     try{if(playerBReady)playerB.pauseVideo()}catch(e){}
     off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});if(pt)pt.textContent='ON';
@@ -1743,6 +1900,7 @@ function toggleMute(){
   const btn=document.getElementById('muteBtn');
   if(isMuted){isMuted=false;btn.classList.remove('active');setVolume(volumeBeforeMute);showMuteOSD(false)}
   else{volumeBeforeMute=currentVolume;isMuted=true;btn.classList.add('active');setVolume(0);showMuteOSD(true)}
+  if(typeof gameAudio!=='undefined'&&gameAudio){gameAudio.muted=isMuted}
 }
 function toggleFullscreen(){
   if(!document.fullscreenElement){
@@ -1763,10 +1921,6 @@ document.addEventListener('fullscreenchange',()=>{
     document.querySelector('.tv-casing').classList.remove('fs-mode');
   }
 });
-function toggleInfoPopup(){
-  const ov=document.getElementById('infoOverlay');
-  ov.classList.toggle('show');
-}
 let volOsdTimer=null,muteOsdTimer=null;
 function showVolOSD(val){
   const osd=document.getElementById('volOsd');
@@ -1802,6 +1956,8 @@ function setVolume(val){
     const ap=activeSlot==='a'?playerA:playerB;
     if(val===0){ap.mute()}else{ap.unMute();ap.setVolume(val)}
   }catch(e){}
+  // Sync game audio volume
+  if(typeof gameAudio!=='undefined'&&gameAudio){gameAudio.volume=val/100;gameAudio.muted=(val===0)}
   // sync circular knob
   const pct2=val/100;
   const arc=document.querySelector('.vc-arc'),glow=document.querySelector('.vc-glow');
@@ -1951,6 +2107,242 @@ function setChatEnabled(on){
   const name=document.getElementById('smsName'),text=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
   [name,text,btn].forEach(el=>{if(el)el.disabled=!on});
 }
+// ====== SYNTHWAVE GAME ENGINE ======
+const GAME_TRACKS=[
+  'https://cdn.pixabay.com/audio/2022/10/25/audio_33f0f26cfa.mp3',
+  'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
+  'https://cdn.pixabay.com/audio/2023/07/06/audio_e4d5a58e66.mp3'
+];
+let gameAudio=new Audio();
+gameAudio.loop=true;gameAudio.volume=0.5;
+let gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=2,gameLastSpawn=0;
+let gameTouchStartX=0;
+
+function generateStars(){
+  const c=document.getElementById('swStars');if(!c)return;
+  c.innerHTML='';
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='sw-star';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*55+'%';
+    s.style.width=(1+Math.random()*2)+'px';
+    s.style.height=s.style.width;
+    s.style.animationDelay=Math.random()*3+'s';
+    s.style.animationDuration=(2+Math.random()*3)+'s';
+    if(Math.random()>0.6)s.style.background='rgba(155,77,255,0.7)';
+    c.appendChild(s);
+  }
+}
+
+function startGame(){
+  gameRunning=true;gameScore=0;gameCarLane=1;gameSpeed=2;gameLastSpawn=0;
+  const gs=document.getElementById('game-slot');
+  if(gs)gs.style.display='block';
+  // Paslēpt YouTube slotus
+  document.getElementById('yt-slot-a').classList.add('yt-hidden');
+  document.getElementById('yt-slot-b').classList.add('yt-hidden');
+  // Ģenerēt zvaigznes
+  generateStars();
+  // Notīrīt vecos obstacles
+  const ob=document.getElementById('swObstacles');if(ob)ob.innerHTML='';
+  // Auto pozīcija — centrs
+  updateCarPosition();
+  // Score
+  const sc=document.getElementById('swScore');if(sc)sc.textContent='0';
+  // Audio
+  startGameAudio();
+  // Game loop
+  gameLoop=requestAnimationFrame(gameTick);
+}
+
+function stopGame(){
+  gameRunning=false;
+  if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}
+  const gs=document.getElementById('game-slot');
+  if(gs)gs.style.display='none';
+  // Atkal rādīt aktīvo YouTube slotu
+  document.getElementById('yt-slot-'+activeSlot).classList.remove('yt-hidden');
+  stopGameAudio();
+}
+
+function startGameAudio(){
+  try{
+    gameAudio.src=GAME_TRACKS[Math.floor(Math.random()*GAME_TRACKS.length)];
+    gameAudio.volume=isMuted?0:currentVolume/100;
+    gameAudio.play().catch(()=>{});
+  }catch(e){}
+}
+function stopGameAudio(){try{gameAudio.pause();gameAudio.currentTime=0}catch(e){}}
+
+let lastGameTime=0;
+function gameTick(ts){
+  if(!gameRunning)return;
+  // Delta time ~60fps
+  if(!lastGameTime)lastGameTime=ts;
+  const dt=Math.min(ts-lastGameTime,50);
+  lastGameTime=ts;
+  // Score +1 katru frame (~60/sek)
+  gameScore++;
+  gameSpeed=2+Math.floor(gameScore/800)*0.3;
+  // Spawn obstacles
+  const spawnRate=Math.max(45,110-Math.floor(gameScore/150));
+  if(gameScore-gameLastSpawn>=spawnRate){
+    gameLastSpawn=gameScore;
+    spawnObstacle();
+  }
+  // Move obstacles
+  moveObstacles();
+  // Update score display
+  if(gameScore%3===0){const sc=document.getElementById('swScore');if(sc)sc.textContent=gameScore}
+  // Bonus!
+  if(gameScore>0&&gameScore%500===0){showGameBonus()}
+  gameLoop=requestAnimationFrame(gameTick);
+}
+
+function spawnObstacle(){
+  const container=document.getElementById('swObstacles');if(!container)return;
+  const lane=Math.floor(Math.random()*3); // 0,1,2
+  const types=['palm','building','mountain'];
+  const type=types[Math.floor(Math.random()*types.length)];
+  const el=document.createElement('div');
+  el.className='sw-obstacle sw-'+type;
+  el.dataset.lane=lane;
+  el.dataset.y=0; // progress 0..110
+  // Lane X positions (% of container width)
+  const laneX=[20,50,80];
+  el.style.left=laneX[lane]+'%';
+  el.style.transform='translateX(-50%) translateY(0px) scale(0.3)';
+  el.style.top='35%'; // horizon
+  // Size by type
+  if(type==='palm'){el.style.width='30px';el.style.height='50px';
+    el.innerHTML='<div class="sw-palm-trunk"></div><div class="sw-palm-top"></div>'}
+  else if(type==='building'){el.style.width=(15+Math.random()*20)+'px';el.style.height=(30+Math.random()*40)+'px'}
+  else{el.style.width=(40+Math.random()*30)+'px';el.style.height=(25+Math.random()*20)+'px'}
+  container.appendChild(el);
+}
+
+function moveObstacles(){
+  const container=document.getElementById('swObstacles');if(!container)return;
+  const obstacles=container.children;
+  const toRemove=[];
+  for(let i=0;i<obstacles.length;i++){
+    const el=obstacles[i];
+    let y=parseFloat(el.dataset.y)||0;
+    y+=gameSpeed*0.8;
+    el.dataset.y=y;
+    // Perspective: starts at horizon (35% top), moves to bottom, scaling up
+    const progress=Math.min(y/100,1.1);
+    const topPct=35+progress*60; // 35% → 95%
+    const scale=0.3+progress*1.2; // 0.3 → 1.5
+    const laneX=[20,50,80];
+    const lane=parseInt(el.dataset.lane);
+    // Lanes spread apart as they come closer
+    const spread=1+progress*0.8;
+    const centerX=50;
+    const laneOffset=(laneX[lane]-centerX)*spread+centerX;
+    el.style.top=topPct+'%';
+    el.style.left=laneOffset+'%';
+    el.style.transform='translateX(-50%) scale('+scale.toFixed(2)+')';
+    el.style.opacity=Math.min(1,progress*2);
+    // Collision check — if obstacle is at car position (progress ~0.85-1.0) and same lane
+    if(progress>0.82&&progress<0.98&&lane===gameCarLane){
+      // Hit! Flash car, but keep going
+      const car=document.getElementById('swCar');
+      if(car&&!car.classList.contains('hit')){
+        car.classList.add('hit');
+        setTimeout(()=>car.classList.remove('hit'),400);
+      }
+    }
+    if(y>120)toRemove.push(el);
+  }
+  toRemove.forEach(el=>el.remove());
+}
+
+function updateCarPosition(){
+  const car=document.getElementById('swCar');if(!car)return;
+  const laneX=[22,50,78]; // % positions for 3 lanes
+  car.style.left=laneX[gameCarLane]+'%';
+  car.style.transform='translateX(-50%)';
+}
+
+function showGameBonus(){
+  const scene=document.querySelector('.sw-scene');if(!scene)return;
+  const b=document.createElement('div');b.className='sw-bonus';b.textContent='+'+gameScore;
+  scene.appendChild(b);
+  setTimeout(()=>b.remove(),900);
+}
+
+// Keyboard controls
+document.addEventListener('keydown',function(e){
+  if(!gameRunning)return;
+  if(e.key==='ArrowLeft'&&gameCarLane>0){gameCarLane--;updateCarPosition();e.preventDefault()}
+  if(e.key==='ArrowRight'&&gameCarLane<2){gameCarLane++;updateCarPosition();e.preventDefault()}
+});
+// Touch controls
+document.addEventListener('DOMContentLoaded',function(){
+  const tl=document.getElementById('swTouchL'),tr=document.getElementById('swTouchR');
+  if(tl)tl.addEventListener('touchstart',function(e){if(!gameRunning)return;e.preventDefault();if(gameCarLane>0){gameCarLane--;updateCarPosition()}},{passive:false});
+  if(tr)tr.addEventListener('touchstart',function(e){if(!gameRunning)return;e.preventDefault();if(gameCarLane<2){gameCarLane++;updateCarPosition()}},{passive:false});
+});
+
+// ====== INFO POPUP ENHANCEMENTS ======
+// Text highlight on scroll (IntersectionObserver)
+function initTextHighlights(){
+  const body=document.getElementById('infoBody');
+  const highlights=document.querySelectorAll('#infoBody .text-highlight');
+  if(!body||!highlights.length)return;
+  // Reset highlights
+  highlights.forEach(h=>h.classList.remove('active'));
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')});
+  },{root:body,threshold:0.5});
+  highlights.forEach(h=>observer.observe(h));
+  return observer;
+}
+// Progress bar on popup scroll
+function initInfoProgress(){
+  const body=document.getElementById('infoBody');
+  const fill=document.getElementById('infoProgressFill');
+  if(!body||!fill)return;
+  body.addEventListener('scroll',function(){
+    const scrollTop=body.scrollTop;
+    const scrollHeight=body.scrollHeight-body.clientHeight;
+    const pct=scrollHeight>0?Math.round(scrollTop/scrollHeight*100):0;
+    fill.style.width=pct+'%';
+  });
+}
+// Magic stars animation on popup title
+function initMagicStars(){
+  const title=document.getElementById('infoTitle');
+  if(!title)return;
+  const stars=title.querySelectorAll('.magic-star');
+  const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+  let idx=0;
+  function animateStar(star){
+    star.style.setProperty('--star-left',rand(-10,110)+'%');
+    star.style.setProperty('--star-top',rand(-60,80)+'%');
+    star.style.animation='none';star.offsetHeight;star.style.animation='';
+  }
+  stars.forEach(star=>{
+    setTimeout(()=>{animateStar(star);setInterval(()=>animateStar(star),1000)},idx++*333);
+  });
+}
+// Info popup with text highlights, progress bar, magic stars
+let infoHighlightObserver=null;
+function toggleInfoPopup(){
+  const ov=document.getElementById('infoOverlay');
+  ov.classList.toggle('show');
+  if(ov.classList.contains('show')){
+    setTimeout(()=>{
+      infoHighlightObserver=initTextHighlights();
+      initInfoProgress();
+      initMagicStars();
+    },100);
+  }else{
+    if(infoHighlightObserver){infoHighlightObserver.disconnect();infoHighlightObserver=null}
+  }
+}
+
 // ADMIN MODERĀCIJAS PANELIS — ?admin=1
 (function(){
   if(!new URLSearchParams(location.search).has('admin'))return;
