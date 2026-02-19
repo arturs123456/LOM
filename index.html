@@ -2933,8 +2933,8 @@ const GAME_LOFI_DURATION=42600; // ~11h50min sekundēs
 var gameAudio=new Audio(); // Legacy fallback
 gameAudio.loop=true;gameAudio.volume=0.5;
 var gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=1.2,gameLastSpawn=0;
-let gameLives=3,gameHiscore=0,gameInvincible=false;
-let gameTouchStartX=0;
+var gameLives=3,gameHiscore=0,gameInvincible=false;
+var gameTouchStartX=0;
 
 function generateStars(){
   const c=document.getElementById('swStars');if(!c)return;
@@ -3026,7 +3026,7 @@ function stopGameAudio(){
   // Nav jāapstādina manuāli — switchChannel to izdarīs
 }
 
-let lastGameTime=0;
+var lastGameTime=0;
 function gameTick(ts){
   if(!gameRunning)return;
   if(!lastGameTime)lastGameTime=ts;
