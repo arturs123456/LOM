@@ -1223,7 +1223,38 @@ let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
 const CROSSFADE_DURATION=3000; // 3 sek crossfade
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
-channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
+
+// ═══════════════════════════════════════
+// PSEUDO-LIVE: Visi lietotāji dzird to pašu dziesmu vienlaicīgi
+// ═══════════════════════════════════════
+// Katram kanālam: efektīvais garums = duration - trimStart - trimEnd
+// Unix timestamp % totalDuration → pozīcija playlistā → dziesma + seekTo
+function getEffectiveDuration(v){return Math.max(30,(v.duration||240)-(v.trimStart||5)-(v.trimEnd||5))}
+function getChannelTotalDuration(chIdx){
+  return channels[chIdx].videos.reduce((sum,v)=>sum+getEffectiveDuration(v),0);
+}
+// Aprēķina kura dziesma skan un kurā sekundē — determinisms no timestamp
+function getLivePosition(chIdx){
+  const vids=channels[chIdx].videos;
+  if(!vids||vids.length===0)return{videoIdx:0,seekTo:0};
+  const total=getChannelTotalDuration(chIdx);
+  const now=Math.floor(Date.now()/1000);
+  let pos=now%total;
+  for(let i=0;i<vids.length;i++){
+    const eDur=getEffectiveDuration(vids[i]);
+    if(pos<eDur)return{videoIdx:i,seekTo:pos+(vids[i].trimStart||5)};
+    pos-=eDur;
+  }
+  return{videoIdx:0,seekTo:vids[0].trimStart||5};
+}
+// Inicializē visus kanālus uz pseudo-live pozīciju
+function syncAllChannels(){
+  channels.forEach((ch,i)=>{
+    const live=getLivePosition(i);
+    currentVideoIdx[i]=live.videoIdx;
+  });
+}
+syncAllChannels();
 
 function fireConfetti(){
   const container=document.createElement('div');container.className='confetti-container';document.body.appendChild(container);
@@ -1272,9 +1303,8 @@ function startTV(){
 // Ielādē CMS datus sākuma ekrāna laikā, tad startē TV
 loadFromSheets().then(loaded=>{
   if(loaded){
-    // Pārinicializēt channel indexus ar jaunajiem datiem
-    currentVideoIdx={};
-    channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
+    // Pseudo-live: sync visus kanālus uz pašreizējo laiku
+    syncAllChannels();
   }
 });
 // TV startē tikai ar pogu klikšķi (nodrošina autoplay ar skaņu)
@@ -1286,12 +1316,15 @@ function setupSlot(p,slot){
   try{p.loadModule('captions');p.unloadModule('captions')}catch(ex){}
 }
 window.onYouTubeIframeAPIReady=function(){
-  const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
-  const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
-  // Slot A — pirmais aktīvais player
+  // Pseudo-live: aprēķina kur šobrīd ir kanāls
+  const live=getLivePosition(currentChannel);
+  currentVideoIdx[currentChannel]=live.videoIdx;
+  const v=channels[currentChannel].videos[live.videoIdx];
+  const trimE=v.trimEnd||5,dur=v.duration||0;
+  // Slot A — pirmais aktīvais player, seekTo uz live pozīciju
   playerA=new YT.Player('yt-slot-a',{
     videoId:v.id,
-    playerVars:{...YT_VARS,start:trimS,end:dur>trimE?dur-trimE:undefined},
+    playerVars:{...YT_VARS,start:live.seekTo,end:dur>trimE?dur-trimE:undefined},
     events:{
       onReady:(e)=>{playerAReady=true;playerReady=true;player=playerA;activeSlot='a';
         e.target.playVideo();updateNowPlaying();setVolume(80);setupSlot(playerA,'a');
@@ -1390,6 +1423,19 @@ function crossfadeTo(v){
   updateNowPlaying();resetOverlayPhases();
 }
 function playVideo(v){crossfadeTo(v)}
+function playVideoLive(v,seekTo){
+  // Bez crossfade, ar seekTo uz pseudo-live pozīciju
+  if(!playerReady)return;
+  crossfading=false;clearInterval(crossfadeTimer);preloadedVideoId=null;
+  const trimE=v.trimEnd||5,dur=v.duration||0;
+  const opts={videoId:v.id,startSeconds:seekTo};
+  if(dur>trimE)opts.endSeconds=dur-trimE;
+  const currPlayer=activeSlot==='a'?playerA:playerB;
+  currPlayer.loadVideoById(opts);
+  const vol=isMuted?0:currentVolume;
+  try{currPlayer.setVolume(vol)}catch(e){}
+  updateNowPlaying();resetOverlayPhases();
+}
 function playVideoHard(v){
   // Bez crossfade — tūlītēja pārslēgšana (kanāla maiņa ar static)
   if(!playerReady)return;
@@ -1404,8 +1450,19 @@ function playVideoHard(v){
   updateNowPlaying();resetOverlayPhases();
 }
 function getCurrentVideo(){return channels[currentChannel].videos[currentVideoIdx[currentChannel]]}
-function nextVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;crossfadeTo(channels[ch].videos[currentVideoIdx[ch]])}
-function prevVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;crossfadeTo(channels[ch].videos[currentVideoIdx[ch]])}
+function nextVideo(){
+  const ch=currentChannel;
+  // Pseudo-live: nākamā dziesma pēc kārtas (crossfade brīdī tā jau ir pareizā)
+  currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;
+  crossfadeTo(channels[ch].videos[currentVideoIdx[ch]]);
+}
+function prevVideo(){
+  // Prev nav pseudo-live — vienkārši iepriekšējā dziesma
+  const ch=currentChannel;
+  currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;
+  const v=channels[ch].videos[currentVideoIdx[ch]];
+  crossfadeTo(v);
+}
 function getNextVideoInfo(){
   const ch=currentChannel,nextIdx=(currentVideoIdx[ch]+1)%channels[ch].videos.length;
   return channels[ch].videos[nextIdx];
@@ -1477,9 +1534,15 @@ document.getElementById('channelGrid').addEventListener('click',(e)=>{
 function switchChannel(ch){
   if(ch<0||ch>=channels.length)return;
   currentChannel=ch;
+  // Pseudo-live: sync uz pašreizējo pozīciju šajā kanālā
+  const live=getLivePosition(ch);
+  currentVideoIdx[ch]=live.videoIdx;
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
-  showStatic(()=>playVideoHard(channels[ch].videos[currentVideoIdx[ch]]));
+  showStatic(()=>{
+    const v=channels[ch].videos[live.videoIdx];
+    playVideoLive(v,live.seekTo);
+  });
 }
 function changeChannel(dir){let n=currentChannel+dir;if(n<0)n=channels.length-1;if(n>=channels.length)n=0;switchChannel(n)}
 function showStatic(cb){
