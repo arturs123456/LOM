@@ -1087,7 +1087,7 @@ const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT22_gZF
 // Kanālu konfigurācija (secība, nosaukumi, krāsas)
 // csvPrefix — kolonnas nosaukuma sākums, pēc kura meklē CSV headerī
 const CHANNEL_CONFIG = [
-  // 10 kanāli: 7 pēc stila + 3 pēc gada
+  // 12 kanāli: 8 pēc stila + 1 ārzemju + 3 pēc gada
   {key:'POP',     name:'POP',     label:'Pop',              color:'#9b4dff',  icon:'🎵', csvPrefix:'POP'},
   {key:'ROKS',    name:'ROKS',    label:'Roks',             color:'#19d0e8',  icon:'🎸', csvPrefix:'SMAGAIS'},
   {key:'ŠLĀGERI', name:'ŠLĀGERI', label:'Šlāgeri',         color:'#ff4cd2',  icon:'🎶', csvPrefix:'ŠLĀGERIS'},
@@ -1095,6 +1095,7 @@ const CHANNEL_CONFIG = [
   {key:'JAZZ',    name:'JAZZ',    label:'Jazz',             color:'#f5a623',  icon:'🎷', csvPrefix:'JAZZ'},
   {key:'DANCE',   name:'DANCE',   label:'Dance',            color:'#00e5ff',  icon:'💃', csvPrefix:'DEJU'},
   {key:'LIVE',    name:'LIVE',    label:'Live & EV',        color:'#e53935',  icon:'🎬', csvPrefix:'LIVE'},
+  {key:'BĒRNI',   name:'BĒRNI',   label:'Bērni',            color:'#ffdd57',  icon:'🧸', csvPrefix:'BĒRNU'},
   {key:'ĀRZ',     name:'ĀRZ',     label:'Ārzemju',          color:'#c0c0c0',  icon:'🌍', csvPrefix:'ĀRZEMJU'},
   // Gada kanāli (automātiski pēc gada)
   {key:'RETRO',   name:'RETRO',   label:'Retro',            color:'#35ed7e',  icon:'📻', csvPrefix:'RETRO'},   // līdz 1990
@@ -1173,8 +1174,6 @@ const EXTRA_CSV_MAP=[
   {csvPrefix:'BLUES',       targetKey:'JAZZ'},
   {csvPrefix:'AMBIENT',     targetKey:'JAZZ'},
   {csvPrefix:'KLASISK',     targetKey:'JAZZ'},
-  // Bērni → POP kā fallback
-  {csvPrefix:'BĒRNU',       targetKey:'POP'}
 ];
 function sheetsToChannels(rows){
   if(!rows||rows.length===0)return[];
