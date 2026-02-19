@@ -258,9 +258,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     repeating-linear-gradient(90deg,rgba(155,77,255,0.01) 0px,transparent 1px,transparent 4px);
   animation:scanlineFlicker 8s linear infinite}
 @keyframes scanlineFlicker{0%,100%{opacity:0.8}50%{opacity:0.95}}
-.yt-slot{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:1;transition:opacity 2s ease}
+.yt-slot{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:1;transition:opacity 1.5s ease}
 .yt-slot.yt-ready{top:-80px;left:-15px;width:calc(100% + 30px);height:calc(100% + 160px);pointer-events:none;transform:scale(1.25)}
 .yt-slot.yt-hidden{opacity:0}
+/* Dimming overlay — aptumšo ekrānu pirms crossfade */
+.tv-dim-overlay{position:absolute;inset:0;z-index:3;pointer-events:none;background:rgba(0,0,0,0);transition:background 5s ease;border-radius:inherit}
+.tv-dim-overlay.dimming{background:rgba(0,0,0,0.6)}
 .yt-blocker{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
 /* Bottom bar to hide YouTube related video thumbnails */
 .yt-bottom-hide{position:absolute;bottom:0;left:0;right:0;height:90px;z-index:2;background:linear-gradient(to top,#000 60%,transparent 100%);pointer-events:none}
@@ -1326,6 +1329,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         <div class="scanlines"></div>
         <div id="yt-slot-a" class="yt-slot"></div>
         <div id="yt-slot-b" class="yt-slot yt-hidden"></div>
+        <div class="tv-dim-overlay" id="tvDimOverlay"></div>
         <!-- GAME CHANNEL SLOT -->
         <div id="game-slot" class="game-slot" style="display:none">
           <div class="sw-scene">
@@ -1736,7 +1740,7 @@ let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady
 let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
-const CROSSFADE_DURATION=3000; // 3 sek crossfade — abi skan paralēli, video uzreiz redzams
+const CROSSFADE_DURATION=5000; // 5 sek crossfade — jaunais aug, vecais izplēn
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 
 // ═══════════════════════════════════════
@@ -1910,6 +1914,7 @@ function crossfadeTo(v){
   const currPlayer=activeSlot==='a'?playerA:playerB;
   const nextEl=document.getElementById('yt-slot-'+nextSlot);
   const currEl=document.getElementById('yt-slot-'+activeSlot);
+  const dimOv=document.getElementById('tvDimOverlay');
   // Ja video jau ir preloaded — nav jāielādē no jauna, tikai seeko uz sākumu
   if(preloadedVideoId===v.id){
     try{nextPlayer.seekTo(trimS,true)}catch(e){}
@@ -1919,22 +1924,23 @@ function crossfadeTo(v){
   preloadedVideoId=null;
   nextPlayer.setVolume(0);
   nextPlayer.unMute();
-  // Rādi nākamo slotu UZREIZ — video redzams ātrāk nekā skaņas pāreja
+  // Jaunais klips UZREIZ redzams, vecais paslēpts + noņem dimming
   nextEl.classList.remove('yt-hidden');
   currEl.classList.add('yt-hidden');
-  // Volume fade: curr (pre-faded)→0, next 0→full pa CROSSFADE_DURATION
-  const steps=20,interval=CROSSFADE_DURATION/steps;
+  if(dimOv)dimOv.classList.remove('dimming');
+  // Volume crossfade: vecais fade out, jaunais fade in pa CROSSFADE_DURATION (5s)
+  const steps=25,interval=CROSSFADE_DURATION/steps;
   let step=0;
   const vol=isMuted?0:currentVolume;
-  // Nolasīt faktisko volume (var būt samazināts ar pre-fade)
   let currVol=vol;
   try{currVol=currPlayer.getVolume()||vol}catch(e){}
   clearInterval(crossfadeTimer);
   crossfadeTimer=setInterval(()=>{
     step++;
     const pct=step/steps;
-    // Smooth crossfade: abi skan paralēli ~3 sek
+    // Vecais klips — fade out (vēl skan kādu brīdi bet kļūst arvien klusāks)
     const fadeOutVol=Math.round(currVol*Math.cos(pct*Math.PI/2));
+    // Jaunais klips — fade in (sāk klusām, aug līdz pilnai skaņai)
     const fadeInVol=Math.round(vol*Math.sin(pct*Math.PI/2));
     try{currPlayer.setVolume(fadeOutVol)}catch(e){}
     try{nextPlayer.setVolume(fadeInVol)}catch(e){}
@@ -2004,7 +2010,7 @@ function parseVideoMeta(v){
 }
 // TV Overlay — 3 phase system
 let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false,xfade:false};
-function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay()}
+function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay();const dim=document.getElementById('tvDimOverlay');if(dim)dim.classList.remove('dimming')}
 function showOverlay(phase,videoData,duration){
   const ov=document.getElementById('tvOverlay');
   const meta=parseVideoMeta(videoData);
@@ -2040,24 +2046,30 @@ function startProgressTracker(){
       const ap=activeSlot==='a'?playerA:playerB;
       const d=ap.getDuration(),c=ap.getCurrentTime();
       if(d<=0)return;
-      const p=(c/d)*100+'%';document.getElementById('npProgressFill').style.width=p;
-      const remaining=d-c;
       const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
+      const trimE=v.trimEnd||10;
+      const effectiveEnd=d>trimE?d-trimE:d; // endSeconds — kur playeris apstāsies
+      const remaining=effectiveEnd-c; // Laiks līdz efektīvajām beigām
+      const p=(c/effectiveEnd)*100+'%';document.getElementById('npProgressFill').style.width=p;
+      const dimOv=document.getElementById('tvDimOverlay');
       // Phase 1: NOW PLAYING — pēc 15 sek. no sākuma, rāda 15 sek.
       if(c>=15&&c<30&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,15)}
-      // Phase 2: UP NEXT — 30 sek. pirms beigām, rāda 15 sek. + preload nākamo
-      if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
-      // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
-      if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
-      // Pre-fade: pēdējās 15 sek pakāpeniski samazina volume (100%→30%)
-      if(remaining<=15&&remaining>5&&!crossfading&&!isMuted){
-        const fadeProgress=(remaining-5)/10; // 1.0 pie 15s → 0.0 pie 5s
-        const fadeVol=Math.round(currentVolume*(0.3+0.7*fadeProgress));
+      // Phase 2: UP NEXT — 35 sek. pirms beigām, rāda 15 sek. + preload nākamo
+      if(remaining<=35&&remaining>20&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
+      // Phase 3: JUST PLAYED — 15 sek. pirms beigām (kad jaunais parādās)
+      if(remaining<=15&&remaining>10&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
+      // ═══ JAUNA CROSSFADE MEHĀNIKA: 20s → 15s → 10s ═══
+      // 20s pirms beigām: Ekrāns sāk aptumšoties + volume lēnām samazinās
+      if(remaining<=20&&remaining>15&&!crossfading&&!isMuted){
+        if(dimOv&&!dimOv.classList.contains('dimming'))dimOv.classList.add('dimming');
+        const fadeProgress=(remaining-15)/5; // 1.0 pie 20s → 0.0 pie 15s
+        const fadeVol=Math.round(currentVolume*(0.4+0.6*fadeProgress));
         try{ap.setVolume(fadeVol)}catch(e){}
       }
-      // Crossfade: 4 sek pirms beigām sāk pāreju uz nākamo (4s paralēli abi skan)
-      // Crossfade: 5 sek pirms beigām — video pārslēdzas uzreiz, skaņa fade 3 sek
-      if(remaining<=5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
+      // 15s pirms beigām: Jaunais klips parādās — crossfade sākas
+      // Jaunais redzams un sāk skanēt klusām, vecais vēl skan bet paslēpts
+      if(remaining<=15&&remaining>10&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
+      // 10s pirms beigām: No vecā nekas nav palicis (crossfadeTo jau pabeidza fade)
     }catch(e){}
   },500);
 }
