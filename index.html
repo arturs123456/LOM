@@ -2103,8 +2103,6 @@ function crossfadeTo(v){
     }
   },interval);
   updateNowPlaying();resetOverlayPhases();
-  // Atskaņot pending TTS (admin ētera balss) starp dziesmām
-  try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}
 }
 function playVideo(v){crossfadeTo(v)}
 function playVideoLive(v,seekTo){
@@ -2207,8 +2205,8 @@ function startProgressTracker(){
       if(c>=15&&c<30&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,15)}
       // Phase 2: UP NEXT — 35 sek. pirms beigām, rāda 15 sek. + preload nākamo
       if(remaining<=35&&remaining>20&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
-      // Phase 3: JUST PLAYED — 15 sek. pirms beigām (kad jaunais parādās)
-      if(remaining<=15&&remaining>10&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
+      // Phase 3: JUST PLAYED — 15 sek. pirms beigām (kad jaunais parādās) + TTS ētera balss
+      if(remaining<=15&&remaining>10&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10);try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}}
       // ═══ JAUNA CROSSFADE MEHĀNIKA: 20s → 15s → 10s ═══
       // 20s pirms beigām: Ekrāns sāk aptumšoties + volume lēnām samazinās
       if(remaining<=20&&remaining>15&&!crossfading&&!isMuted){
