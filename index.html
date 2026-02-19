@@ -3072,7 +3072,7 @@ function submitContactForm(e){
     ttsAudio.volume=Math.min(1,(currentVolume/100)*0.9);
     const ap=activeSlot==='a'?playerA:playerB;
     const origVol=isMuted?0:currentVolume;
-    try{if(ap)ap.setVolume(Math.round(origVol*0.25))}catch(e){}
+    try{if(ap)ap.setVolume(Math.round(origVol*0.50))}catch(e){}
     ttsAudio.addEventListener('ended',()=>{
       URL.revokeObjectURL(url);
       try{if(ap)ap.setVolume(origVol)}catch(e){}
