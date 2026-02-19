@@ -234,81 +234,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .calib-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:26px;color:rgba(255,255,255,0.75);letter-spacing:8px;background:rgba(0,0,0,0.45);padding:8px 24px}
 
 /* ČATA JOSLA — zem TV */
-.led-marquee-wrap{
-  position:fixed;bottom:0;left:0;right:0;z-index:50;
-  display:none;
-  justify-content:center;
-  padding:0 12px 4px;
-  pointer-events:auto;
-}
-.led-marquee-wrap.on{display:flex}
-.led-marquee-housing{
-  width:100%;max-width:1200px;
-  background:rgba(8,6,18,0.7);
-  border-radius:6px;
-  border:1px solid rgba(255,255,255,0.06);
-  box-shadow:0 2px 12px rgba(0,0,0,0.4),0 0 20px rgba(155,77,255,0.04);
-  padding:4px 6px;
-  overflow:hidden;
-  backdrop-filter:blur(6px);
-}
-.led-marquee-viewport{
-  width:100%;height:26px;
-  background:rgba(10,6,24,0.5);
-  border-radius:3px;
-  overflow:hidden;
-  box-shadow:inset 0 2px 6px rgba(0,0,0,0.4);
-  position:relative;
-}
-.led-marquee-text{
-  position:absolute;top:0;left:0;height:100%;
-  display:flex;align-items:center;
-  white-space:nowrap;
-  font-family:'VT323',monospace;
-  font-size:20px;
-  font-weight:400;
-  color:rgba(232,168,50,0.75);
-  text-shadow:0 0 6px rgba(232,168,50,0.25);
-  letter-spacing:0.5px;
-  animation:ledScroll 40s linear infinite;
-  padding-left:100%;
-}
-.led-marquee-text .chat-name{color:rgba(139,233,253,0.7);text-shadow:0 0 4px rgba(139,233,253,0.25)}
-.led-marquee-text .chat-sep{color:rgba(255,255,255,0.1);margin:0 16px;font-size:14px}
-@keyframes ledScroll{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(-100%)}
-}
-/* Čata input rinda */
-.led-chat-input-row{
-  display:flex;gap:4px;margin-top:4px;align-items:center;
-}
-.led-chat-name{
-  width:90px;flex-shrink:0;
-  padding:4px 8px;border-radius:4px;border:1px solid rgba(139,233,253,0.2);
-  background:rgba(139,233,253,0.06);color:#8be9fd;font-family:'VT323',monospace;font-size:15px;
-  outline:none;transition:border-color .2s;
-}
-.led-chat-name:focus{border-color:rgba(139,233,253,0.5)}
-.led-chat-name::placeholder{color:rgba(139,233,253,0.3)}
-.led-chat-msg{
-  flex:1;min-width:0;
-  padding:4px 8px;border-radius:4px;border:1px solid rgba(232,168,50,0.2);
-  background:rgba(232,168,50,0.06);color:#e8a832;font-family:'VT323',monospace;font-size:15px;
-  outline:none;transition:border-color .2s;
-}
-.led-chat-msg:focus{border-color:rgba(232,168,50,0.5)}
-.led-chat-msg::placeholder{color:rgba(232,168,50,0.3)}
-.led-chat-send{
-  flex-shrink:0;padding:4px 12px;border-radius:4px;
-  border:1px solid rgba(155,77,255,0.4);background:rgba(155,77,255,0.12);
-  color:var(--neon-purple);font-family:'VT323',monospace;font-size:15px;
-  cursor:pointer;transition:all .15s;letter-spacing:1px;
-}
-.led-chat-send:hover{background:rgba(155,77,255,0.25);border-color:var(--neon-purple)}
-
 /* MAIN APP */
-#app{position:fixed;inset:12px 12px 44px;display:none}
+#app{position:fixed;inset:12px;display:none}
 
 /* TV CASING — Retro Plastic Shell with unified frame */
 .tv-casing{position:absolute;inset:0;overflow:hidden;
@@ -536,7 +463,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .now-playing{display:none}
 .screen-progress{position:absolute;bottom:28px;left:0;right:0;z-index:10;height:3px;background:rgba(255,255,255,0.05);pointer-events:none}
 .screen-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--hot-pink),var(--neon-purple),var(--electric-blue));box-shadow:0 0 8px rgba(255,76,210,0.6);transition:width .3s}
-.sms-ticker-screen{display:none !important} /* SMS ticker noņemts no TV — čats ir zem TV */
+.sms-ticker-screen{position:absolute;bottom:0;left:0;right:0;z-index:26;height:64px;overflow:hidden;background:rgba(0,0,10,0.88);border-top:2px solid rgba(88,101,242,0.25);pointer-events:none}
 .sms-ticker-screen.off{display:none}
 .sms-ticker-inner{display:flex;position:absolute;top:0;left:0;height:100%;white-space:nowrap;align-items:center;animation:tickerScroll 60s linear infinite}
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -1204,10 +1131,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .sms-item{font-size:11px;padding:0 12px}
   .tv-overlay{bottom:40px}
   .screen-progress{bottom:14px}
-  .led-marquee-viewport{height:22px}
-  .led-marquee-text{font-size:18px}
-  .led-marquee-housing{padding:2px 4px}
-  #app{inset:6px 6px 32px !important}
+  #app{inset:6px !important}
 }
 
 /* "PAGRIEZ TELEFONU" OVERLAY — tikai portrait mobilajā */
@@ -1221,7 +1145,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 @media(max-width:768px) and (orientation:portrait){
   .rotate-overlay{display:flex !important}
   #app{display:none !important}
-  .led-marquee-wrap{display:none !important}
 }
 
 /* CIRCULAR VOLUME KNOB — Discord style */
@@ -1864,19 +1787,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 </div>
 
 <!-- ČATA JOSLA — zem TV -->
-<div class="led-marquee-wrap" id="ledMarqueeWrap">
-  <div class="led-marquee-housing">
-    <div class="led-marquee-viewport">
-      <div class="led-marquee-text" id="ledMarqueeText"></div>
-    </div>
-    <div class="led-chat-input-row">
-      <input type="text" class="led-chat-name" id="ledChatName" placeholder="Vārds" maxlength="15">
-      <input type="text" class="led-chat-msg" id="ledChatMsg" placeholder="Raksti ziņu..." maxlength="280">
-      <button class="led-chat-send" id="ledChatSend">SŪTĪT</button>
-    </div>
-  </div>
-</div>
-
 <!-- INFO POPUP -->
 <div class="info-popup-overlay" id="infoOverlay" onclick="if(event.target===this)toggleInfoPopup()">
   <div class="info-popup">
@@ -2937,12 +2847,7 @@ function sendLedChat(){
   // Sinhronizēt ar panelī esošo vārdu
   const smsN=document.getElementById('smsName');if(smsN)smsN.value=cleanName;
 }
-document.getElementById('ledChatSend').addEventListener('click',sendLedChat);
-document.getElementById('ledChatMsg').addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();sendLedChat()}});
-// Sinhronizēt vārdu starp abiem input laukiem
-document.getElementById('ledChatName').addEventListener('change',function(){
-  const smsN=document.getElementById('smsName');if(smsN)smsN.value=this.value;
-});
+// LED chat noņemts — SMS ticker uz TV ekrāna
 function shareApp(){const u=location.href;if(navigator.share)navigator.share({title:'LOM TV',text:'LOM TV — Latvijas Online Mūzika 📺🇱🇻',url:u}).catch(()=>{});else navigator.clipboard.writeText(u).catch(()=>{})}
 // Click on screen = toggle mute
 document.getElementById('tvScreen').addEventListener('click',(e)=>{
