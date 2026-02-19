@@ -417,7 +417,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   font-family:var(--font-main),sans-serif;font-size:13px;color:#ddd;
   line-height:1.5;letter-spacing:0.3px;
   opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .2s ease;
-  box-shadow:0 12px 48px rgba(0,0,0,0.7)}
+  box-shadow:0 12px 48px rgba(0,0,0,0.7);
+  animation:none!important;text-shadow:none!important}
+.tv-report-popup *{animation:none!important;text-shadow:none!important}
 .tv-report-popup.show{opacity:1;pointer-events:auto;transform:translateY(0)}
 .tv-report-q{color:#ddd;margin-bottom:10px;text-align:center;font-weight:600}
 .tv-report-btns{display:flex;gap:8px;justify-content:center;margin-bottom:0}
@@ -425,10 +427,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:rgba(255,255,255,0.05);color:#ccc;font-family:inherit;font-size:13px;
   cursor:pointer;transition:all .15s;letter-spacing:0.5px;font-weight:500}
 .tv-report-btn:hover{background:rgba(255,255,255,0.12)}
-.tv-report-btn.yes{border-color:rgba(255,107,107,0.3);color:#ff6b6b}
-.tv-report-btn.yes:hover{background:rgba(255,107,107,0.12);border-color:#ff6b6b}
-.tv-report-btn.no{border-color:rgba(53,237,126,0.3);color:#35ed7e}
-.tv-report-btn.no:hover{background:rgba(53,237,126,0.12);border-color:#35ed7e}
+.tv-report-btn.yes{border-color:rgba(53,237,126,0.3);color:#35ed7e}
+.tv-report-btn.yes:hover{background:rgba(53,237,126,0.12);border-color:#35ed7e}
+.tv-report-btn.no{border-color:rgba(255,107,107,0.3);color:#ff6b6b}
+.tv-report-btn.no:hover{background:rgba(255,107,107,0.12);border-color:#ff6b6b}
 .tv-report-thanks{color:#35ed7e;text-align:center;font-size:13px}
 .tv-report-divider{height:1px;background:rgba(255,255,255,0.06);margin:12px 0}
 .tv-report-suggest-label{color:#aaa;margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
@@ -604,7 +606,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     inset 0 -1px 2px rgba(0,0,0,0.5),
     inset 2px 0 3px rgba(0,0,0,0.15),
     inset -2px 0 3px rgba(0,0,0,0.15)}
-.ch-face .ch-icon{font-size:20px;line-height:1;filter:grayscale(0.4);flex-shrink:0}
+.ch-face .ch-icon{font-size:26px;line-height:1;filter:grayscale(0.4);flex-shrink:0}
 .ch-face-back .ch-icon{filter:grayscale(0)}
 .ch-face .ch-name{font-family:var(--font-main);font-size:15px;font-weight:700;color:rgba(224,227,255,0.5);line-height:1.2;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;letter-spacing:1.5px;text-transform:uppercase}
 .ch-face-front .ch-name{color:rgba(224,227,255,0.4)}
@@ -707,10 +709,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     linear-gradient(180deg,#50505a 0%,#383840 50%,#2a2a30 100%);
   color:var(--pure-white)}
 .ctrl-btn:active{transform:translateY(3px);box-shadow:0 0 #111,inset 3px 3px 6px rgba(0,0,0,0.7),inset 0 0 4px rgba(0,0,0,0.3)}
-.ctrl-btn .ctrl-arrow{font-size:18px;color:rgba(224,227,255,0.5)}
+.ctrl-btn .ctrl-arrow{font-size:24px;color:rgba(224,227,255,0.5)}
 /* VOL triangles: left ◄ bigger, right ► bigger, pushed to edges */
-#volDownBtn .ctrl-arrow{font-size:28px;margin-left:-4px;margin-right:2px}
-#volUpBtn .ctrl-arrow{font-size:24px;margin-right:-4px;margin-left:2px}
+#volDownBtn .ctrl-arrow{font-size:36px;margin-left:-4px;margin-right:2px}
+#volUpBtn .ctrl-arrow{font-size:31px;margin-right:-4px;margin-left:2px}
 .ctrl-btn .ctrl-label{white-space:nowrap}
 
 /* MUTE active state */
@@ -734,10 +736,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     inset 2px 0 3px rgba(0,0,0,0.12),
     inset -2px 0 3px rgba(0,0,0,0.12);
   transition:all .15s;flex-shrink:0}
-.ch-vertical-btn-top{flex:1;width:100%;display:flex;align-items:center;justify-content:center;font-size:26px;color:rgba(224,227,255,0.8);border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;line-height:1;border-radius:4px 4px 0 0}
+.ch-vertical-btn-top{flex:1;width:100%;display:flex;align-items:center;justify-content:center;font-size:34px;color:rgba(224,227,255,0.8);border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;line-height:1;border-radius:4px 4px 0 0}
 .ch-vertical-btn-top:hover{background:rgba(88,101,242,0.2);color:var(--pure-white)}
 .ch-vertical-btn-center{flex-shrink:0;font-family:var(--font-main);font-size:17px;font-weight:700;color:rgba(224,227,255,0.35);letter-spacing:2px;text-transform:uppercase;padding:4px 0;pointer-events:none}
-.ch-vertical-btn-bottom{flex:1;width:100%;display:flex;align-items:center;justify-content:center;font-size:26px;color:rgba(224,227,255,0.8);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;line-height:1;border-radius:0 0 4px 4px}
+.ch-vertical-btn-bottom{flex:1;width:100%;display:flex;align-items:center;justify-content:center;font-size:34px;color:rgba(224,227,255,0.8);border-top:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;line-height:1;border-radius:0 0 4px 4px}
 .ch-vertical-btn-bottom:hover{background:rgba(88,101,242,0.2);color:var(--pure-white)}
 
 /* POWER + UTILITIES */
@@ -835,8 +837,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .power-btn-pair{display:flex;gap:5px;width:100%}
 .power-pair-btn{flex:1;height:44px;display:flex;align-items:center;justify-content:center;gap:5px;border:none;border-radius:8px;cursor:pointer;
   font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
-.pair-btn-icon{width:18px;height:26px;flex-shrink:0}
-.pair-btn-icon-text{font-size:20px;line-height:1;color:#fff}
+.pair-btn-icon{width:22px;height:31px;flex-shrink:0}
+.pair-btn-icon-text{font-size:26px;line-height:1;color:#fff}
 .pair-btn-text{font-size:16px;letter-spacing:2px}
 /* FULL — zaļā poga */
 .power-pair-btn.fullscreen{
@@ -907,6 +909,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .panel-bottom-zone{flex-shrink:0;display:flex;flex-direction:column;gap:4px;padding:4px 0 2px;margin-top:auto;
   position:sticky;bottom:0;background:linear-gradient(0deg,#0d0d0d 60%,transparent)}
 .util-btns-bottom{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.util-btns-bottom .wood-btn span{font-size:24px}
 .util-btns-bottom .wood-btn{height:48px;width:100%;padding:0 14px;font-size:18px;border-radius:8px;
   /* Glass button style */
   background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02));
@@ -1026,7 +1029,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* Fullscreen: zoom video to fill (cover letterbox) */
 .tv-casing.fs-mode .yt-slot.yt-ready{position:absolute;top:-80px;left:-15px;width:calc(100% + 30px);height:calc(100% + 160px);transform:scale(1.25);object-fit:cover}
 /* Fullscreen exit button — top right */
-.fs-exit-btn{display:none;position:absolute;top:24px;right:20px;z-index:50;
+.fs-exit-btn{display:none;position:absolute;top:54px;right:20px;z-index:50;
   width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
   background:rgba(0,0,0,0.7);color:rgba(255,255,255,0.8);
   font-size:22px;font-weight:bold;
@@ -1097,12 +1100,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .controls-section{padding:2px 8px}
   .ctrl-btn{height:28px;font-size:11px}
   .ch-vertical-btn{min-height:60px;width:44px}
-  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
+  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:24px}
   .ch-vertical-btn-center{font-size:12px}
   .power-top-row{gap:4px}
   .power-btn-pair{gap:4px}
   .power-pair-btn{height:40px}
-  .pair-btn-icon{width:12px;height:18px}
+  .pair-btn-icon{width:15px;height:22px}
   .pair-btn-text{font-size:12px;letter-spacing:1px}
   .power-toggle{font-size:0.25em}
   .tv-live-strip{top:6px;right:10px;gap:5px}
@@ -1685,7 +1688,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
               <!-- FULL + SPĒLE pogas blakus zem toggle -->
               <div class="power-btn-pair">
                 <button class="power-pair-btn fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
-                  <svg class="pair-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3h6v2H5v4H3zM15 3h6v6h-2V5h-4zM3 15v6h6v-2H5v-4zm18 0v4h-4v2h6v-6z"/></svg>
+                  <svg class="pair-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h6v2H5v4H3zM15 3h6v6h-2V5h-4zM3 15v6h6v-2H5v-4zm18 0v4h-4v2h6v-6z"/></svg>
                   <span class="pair-btn-text">FULL</span>
                 </button>
                 <button class="power-pair-btn game-btn" id="gamePanelBtn">
@@ -1787,7 +1790,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <div class="panel-bottom-zone">
         <div class="util-btns-bottom" style="flex-direction:row;gap:6px">
           <button class="wood-btn" onclick="shareApp()" style="flex:1;min-width:0"><span>📤</span> Iesaki</button>
-          <button class="wood-btn" onclick="openPwaPopup()" style="flex:1;min-width:0"><span>📲</span> App</button>
+          <button class="wood-btn" onclick="pwaInstallNative()" style="flex:1;min-width:0"><span>📲</span> App</button>
         </div>
       </div>
     </div>
@@ -3469,7 +3472,7 @@ function pwaShowMain(){
   document.getElementById('pwaInstructions').classList.remove('show');
 }
 function pwaInstallNative(){
-  // Ja ir native prompt (Chrome/Edge) — izmantojam to
+  // Ja ir native prompt (Chrome/Edge) — uzreiz instalējam
   if(deferredPwaPrompt){
     deferredPwaPrompt.prompt();
     deferredPwaPrompt.userChoice.then(r=>{
@@ -3479,7 +3482,11 @@ function pwaInstallNative(){
     });
     return;
   }
-  // Ja nav — rādam instrukcijas atkarībā no ierīces
+  // Ja nav native prompt — atveram popup ar instrukcijām
+  document.getElementById('pwaOverlay').classList.add('show');
+  document.getElementById('pwaMain').style.display='none';
+  const instr=document.getElementById('pwaInstructions');
+  instr.classList.add('show');
   showPwaInstructions();
 }
 function showPwaInstructions(){
