@@ -1219,10 +1219,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   border-radius:50%;box-shadow:0 0 60px rgba(255,41,117,0.6),0 0 120px rgba(255,107,43,0.3);
   mask-image:linear-gradient(to bottom,#000 42%,transparent 42%,transparent 46%,#000 46%,#000 50%,transparent 50%,transparent 54%,#000 54%,#000 58%,transparent 58%,transparent 63%,#000 63%,#000 70%,transparent 70%,transparent 78%,#000 78%);
   -webkit-mask-image:linear-gradient(to bottom,#000 42%,transparent 42%,transparent 46%,#000 46%,#000 50%,transparent 50%,transparent 54%,#000 54%,#000 58%,transparent 58%,transparent 63%,#000 63%,#000 70%,transparent 70%,transparent 78%,#000 78%)}
-/* Horizon glow */
-.sw-horizon{position:absolute;bottom:44%;left:0;right:0;height:6px;z-index:2;
-  background:linear-gradient(90deg,transparent,rgba(255,41,117,0.6) 20%,rgba(255,107,43,0.8) 50%,rgba(255,41,117,0.6) 80%,transparent);
-  box-shadow:0 0 30px rgba(255,41,117,0.5);filter:blur(2px)}
+/* Horizon glow — wider, more atmospheric */
+.sw-horizon{position:absolute;bottom:44%;left:0;right:0;height:8px;z-index:2;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,41,117,0.5) 15%,rgba(255,107,43,0.9) 50%,rgba(255,41,117,0.5) 85%,transparent 95%);
+  box-shadow:0 0 40px rgba(255,41,117,0.6),0 0 80px rgba(255,107,43,0.2);filter:blur(2px)}
+/* Horizon ambient glow — subtle color wash above */
+.sw-horizon::before{content:'';position:absolute;bottom:100%;left:10%;right:10%;height:40px;
+  background:linear-gradient(to top,rgba(255,107,43,0.12),transparent);filter:blur(8px);pointer-events:none}
 /* Grid floor — perspective ground */
 .sw-grid-wrap{position:absolute;bottom:0;left:0;right:0;height:46%;z-index:2;
   overflow:hidden;perspective:400px;perspective-origin:50% 0%}
@@ -1239,64 +1242,134 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 12px,transparent 12px,transparent 24px)}
 .sw-lane-r{position:absolute;bottom:0;left:62%;width:2px;height:46%;z-index:5;
   background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 12px,transparent 12px,transparent 24px)}
-/* Road edge glow lines */
-.sw-road-edge-l{position:absolute;bottom:0;left:15%;width:2px;height:46%;z-index:5;
-  background:linear-gradient(to top,rgba(25,208,232,0.7),transparent 70%)}
-.sw-road-edge-r{position:absolute;bottom:0;right:15%;width:2px;height:46%;z-index:5;
-  background:linear-gradient(to top,rgba(25,208,232,0.7),transparent 70%)}
-/* Car */
+/* Road edge glow lines — neon cyan with pulse */
+.sw-road-edge-l{position:absolute;bottom:0;left:15%;width:3px;height:46%;z-index:5;
+  background:linear-gradient(to top,rgba(25,208,232,0.9),rgba(25,208,232,0.4) 40%,transparent 75%);
+  box-shadow:0 0 8px rgba(25,208,232,0.4),0 0 16px rgba(25,208,232,0.15);
+  animation:roadEdgePulse 2s ease-in-out infinite alternate}
+.sw-road-edge-r{position:absolute;bottom:0;right:15%;width:3px;height:46%;z-index:5;
+  background:linear-gradient(to top,rgba(25,208,232,0.9),rgba(25,208,232,0.4) 40%,transparent 75%);
+  box-shadow:0 0 8px rgba(25,208,232,0.4),0 0 16px rgba(25,208,232,0.15);
+  animation:roadEdgePulse 2s ease-in-out infinite alternate}
+@keyframes roadEdgePulse{0%{opacity:0.7}100%{opacity:1}}
+/* Car — DeLorean-style retro sports car */
 .sw-car{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);z-index:10;
-  width:60px;height:90px;transition:left 0.15s ease-out}
-/* Car body — bottom */
-.sw-car::before{content:'';position:absolute;bottom:0;left:2px;width:56px;height:24px;
-  background:linear-gradient(90deg,#ff2975,#ff2975 30%,#e91e8c 50%,#9b4dff 80%,#9b4dff);border-radius:4px 4px 2px 2px;
-  box-shadow:0 0 24px rgba(255,41,117,0.9),0 0 48px rgba(155,77,255,0.4),0 4px 12px rgba(0,0,0,0.6)}
-/* Car body — top/windshield */
-.sw-car::after{content:'';position:absolute;bottom:22px;left:8px;width:44px;height:52px;
-  background:linear-gradient(180deg,rgba(25,208,232,0.9) 0%,rgba(25,208,232,0.4) 25%,#1a1a2e 50%);
-  clip-path:polygon(8% 100%,92% 100%,82% 28%,68% 0%,32% 0%,18% 28%);
-  box-shadow:0 -6px 20px rgba(25,208,232,0.6)}
-/* Car headlights beam */
-.sw-car-lights{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);width:80px;height:140px;z-index:9;
-  background:linear-gradient(to top,rgba(25,208,232,0.25),transparent 80%);
-  clip-path:polygon(35% 100%,65% 100%,95% 0%,5% 0%);pointer-events:none;
-  filter:blur(6px);opacity:0.5}
-/* Car tail lights */
-.sw-car-tail{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:56px;height:4px;
-  background:linear-gradient(90deg,transparent 5%,#ff2975 15%,#ff2975 30%,transparent 45%,transparent 55%,#ff2975 70%,#ff2975 85%,transparent 95%);
-  box-shadow:0 2px 10px rgba(255,41,117,0.7);border-radius:1px;filter:blur(1px)}
+  width:70px;height:100px;transition:left 0.15s ease-out}
+/* Car body — lower chassis */
+.sw-car::before{content:'';position:absolute;bottom:0;left:3px;width:64px;height:28px;
+  background:linear-gradient(180deg,#c0c0c0 0%,#8a8a9e 40%,#5a5a6e 100%);
+  border-radius:4px 4px 2px 2px;
+  box-shadow:0 0 20px rgba(25,208,232,0.6),0 0 40px rgba(155,77,255,0.3),0 4px 12px rgba(0,0,0,0.8),
+    inset 0 2px 0 rgba(255,255,255,0.3),inset 0 -2px 4px rgba(0,0,0,0.5);
+  border:1px solid rgba(25,208,232,0.3)}
+/* Car body — top/windshield wedge */
+.sw-car::after{content:'';position:absolute;bottom:26px;left:7px;width:56px;height:56px;
+  background:linear-gradient(180deg,rgba(25,208,232,0.95) 0%,rgba(25,208,232,0.3) 20%,#2a2a3e 45%,#c0c0c0 60%,#8a8a9e 100%);
+  clip-path:polygon(5% 100%,95% 100%,85% 30%,72% 0%,28% 0%,15% 30%);
+  box-shadow:0 -8px 24px rgba(25,208,232,0.7)}
+/* Headlights beam — dual cones */
+.sw-car-lights{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);width:90px;height:160px;z-index:9;
+  background:
+    linear-gradient(to top,rgba(25,208,232,0.2) 0%,transparent 70%),
+    radial-gradient(ellipse 30% 100% at 35% 100%,rgba(25,208,232,0.15),transparent 60%),
+    radial-gradient(ellipse 30% 100% at 65% 100%,rgba(25,208,232,0.15),transparent 60%);
+  clip-path:polygon(30% 100%,70% 100%,98% 0%,2% 0%);pointer-events:none;
+  filter:blur(5px);opacity:0.6}
+/* Tail lights — twin red rectangles */
+.sw-car-tail{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:64px;height:5px;
+  background:linear-gradient(90deg,transparent 2%,#ff2975 10%,#ff4488 22%,transparent 35%,transparent 65%,#ff4488 78%,#ff2975 90%,transparent 98%);
+  box-shadow:0 3px 14px rgba(255,41,117,0.8),0 0 6px rgba(255,41,117,0.5);border-radius:1px}
+/* Neon underglow */
+.sw-car-glow{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:72px;height:12px;
+  background:radial-gradient(ellipse,rgba(25,208,232,0.5) 0%,rgba(155,77,255,0.3) 40%,transparent 70%);
+  filter:blur(6px);pointer-events:none;animation:underGlow 2s ease-in-out infinite alternate}
+@keyframes underGlow{0%{opacity:0.6}100%{opacity:1}}
 /* Obstacles container */
 #swObstacles{position:absolute;inset:0;z-index:8;pointer-events:none}
 /* Obstacles */
 .sw-obstacle{position:absolute;pointer-events:none;opacity:0}
-/* Palm tree */
-.sw-palm{width:50px;height:80px}
+/* Palm tree — neon synthwave style */
+.sw-palm{width:60px;height:90px}
 .sw-palm-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:10px;height:45px;background:linear-gradient(90deg,#3d2200,#6b3900,#3d2200);border-radius:3px;
-  box-shadow:inset -2px 0 4px rgba(0,0,0,0.4)}
+  width:8px;height:52px;
+  background:linear-gradient(90deg,#2a1a00,#5a3800 30%,#8a5a10 50%,#5a3800 70%,#2a1a00);
+  border-radius:2px;
+  box-shadow:inset -2px 0 4px rgba(0,0,0,0.5),0 0 8px rgba(155,77,255,0.15)}
+.sw-palm-trunk::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 5px,rgba(0,0,0,0.2) 5px,rgba(0,0,0,0.2) 6px)}
 .sw-palm-top{position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:50px;height:40px;
-  background:radial-gradient(ellipse at 50% 80%,#0d9e0d 0%,#0a6e0a 40%,transparent 70%);
-  filter:drop-shadow(0 0 6px rgba(53,237,126,0.5))}
-/* Building — neon skyscraper */
+  width:60px;height:45px;
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 90%,rgba(53,237,126,0.9) 0%,transparent 50%),
+    radial-gradient(ellipse 90% 40% at 30% 70%,rgba(53,237,126,0.7) 0%,transparent 50%),
+    radial-gradient(ellipse 90% 40% at 70% 70%,rgba(53,237,126,0.7) 0%,transparent 50%),
+    radial-gradient(ellipse 70% 50% at 20% 50%,rgba(25,208,232,0.4) 0%,transparent 50%),
+    radial-gradient(ellipse 70% 50% at 80% 50%,rgba(25,208,232,0.4) 0%,transparent 50%);
+  filter:drop-shadow(0 0 10px rgba(53,237,126,0.6)) drop-shadow(0 0 20px rgba(53,237,126,0.2))}
+/* Building — neon skyscraper with lit windows */
 .sw-building{position:relative;
-  background:linear-gradient(180deg,#ff2975 0%,#9b4dff 40%,#1a1a2e 100%);
-  border:1px solid rgba(155,77,255,0.6);
-  box-shadow:0 0 12px rgba(155,77,255,0.4),inset 0 0 20px rgba(0,0,0,0.5)}
+  background:linear-gradient(180deg,#2a1a3e 0%,#1a0e2e 40%,#0e0818 100%);
+  border:1px solid rgba(155,77,255,0.5);
+  box-shadow:0 0 16px rgba(155,77,255,0.4),0 0 32px rgba(155,77,255,0.15),inset 0 0 20px rgba(0,0,0,0.6)}
 .sw-building::before{content:'';position:absolute;inset:3px;
-  background:repeating-linear-gradient(0deg,rgba(255,255,255,0.2) 0px,rgba(255,255,255,0.2) 5px,transparent 5px,transparent 10px),
-    repeating-linear-gradient(90deg,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 8px,transparent 8px,transparent 16px);
-  opacity:0.6}
-/* Mountain */
+  background:
+    repeating-linear-gradient(0deg,transparent 0px,transparent 6px,rgba(155,77,255,0.12) 6px,rgba(155,77,255,0.12) 7px),
+    repeating-linear-gradient(90deg,transparent 0px,transparent 7px,rgba(155,77,255,0.08) 7px,rgba(155,77,255,0.08) 8px);
+  opacity:0.9}
+/* Neon lit windows */
+.sw-building::after{content:'';position:absolute;inset:4px;
+  background:
+    radial-gradient(circle 2px at 25% 15%,rgba(25,208,232,0.9),transparent 3px),
+    radial-gradient(circle 2px at 65% 25%,rgba(255,41,117,0.8),transparent 3px),
+    radial-gradient(circle 2px at 35% 45%,rgba(245,166,35,0.7),transparent 3px),
+    radial-gradient(circle 2px at 75% 55%,rgba(25,208,232,0.7),transparent 3px),
+    radial-gradient(circle 2px at 20% 70%,rgba(255,41,117,0.6),transparent 3px),
+    radial-gradient(circle 2px at 60% 80%,rgba(53,237,126,0.7),transparent 3px);
+  animation:windowFlicker 3s steps(1) infinite}
+@keyframes windowFlicker{0%,100%{opacity:1}25%{opacity:0.8}50%{opacity:1}75%{opacity:0.7}}
+/* Antenna/spire on top */
+/* Mountain — dark silhouette with neon edge */
 .sw-mountain{clip-path:polygon(50% 0%,0% 100%,100% 100%);
-  background:linear-gradient(180deg,#3a1a6e 0%,#1a0a3e 60%,#0a0014 100%);
-  box-shadow:0 0 8px rgba(155,77,255,0.3)}
-/* Neon diamond collectible */
-.sw-diamond{width:24px;height:24px;
-  background:#35ed7e;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
-  box-shadow:0 0 16px rgba(53,237,126,0.8);
-  animation:swDiamondSpin 1s linear infinite}
-@keyframes swDiamondSpin{0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(40deg) brightness(1.3)}100%{filter:hue-rotate(0deg) brightness(1)}}
+  background:linear-gradient(180deg,#2a1050 0%,#1a0a3e 35%,#0a0014 100%);
+  box-shadow:0 0 12px rgba(155,77,255,0.3);position:relative}
+.sw-mountain::before{content:'';position:absolute;inset:0;
+  clip-path:polygon(50% 0%,0% 100%,100% 100%);
+  background:linear-gradient(180deg,transparent 0%,transparent 85%,rgba(155,77,255,0.2) 100%)}
+.sw-mountain::after{content:'';position:absolute;top:0;left:50%;width:40%;height:30%;
+  transform:translateX(-50%);
+  clip-path:polygon(50% 0%,0% 100%,100% 100%);
+  background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(200,210,255,0.1) 100%);
+  filter:blur(1px)}
+/* Neon diamond collectible — pulsējošs ar glow */
+.sw-diamond{width:28px;height:28px;position:relative;
+  background:linear-gradient(135deg,#35ed7e,#19d0e8);
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  box-shadow:0 0 20px rgba(53,237,126,0.9),0 0 40px rgba(53,237,126,0.4);
+  animation:swDiamondSpin 1.5s ease-in-out infinite}
+@keyframes swDiamondSpin{0%{filter:hue-rotate(0deg) brightness(1);transform:scale(1)}25%{filter:hue-rotate(20deg) brightness(1.2)}50%{filter:hue-rotate(40deg) brightness(1.4);transform:scale(1.15)}75%{filter:hue-rotate(20deg) brightness(1.2)}100%{filter:hue-rotate(0deg) brightness(1);transform:scale(1)}}
+/* Neon barrel obstacle */
+.sw-barrel{width:28px;height:32px;
+  background:linear-gradient(90deg,#1a0e2e 0%,#3a1a5e 20%,#5a2a8e 50%,#3a1a5e 80%,#1a0e2e 100%);
+  border-radius:4px;border:1px solid rgba(255,41,117,0.6);
+  box-shadow:0 0 12px rgba(255,41,117,0.5),inset 0 0 8px rgba(0,0,0,0.5);position:relative}
+.sw-barrel::before{content:'';position:absolute;top:30%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,#ff2975,transparent);
+  box-shadow:0 0 8px rgba(255,41,117,0.8)}
+.sw-barrel::after{content:'⚠';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:12px;line-height:1;filter:drop-shadow(0 0 4px rgba(245,166,35,0.8))}
+/* Kruīzera auto — pretimbraucošs */
+.sw-cruiser{width:40px;height:60px;position:relative}
+.sw-cruiser::before{content:'';position:absolute;bottom:0;left:4px;width:32px;height:18px;
+  background:linear-gradient(90deg,#e53935,#c62828);border-radius:3px 3px 1px 1px;
+  box-shadow:0 0 16px rgba(229,57,53,0.7),0 3px 8px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,100,100,0.3)}
+.sw-cruiser::after{content:'';position:absolute;bottom:16px;left:8px;width:24px;height:30px;
+  background:linear-gradient(180deg,rgba(245,166,35,0.8) 0%,rgba(245,166,35,0.3) 20%,#1a1a2e 50%,#e53935 70%);
+  clip-path:polygon(10% 100%,90% 100%,80% 30%,65% 0%,35% 0%,20% 30%)}
+/* Kruīzera priekšējie lukturi */
+.sw-cruiser-lights{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:32px;height:6px;
+  background:linear-gradient(90deg,transparent 5%,#f5a623 15%,#f5a623 30%,transparent 45%,transparent 55%,#f5a623 70%,#f5a623 85%,transparent 95%);
+  box-shadow:0 -4px 12px rgba(245,166,35,0.6);border-radius:1px}
 /* Score */
 .sw-score{position:absolute;top:16px;right:20px;z-index:15;
   font-family:'Handjet',var(--font-main),sans-serif;font-size:48px;font-weight:700;
@@ -1444,6 +1517,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
             <div class="sw-car" id="swCar">
               <div class="sw-car-lights"></div>
               <div class="sw-car-tail"></div>
+              <div class="sw-car-glow"></div>
             </div>
             <div class="sw-hit-flash" id="swHitFlash"></div>
             <div class="sw-lives" id="swLives"></div>
@@ -2726,7 +2800,7 @@ function gameTick(ts){
 function spawnObstacle(){
   const container=document.getElementById('swObstacles');if(!container)return;
   const lane=Math.floor(Math.random()*3); // 0,1,2
-  const types=['palm','palm','building','building','mountain','diamond'];
+  const types=['palm','palm','building','building','mountain','barrel','cruiser','diamond'];
   const type=types[Math.floor(Math.random()*types.length)];
   const el=document.createElement('div');
   el.className='sw-obstacle sw-'+type;
@@ -2734,11 +2808,15 @@ function spawnObstacle(){
   el.dataset.y=0;
   el.dataset.type=type;
   // Size by type
-  if(type==='palm'){el.style.width='50px';el.style.height='80px';
+  if(type==='palm'){el.style.width='60px';el.style.height='90px';
     el.innerHTML='<div class="sw-palm-trunk"></div><div class="sw-palm-top"></div>'}
-  else if(type==='building'){el.style.width=(25+Math.random()*25)+'px';el.style.height=(50+Math.random()*50)+'px'}
-  else if(type==='diamond'){el.style.width='24px';el.style.height='24px'}
-  else{el.style.width=(60+Math.random()*40)+'px';el.style.height=(35+Math.random()*25)+'px'}
+  else if(type==='building'){
+    const w=28+Math.random()*28;el.style.width=w+'px';el.style.height=(55+Math.random()*55)+'px'}
+  else if(type==='diamond'){el.style.width='28px';el.style.height='28px'}
+  else if(type==='barrel'){el.style.width='28px';el.style.height='32px'}
+  else if(type==='cruiser'){el.style.width='40px';el.style.height='60px';
+    el.innerHTML='<div class="sw-cruiser-lights"></div>'}
+  else{el.style.width=(65+Math.random()*45)+'px';el.style.height=(40+Math.random()*30)+'px'}
   container.appendChild(el);
 }
 
