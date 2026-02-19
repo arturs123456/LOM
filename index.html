@@ -2073,7 +2073,7 @@ function startTV(){
     document.getElementById('ledPower').classList.remove('off');
     document.querySelectorAll('.indicator-bar').forEach(b=>b.classList.add('active'));
     // Uzreiz sāk atskaņot — bez kalibrācijas joslām
-    initYTPlayer();initSMS();startProgressTracker();
+    initYTPlayer();try{initSMS()}catch(e){console.warn('initSMS:',e)};startProgressTracker();
     // VHS OSD — laika atjaunošana katru sekundi
     setInterval(()=>{const osd=document.getElementById('vhsOsdTime');if(osd&&isPoweredOn){const now=new Date();osd.textContent=now.toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}},1000);
   },600);
