@@ -1221,7 +1221,7 @@ let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady
 let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
-const CROSSFADE_DURATION=2000; // 2 sek crossfade
+const CROSSFADE_DURATION=3000; // 3 sek crossfade
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
@@ -1466,7 +1466,7 @@ function startProgressTracker(){
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
       // Crossfade: 2.5 sek pirms beigām sāk pāreju uz nākamo
-      if(remaining<=2.5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
+      if(remaining<=3.5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
     }catch(e){}
   },500);
 }
