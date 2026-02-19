@@ -2565,6 +2565,7 @@ function isGameChannel(ch){
 function switchChannel(ch){
   if(ch<0||ch>=channels.length)return;
   hideColorBars();clearWatchdog();skipChain=0; // Reset error state
+  resetOverlayPhases(); // Notīra TAGAD SKAN / TIKKO SKANĒJA overlay + taimerus (lai nepaliek no iepriekšējā kanāla)
   // Ja iepriekšējais bija spēle — apstādināt
   if(isGameChannel(currentChannel)){stopGame()}
   currentChannel=ch;
