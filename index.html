@@ -79,6 +79,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .start-screen{transition:opacity 0.6s ease}
 .start-screen.fade-out{opacity:0;pointer-events:none}
 .start-screen.hidden{display:none}
+.start-btn{position:relative;z-index:10;margin-top:32px;padding:16px 48px;font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:var(--pure-white);
+  background:linear-gradient(145deg,rgba(155,77,255,0.3),rgba(155,77,255,0.1));border:2px solid var(--neon-purple);border-radius:8px;cursor:pointer;
+  box-shadow:0 0 20px rgba(155,77,255,0.3),0 0 40px rgba(155,77,255,0.1),inset 0 0 20px rgba(155,77,255,0.1);
+  transition:all .3s ease;animation:startBtnPulse 2s ease-in-out infinite}
+.start-btn:hover{background:linear-gradient(145deg,rgba(155,77,255,0.5),rgba(155,77,255,0.2));box-shadow:0 0 30px rgba(155,77,255,0.5),0 0 60px rgba(155,77,255,0.2),inset 0 0 30px rgba(155,77,255,0.15);transform:scale(1.05)}
+@keyframes startBtnPulse{0%,100%{box-shadow:0 0 20px rgba(155,77,255,0.3),0 0 40px rgba(155,77,255,0.1)}50%{box-shadow:0 0 30px rgba(155,77,255,0.5),0 0 60px rgba(155,77,255,0.2)}}
 @keyframes sphereSpin{0%{transform:rotateX(-210deg) rotateY(0deg) rotateZ(185deg)}100%{transform:rotateX(-210deg) rotateY(360deg) rotateZ(185deg)}}
 @keyframes sphereShine{50%,100%{border-color:transparent;box-shadow:0 0 1px 1px transparent,0 0 1px 1px transparent inset;filter:hue-rotate(180deg)}}
 @keyframes letterGlow{
@@ -853,6 +859,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <div class="start-sub">kopš 2003. gada</div>
     </div>
   </div>
+  <button class="start-btn" id="startBtn" onclick="startTV()">IESLĒGT TV</button>
 </div>
 
 <!-- CALIBRATION moved inside tv-screen -->
@@ -1196,7 +1203,6 @@ async function loadFromSheets(){
 }
 
 let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady=false,smsMessages=[],progressInterval=null,isMuted=false,currentVolume=80,volumeBeforeMute=80;
-let firstPlayDone=false; // true pēc pirmā unmute
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
 function startTV(){
@@ -1229,8 +1235,7 @@ loadFromSheets().then(loaded=>{
     channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
   }
 });
-// Auto-start TV after 6 seconds (logo shows for 6s)
-setTimeout(startTV,6000);
+// TV startē tikai ar pogu klikšķi (nodrošina autoplay ar skaņu)
 
 function initYTPlayer(){const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
 window.onYouTubeIframeAPIReady=function(){
@@ -1238,13 +1243,9 @@ window.onYouTubeIframeAPIReady=function(){
   const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
   player=new YT.Player('yt-player',{
     videoId:v.id,
-    playerVars:{autoplay:1,mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin,start:trimS,end:dur>trimE?dur-trimE:undefined},
+    playerVars:{autoplay:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin,start:trimS,end:dur>trimE?dur-trimE:undefined},
     events:{
-      onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();
-        // Sāk muted — rāda unmute overlay, gaidīs pirmo klikšķi
-        isMuted=true;currentVolume=0;
-        document.getElementById('muteBtn').classList.add('active');
-        showMuteOSD(true);
+      onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();setVolume(80);
         // Oversize iframe lai paslēptu YouTube UI
         try{player.getIframe().classList.add('yt-ready')}catch(ex){}
         // Izslēgt subtitrus
@@ -1462,21 +1463,10 @@ function checkSMSForm(){
 }
 function sendSMS(){if(!isPoweredOn)return;const n=document.getElementById('smsName'),t=document.getElementById('smsText');if(!n.value.trim()||!t.value.trim())return;smsMessages.push({name:n.value.trim(),text:t.value.trim()});renderTicker();n.value='';t.value='';checkSMSForm()}
 function shareApp(){const u=location.href;if(navigator.share)navigator.share({title:'LOM TV',text:'LOM TV — Latvijas Online Mūzika 📺🇱🇻',url:u}).catch(()=>{});else navigator.clipboard.writeText(u).catch(()=>{})}
-// Click on screen = first click unmutes, then toggle mute
+// Click on screen = toggle mute
 document.getElementById('tvScreen').addEventListener('click',(e)=>{
   if(!isPoweredOn)return;
-  // Don't mute if clicking on overlays that have their own handlers
   if(e.target.closest('.screen-logo')||e.target.closest('.now-playing')||e.target.closest('.fs-exit-btn'))return;
-  // Pirmais klikšķis — unmute (autoplay sāka muted)
-  if(!firstPlayDone){
-    firstPlayDone=true;
-    isMuted=false;
-    document.getElementById('muteBtn').classList.remove('active');
-    try{player.unMute();player.setVolume(80)}catch(ex){}
-    currentVolume=80;
-    showMuteOSD(false);
-    return;
-  }
   toggleMute();
 });
 document.addEventListener('keydown',(e)=>{
