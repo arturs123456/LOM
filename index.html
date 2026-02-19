@@ -2288,7 +2288,7 @@ function initSMS(){
 }
 function renderTicker(){
   const t=document.getElementById('smsTicker');let h='';
-  for(let r=0;r<2;r++)smsMessages.forEach(m=>{h+='<span class="sms-item"><span class="sms-name">'+m.name+':</span> <span class="sms-text">'+m.text+'</span><span class="sms-sep">★</span></span>'});
+  for(let r=0;r<2;r++)smsMessages.forEach(m=>{h+='<span class="sms-item"><span class="sms-name">'+m.name+':</span> <span class="sms-text">'+m.text+'</span><span class="sms-sep">|</span></span>'});
   t.innerHTML=h;t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
 }
 function checkSMSForm(){
