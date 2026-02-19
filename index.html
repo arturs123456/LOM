@@ -2966,6 +2966,7 @@ function submitContactForm(e){
     <div id="adminMsgList"><em>Nav ziņu</em></div>
     <div class="admin-section">
       <h4>🎙️ Ētera balss (ElevenLabs TTS)</h4>
+      <input type="password" class="admin-tts-input" id="adminApiKey" placeholder="ElevenLabs API atslēga (sk_...)" style="width:100%;margin-bottom:6px;height:32px;font-size:12px">
       <textarea class="admin-tts-input" id="adminTtsText" placeholder="Ieraksti tekstu kas tiks nolasīts ēterā..." rows="3"></textarea>
       <select class="admin-voice-select" id="adminVoiceSelect">
         <option value="EkK5I93UQWFDigLMpZcX">James — Husky & Engaging</option>
@@ -3041,16 +3042,27 @@ function submitContactForm(e){
   };
 
   // ═══ ELEVENLABS TTS ═══
-  const ELEVENLABS_KEY='sk_d35a460796964c760b8731d017f368acabaa8a727b9de4f5';
   let ttsAudio=null;
   let pendingTtsBlob=null; // Audio blob kas gaida atskaņošanu starp dziesmām
   let pendingTtsSmsText=null; // SMS teksts kas gaida publicēšanu
 
+  // API atslēga no localStorage + input lauka
+  function getElevenLabsKey(){
+    const inp=document.getElementById('adminApiKey');
+    const val=inp?inp.value.trim():'';
+    if(val){localStorage.setItem('lom_11labs_key',val);return val}
+    return localStorage.getItem('lom_11labs_key')||'';
+  }
+  // Ielādēt saglabāto atslēgu input laukā
+  try{const saved=localStorage.getItem('lom_11labs_key');if(saved){const inp=document.getElementById('adminApiKey');if(inp)inp.value=saved}}catch(e){}
+
   // Ģenerē TTS audio blob (neatskano — tikai atgriež blob)
   async function elevenLabsGenerate(text,voiceId,modelId){
+    const apiKey=getElevenLabsKey();
+    if(!apiKey)throw new Error('Nav ElevenLabs API atslēgas! Ielīmē to augšā.');
     const resp=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,{
       method:'POST',
-      headers:{'Content-Type':'application/json','xi-api-key':ELEVENLABS_KEY},
+      headers:{'Content-Type':'application/json','xi-api-key':apiKey},
       body:JSON.stringify({
         text:text,
         model_id:modelId||'eleven_flash_v2_5',
