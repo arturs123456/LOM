@@ -2111,10 +2111,17 @@ function togglePower(){
   else{
     isPoweredOn=true;tog.checked=true;led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));
     if(vhsOsd)vhsOsd.style.display='';
-    setChatEnabled(true);showStatic(()=>{
-      const ap=activeSlot==='a'?playerA:playerB;
-      if(playerReady&&ap)ap.playVideo();
-    })}
+    setChatEnabled(true);
+    // Ja pašreizējais kanāls ir spēle — pārslēdzamies uz pirmo mūzikas kanālu
+    if(isGameChannel(currentChannel)){
+      switchChannel(0);
+    } else {
+      showStatic(()=>{
+        const ap=activeSlot==='a'?playerA:playerB;
+        if(playerReady&&ap)ap.playVideo();
+      });
+    }
+  }
 }
 document.getElementById('powerToggleInput').addEventListener('change',function(){
   if(this.checked!==isPoweredOn)togglePower();
