@@ -37,7 +37,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* START SCREEN — Sci-Fi Cyberpunk Background */
 @keyframes nebulaDrift{0%{transform:translate(0,0) scale(1)}25%{transform:translate(2%,-1%) scale(1.02)}50%{transform:translate(-1%,2%) scale(1)}75%{transform:translate(1%,1%) scale(1.01)}100%{transform:translate(0,0) scale(1)}}
 @keyframes gridPulse{0%,100%{opacity:0.04}50%{opacity:0.08}}
-@keyframes scanlineSweep{0%{top:-10%}100%{top:110%}}
 @keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 .start-screen{position:fixed;inset:0;z-index:300;overflow:hidden;
   background:#020808;
@@ -57,11 +56,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     linear-gradient(rgba(25,208,232,0.03) 1px,transparent 1px) 0 0 / 60px 60px,
     linear-gradient(90deg,rgba(25,208,232,0.03) 1px,transparent 1px) 0 0 / 60px 60px;
   animation:gridPulse 4s ease-in-out infinite}
-/* Horizontal scanline sweep */
-.start-scanline{position:absolute;left:0;right:0;height:2px;z-index:2;pointer-events:none;
-  background:linear-gradient(90deg,transparent 0%,rgba(25,208,232,0.4) 20%,rgba(155,77,255,0.5) 50%,rgba(25,208,232,0.4) 80%,transparent 100%);
-  box-shadow:0 0 20px rgba(25,208,232,0.3),0 0 60px rgba(155,77,255,0.15);
-  animation:scanlineSweep 6s linear infinite}
 /* Floating particles */
 .start-particles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .start-particle{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(25,208,232,0.8);
@@ -890,7 +884,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 <!-- START -->
 <div class="start-screen" id="startScreen">
-  <div class="start-scanline"></div>
   <div class="start-particles">
     <div class="start-particle"></div><div class="start-particle"></div><div class="start-particle"></div>
     <div class="start-particle"></div><div class="start-particle"></div><div class="start-particle"></div>
