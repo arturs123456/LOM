@@ -1786,6 +1786,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 var FIREBASE_CONFIG={apiKey:"AIzaSyBPn0GZ47qig6ydO1WD_vx8Qve9XMWna70",authDomain:"lom-tv-chat.firebaseapp.com",databaseURL:"https://lom-tv-chat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"lom-tv-chat",storageBucket:"lom-tv-chat.firebasestorage.app",messagingSenderId:"633916715129",appId:"1:633916715129:web:5d3c65b1d5471e99c524a8"};
 var firebaseDB=null,firebaseChatRef=null,firebaseConnected=false,firebaseMessages=[];
 var CHAT_RATE={min:5000,perMin:6,perHour:60,ts:[]};
+// Bad-words filtrs (jābūt augšā pirms sanitizeChat izsaukuma)
+var BAD_WORDS=[];
+try{var bw=localStorage.getItem('lom_badwords');if(bw)BAD_WORDS=JSON.parse(bw)}catch(e){}
 
 // ===== GOOGLE SHEETS CMS =====
 // Tabulas formāts: YouTube ID | Izpildītājs | Dziesma | Albums | Gads | Garums (sek) | Era | Trim Start | Trim End | POP | ROKS | ŠLĀGERI | RETRO | ĀRZEMJU | 2020+ | HIPHOP | KONKURSI | LIVE | BĒRNI
@@ -2593,9 +2596,7 @@ var fakeSMS=[
   {name:'Līga',text:'Mana mīļākā dziesma'},
   {name:'Oskars',text:'Šeit vienmēr laba mūzika'}
 ];
-// Bad-words filtrs — ielādē no localStorage vai tukšs
-let BAD_WORDS=[];
-try{const bw=localStorage.getItem('lom_badwords');if(bw)BAD_WORDS=JSON.parse(bw)}catch(e){}
+// Bad-words filtrs (BAD_WORDS deklarēts augšā)
 function filterBadWords(text){
   let c=text;
   BAD_WORDS.forEach(w=>{if(w.length<2)return;const re=new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');c=c.replace(re,'\u2605'.repeat(Math.min(w.length,5)))});
