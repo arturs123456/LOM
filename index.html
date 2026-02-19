@@ -1095,6 +1095,7 @@ const CHANNEL_CONFIG = [
   {key:'JAZZ',    name:'JAZZ',    label:'Jazz',             color:'#f5a623',  icon:'🎷', csvPrefix:'JAZZ'},
   {key:'DANCE',   name:'DANCE',   label:'Dance',            color:'#00e5ff',  icon:'💃', csvPrefix:'DEJU'},
   {key:'LIVE',    name:'LIVE',    label:'Live & EV',        color:'#e53935',  icon:'🎬', csvPrefix:'LIVE'},
+  {key:'ĀRZ',     name:'ĀRZ',     label:'Ārzemju',          color:'#c0c0c0',  icon:'🌍', csvPrefix:'ĀRZEMJU'},
   // Gada kanāli (automātiski pēc gada)
   {key:'RETRO',   name:'RETRO',   label:'Retro',            color:'#35ed7e',  icon:'📻', csvPrefix:'RETRO'},   // līdz 1990
   {key:'ATMODA',  name:'ATMODA',  label:'Atmoda',           color:'#ff8a65',  icon:'🌅', csvPrefix:'_ATMODA'},  // 1991-2021
@@ -1172,9 +1173,8 @@ const EXTRA_CSV_MAP=[
   {csvPrefix:'BLUES',       targetKey:'JAZZ'},
   {csvPrefix:'AMBIENT',     targetKey:'JAZZ'},
   {csvPrefix:'KLASISK',     targetKey:'JAZZ'},
-  // Bērni, Ārzemju → ja ir CSV kolonna, iet zem POP kā fallback
-  {csvPrefix:'BĒRNU',       targetKey:'POP'},
-  {csvPrefix:'ĀRZEMJU',     targetKey:'POP'}
+  // Bērni → POP kā fallback
+  {csvPrefix:'BĒRNU',       targetKey:'POP'}
 ];
 function sheetsToChannels(rows){
   if(!rows||rows.length===0)return[];
