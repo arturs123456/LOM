@@ -478,56 +478,54 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-react-btn.reacted{transform:scale(1.3);transition:transform .15s}
 /* Report popup — 2 soļi: atbilst/neatbilst + iesaki dziesmu */
 .tv-report-popup{position:absolute;top:100%;right:0;margin-top:6px;z-index:20;
-  background:rgba(0,0,0,0.94);backdrop-filter:blur(12px);border:1px solid rgba(255,221,87,0.3);
-  border-radius:10px;padding:16px 20px;min-width:300px;max-width:380px;width:max-content;
-  font-family:'Press Start 2P',monospace;font-size:clamp(7px,0.85vw,9px);color:#fff;
-  line-height:1.7;letter-spacing:0.5px;
+  background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;padding:16px 20px;min-width:280px;max-width:360px;width:max-content;
+  font-family:var(--font-main),sans-serif;font-size:13px;color:#ddd;
+  line-height:1.5;letter-spacing:0.3px;
   opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .2s ease;
-  box-shadow:0 8px 24px rgba(0,0,0,0.7);
-  animation:none;text-shadow:none}
+  box-shadow:0 12px 48px rgba(0,0,0,0.7)}
 .tv-report-popup.show{opacity:1;pointer-events:auto;transform:translateY(0)}
-.tv-report-q{color:#ffdd57;margin-bottom:10px;text-align:center}
+.tv-report-q{color:#ddd;margin-bottom:10px;text-align:center;font-weight:600}
 .tv-report-btns{display:flex;gap:8px;justify-content:center;margin-bottom:0}
-.tv-report-btn{padding:6px 16px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);
-  background:rgba(255,255,255,0.06);color:#fff;font-family:inherit;font-size:inherit;
-  cursor:pointer;transition:all .15s;letter-spacing:1px}
-.tv-report-btn:hover{background:rgba(255,255,255,0.15)}
-.tv-report-btn.yes{border-color:rgba(255,107,107,0.4);color:#ff6b6b}
-.tv-report-btn.yes:hover{background:rgba(255,107,107,0.15);border-color:#ff6b6b}
-.tv-report-btn.no{border-color:rgba(53,237,126,0.4);color:#35ed7e}
-.tv-report-btn.no:hover{background:rgba(53,237,126,0.15);border-color:#35ed7e}
-.tv-report-thanks{color:#35ed7e;text-align:center;font-size:inherit}
-/* Ieteikuma forma (2. solis) */
-.tv-report-divider{height:1px;background:rgba(255,255,255,0.1);margin:12px 0}
-.tv-report-suggest-label{color:#8be9fd;margin-bottom:8px;font-size:inherit}
-.tv-report-input{width:100%;padding:8px 10px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);
-  background:rgba(255,255,255,0.07);color:#fff;font-family:var(--font-main);font-size:12px;
+.tv-report-btn{padding:7px 20px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.05);color:#ccc;font-family:inherit;font-size:13px;
+  cursor:pointer;transition:all .15s;letter-spacing:0.5px;font-weight:500}
+.tv-report-btn:hover{background:rgba(255,255,255,0.12)}
+.tv-report-btn.yes{border-color:rgba(255,107,107,0.3);color:#ff6b6b}
+.tv-report-btn.yes:hover{background:rgba(255,107,107,0.12);border-color:#ff6b6b}
+.tv-report-btn.no{border-color:rgba(53,237,126,0.3);color:#35ed7e}
+.tv-report-btn.no:hover{background:rgba(53,237,126,0.12);border-color:#35ed7e}
+.tv-report-thanks{color:#35ed7e;text-align:center;font-size:13px}
+.tv-report-divider{height:1px;background:rgba(255,255,255,0.06);margin:12px 0}
+.tv-report-suggest-label{color:#aaa;margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.tv-report-input{width:100%;padding:8px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.05);color:#ddd;font-family:var(--font-main),sans-serif;font-size:13px;
   outline:none;transition:border-color .2s;box-sizing:border-box;margin-bottom:8px}
-.tv-report-input:focus{border-color:rgba(139,233,253,0.5)}
-.tv-report-input::placeholder{color:rgba(255,255,255,0.3);font-size:11px}
-.tv-report-submit{width:100%;padding:8px;border-radius:5px;border:1px solid rgba(139,233,253,0.4);
-  background:rgba(139,233,253,0.1);color:#8be9fd;font-family:'Press Start 2P',monospace;
-  font-size:clamp(7px,0.8vw,9px);cursor:pointer;transition:all .15s;letter-spacing:1px}
-.tv-report-submit:hover{background:rgba(139,233,253,0.2);border-color:#8be9fd}
+.tv-report-input:focus{border-color:rgba(53,237,126,0.4)}
+.tv-report-input::placeholder{color:rgba(255,255,255,0.3)}
+.tv-report-submit{width:100%;padding:9px;border-radius:6px;border:1px solid rgba(53,237,126,0.25);
+  background:rgba(53,237,126,0.12);color:#35ed7e;font-family:var(--font-main),sans-serif;
+  font-size:13px;cursor:pointer;transition:all .15s;letter-spacing:1.5px;font-weight:600;text-transform:uppercase}
+.tv-report-submit:hover{background:rgba(53,237,126,0.2);border-color:rgba(53,237,126,0.45)}
 .tv-report-submit:disabled{opacity:0.4;cursor:default}
 /* TV Info Overlay — 3 phase system */
 .tv-overlay{position:absolute;bottom:100px;left:24px;z-index:14;pointer-events:none;
   transform:translateX(-110%);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease;
-  max-width:520px}
+  max-width:680px}
 .tv-overlay.show{transform:translateX(0);opacity:1}
-.tv-overlay-inner{background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);border-left:5px solid var(--neon-purple);
-  padding:20px 28px 16px;border-radius:0 10px 10px 0;
-  box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(155,77,255,0.2),0 0 60px rgba(155,77,255,0.08)}
-.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:32px;font-weight:700;letter-spacing:8px;text-transform:uppercase;margin-bottom:10px;
+.tv-overlay-inner{background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);border-left:5px solid var(--neon-purple);
+  padding:26px 36px 20px;border-radius:0 10px 10px 0;
+  box-shadow:0 6px 30px rgba(0,0,0,0.6),0 0 30px rgba(155,77,255,0.15),0 0 60px rgba(155,77,255,0.06)}
+.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:40px;font-weight:700;letter-spacing:8px;text-transform:uppercase;margin-bottom:12px;
   color:var(--neon-purple);text-shadow:0 0 12px rgba(155,77,255,0.7),0 0 24px rgba(155,77,255,0.3)}
-.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue);box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(25,208,232,0.2),0 0 60px rgba(25,208,232,0.08)}
+.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue);box-shadow:0 6px 30px rgba(0,0,0,0.6),0 0 30px rgba(25,208,232,0.15),0 0 60px rgba(25,208,232,0.06)}
 .tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 12px rgba(25,208,232,0.7),0 0 24px rgba(25,208,232,0.3)}
 /* phase-just (TIKKO SKANĒJA) — tāds pats izskats kā phase-now (TAGAD SKAN), tikai cits teksts */
-.tv-overlay-title{font-family:'Russo One',var(--font-display),sans-serif;font-size:38px;font-weight:400;color:#fff;margin-bottom:8px;line-height:1.15;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
-.tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:30px;font-weight:400;color:rgba(200,210,240,0.75);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-style:normal;letter-spacing:0.5px}
-.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:22px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:4px;margin-top:6px}
+.tv-overlay-title{font-family:'Russo One',var(--font-display),sans-serif;font-size:50px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.15;
+  white-space:normal;word-wrap:break-word;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
+.tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:38px;font-weight:400;color:rgba(200,210,240,0.75);
+  white-space:normal;word-wrap:break-word;font-style:normal;letter-spacing:0.5px}
+.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:28px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:4px;margin-top:8px}
 /* Legacy now-playing compat — keep for channel display */
 .now-playing{display:none}
 .screen-progress{position:absolute;bottom:28px;left:0;right:0;z-index:10;height:3px;background:rgba(255,255,255,0.05);pointer-events:none}
@@ -1041,74 +1039,50 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* INFO POPUP — Retro-Futuristic style */
 @keyframes infoGlitchIn{0%{clip-path:inset(100% 0 0 0);opacity:0}30%{clip-path:inset(40% 0 0 0);opacity:0.7}32%{clip-path:inset(45% 0 0 0)}60%{clip-path:inset(10% 0 0 0);opacity:1}62%{clip-path:inset(12% 0 0 0)}100%{clip-path:inset(0);opacity:1}}
-@keyframes infoBorderPulse{0%,100%{border-color:rgba(25,208,232,0.4);box-shadow:0 0 20px rgba(25,208,232,0.15),inset 0 0 30px rgba(25,208,232,0.05)}50%{border-color:rgba(25,208,232,0.7);box-shadow:0 0 30px rgba(25,208,232,0.25),inset 0 0 40px rgba(25,208,232,0.08)}}
-@keyframes infoScanline{0%{top:-4px}100%{top:100%}}
-.info-popup-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.info-popup-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center}
 .info-popup-overlay.show{display:flex}
-.info-popup{position:relative;width:820px;max-width:94vw;max-height:82vh;display:flex;flex-direction:column;
-  background:
-    linear-gradient(160deg,rgba(4,18,8,0.96),rgba(2,8,6,0.98)),
-    repeating-linear-gradient(0deg,rgba(53,237,126,0.05) 0px,rgba(53,237,126,0.05) 1px,transparent 1px,transparent 3px),
-    repeating-linear-gradient(90deg,rgba(53,237,126,0.04) 0px,rgba(53,237,126,0.04) 1px,transparent 1px,transparent 3px);
-  border:2px solid rgba(53,237,126,0.55);
-  border-radius:6px;
+.info-popup{position:relative;width:560px;max-width:94vw;max-height:82vh;display:flex;flex-direction:column;
+  background:rgba(10,10,10,0.96);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;
   padding:0;overflow:hidden;
-  box-shadow:0 0 32px rgba(53,237,126,0.22),0 16px 60px rgba(0,0,0,0.8),inset 0 0 36px rgba(53,237,126,0.08);
-  animation:infoGlitchIn 0.4s ease-out,infoBorderPulse 3s ease-in-out infinite}
-/* Scanline effect on popup */
-.info-popup::before{content:'';position:absolute;left:0;right:0;height:4px;z-index:5;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(53,237,126,0.25),transparent);
-  animation:infoScanline 3s linear infinite}
-/* Corner decorations */
-.info-popup::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:4;
-  background:
-    linear-gradient(135deg,rgba(53,237,126,0.15) 0%,transparent 3%),
-    linear-gradient(225deg,rgba(53,237,126,0.15) 0%,transparent 3%),
-    linear-gradient(315deg,rgba(53,237,126,0.15) 0%,transparent 3%),
-    linear-gradient(45deg,rgba(53,237,126,0.15) 0%,transparent 3%)}
-.info-popup-header{display:flex;align-items:center;justify-content:space-between;padding:22px 28px 14px;
-  border-bottom:1px solid rgba(53,237,126,0.22);
-  background:linear-gradient(180deg,rgba(53,237,126,0.16),transparent);
-  letter-spacing:0.5px}
-.info-popup-title{font-family:'Handjet',var(--font-main),sans-serif;font-size:40px;font-weight:800;
-  color:#35ed7e;letter-spacing:10px;text-transform:uppercase;
-  text-shadow:0 0 16px rgba(53,237,126,0.65)}
-.info-popup-close{width:42px;height:42px;border:1px solid rgba(53,237,126,0.4);border-radius:4px;
-  background:rgba(0,0,0,0.35);color:rgba(53,237,126,0.85);cursor:pointer;font-size:20px;
+  box-shadow:0 12px 48px rgba(0,0,0,0.7);
+  animation:infoGlitchIn 0.35s ease-out}
+.info-popup-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.08)}
+.info-popup-title{font-family:var(--font-main),sans-serif;font-size:15px;font-weight:700;
+  color:#ddd;letter-spacing:2px;text-transform:uppercase}
+.info-popup-close{width:32px;height:32px;border:1px solid rgba(255,255,255,0.12);border-radius:4px;
+  background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);cursor:pointer;font-size:16px;
   display:flex;align-items:center;justify-content:center;transition:all .15s}
-.info-popup-close:hover{background:rgba(53,237,126,0.18);color:#35ed7e;border-color:#35ed7e}
-.info-popup-body{padding:32px 30px 38px;font-family:'Handjet',var(--font-main),sans-serif;font-size:28px;font-weight:500;line-height:1.9;
-  color:rgba(202,235,210,0.9);position:relative;z-index:1;letter-spacing:1px;overflow:auto}
-.info-popup-body p{margin-bottom:22px}
-.info-popup-body .info-strap{display:inline-flex;align-items:center;gap:12px;
-  padding:10px 14px;border-radius:4px;border:1px solid rgba(53,237,126,0.5);
-  background:linear-gradient(135deg,rgba(53,237,126,0.16),rgba(53,237,126,0.06));
-  font-size:22px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#35ed7e;
-  box-shadow:0 0 14px rgba(53,237,126,0.2)}
-.info-popup-body strong{color:#35ed7e;font-weight:700}
-.info-popup-body .info-version{font-family:'Handjet',monospace;font-size:20px;color:rgba(53,237,126,0.7);
-  letter-spacing:6px;margin-top:28px;display:block;text-transform:uppercase}
-/* Contact form in popup */
-.contact-form{display:flex;flex-direction:column;gap:10px;margin-top:12px}
-.contact-input{background:rgba(0,20,10,0.6);border:1px solid rgba(53,237,126,0.2);border-radius:6px;padding:10px 14px;
-  color:#caebd2;font-family:'Handjet',monospace;font-size:22px;letter-spacing:1px;outline:none;transition:border-color .2s}
-.contact-input::placeholder{color:rgba(53,237,126,0.35)}
-.contact-input:focus{border-color:rgba(53,237,126,0.5)}
-.contact-textarea{resize:vertical;min-height:60px}
-.contact-submit{background:linear-gradient(180deg,#1e4a1e,#0e2a0e);color:#35ed7e;border:1px solid rgba(53,237,126,0.3);
-  border-radius:6px;padding:12px;font-family:'Handjet',monospace;font-size:24px;letter-spacing:3px;cursor:pointer;
-  transition:all .2s;text-transform:uppercase}
-.contact-submit:hover{background:linear-gradient(180deg,#2a6a2a,#184a18);box-shadow:0 0 16px rgba(53,237,126,0.3)}
+.info-popup-close:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.25)}
+.info-popup-body{padding:16px 20px 20px;font-family:var(--font-main),sans-serif;font-size:13px;font-weight:400;line-height:1.6;
+  color:rgba(220,220,220,0.9);position:relative;z-index:1;letter-spacing:0.3px;overflow:auto}
+.info-popup-body p{margin-bottom:10px}
+.info-popup-body .info-strap{display:inline-flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.04);
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#aaa}
+.info-popup-body strong{color:#35ed7e;font-weight:600}
+.info-popup-body .info-version{font-family:var(--font-main),monospace;font-size:11px;color:rgba(255,255,255,0.35);
+  letter-spacing:2px;margin-top:14px;display:block;text-transform:uppercase}
+/* Shared form style — used in both INFO and Report */
+.contact-form{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.contact-form-row{display:flex;gap:8px}
+.contact-form-row .contact-input{flex:1;min-width:0}
+.contact-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px 12px;
+  color:#ddd;font-family:var(--font-main),sans-serif;font-size:13px;letter-spacing:0.3px;outline:none;transition:border-color .2s;box-sizing:border-box}
+.contact-input::placeholder{color:rgba(255,255,255,0.3)}
+.contact-input:focus{border-color:rgba(53,237,126,0.4)}
+.contact-textarea{resize:vertical;min-height:50px}
+.contact-submit{background:rgba(53,237,126,0.12);color:#35ed7e;border:1px solid rgba(53,237,126,0.25);
+  border-radius:6px;padding:9px 16px;font-family:var(--font-main),sans-serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;
+  transition:all .2s;text-transform:uppercase;font-weight:600}
+.contact-submit:hover{background:rgba(53,237,126,0.2);border-color:rgba(53,237,126,0.45)}
 .contact-submit:disabled{opacity:0.5;cursor:not-allowed}
-.contact-status{font-size:18px;color:#35ed7e;text-align:center;min-height:20px}
-/* Grid lines inside popup */
-.info-popup-body::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:
-    linear-gradient(rgba(53,237,126,0.025) 1px,transparent 1px) 0 0 / 32px 32px,
-    linear-gradient(90deg,rgba(53,237,126,0.025) 1px,transparent 1px) 0 0 / 32px 32px,
-    repeating-linear-gradient(0deg,rgba(53,237,126,0.05) 0px,rgba(53,237,126,0.05) 1px,transparent 1px,transparent 3px),
-    repeating-linear-gradient(90deg,rgba(53,237,126,0.05) 0px,rgba(53,237,126,0.05) 1px,transparent 1px,transparent 3px);
-  mix-blend-mode:screen}
+.contact-status{font-size:12px;color:#35ed7e;text-align:center;min-height:16px}
+.info-section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin:14px 0 6px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)}
+/* Grid lines removed — clean look */
 
 /* FULLSCREEN MODE — panel hidden, screen fills entire viewport */
 .tv-casing.fs-mode .tv-panel{display:none}
@@ -1175,11 +1149,11 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   :root{--panel-w:200px}
   .tv-screen-area{top:4px;bottom:4px;left:4px;right:calc(var(--panel-w)+4px)}
   .tv-screen{top:4px;bottom:4px;left:4px;right:4px}
-  .tv-overlay{bottom:56px;left:8px;max-width:60%}
-  .tv-overlay-inner{padding:10px 16px 8px}
-  .tv-overlay-title{font-size:24px}
-  .tv-overlay-artist{font-size:18px}
-  .tv-overlay-label{font-size:20px;letter-spacing:4px;margin-bottom:6px}
+  .tv-overlay{bottom:56px;left:8px;max-width:75%}
+  .tv-overlay-inner{padding:14px 20px 10px}
+  .tv-overlay-title{font-size:30px}
+  .tv-overlay-artist{font-size:22px}
+  .tv-overlay-label{font-size:26px;letter-spacing:4px;margin-bottom:8px}
   .sms-ticker-screen{height:40px}
   .sms-item{font-size:13px;padding:0 16px}
   .screen-progress{bottom:18px}
@@ -1201,8 +1175,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .tv-live-strip{top:6px;right:10px;gap:5px}
   .tv-live-badge{font-size:7px;padding:3px 6px}
   .tv-react-btn{font-size:9px;padding:3px 5px}
-  .tv-report-popup{min-width:240px;max-width:320px;padding:12px 14px;font-size:7px}
-  .tv-report-input{font-size:11px;padding:7px 8px}
+  .tv-report-popup{min-width:240px;max-width:320px;padding:12px 14px;font-size:12px}
+  .tv-report-input{font-size:12px;padding:7px 10px}
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
   .vhs-osd-time{top:60px;left:14px}
   .panel-header-wrapper{padding:4px 8px}
@@ -1566,28 +1540,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
 
 /* ====== INFO POPUP TEXT HIGHLIGHT ====== */
-.text-highlight{all:unset;
-  background-repeat:no-repeat;background-size:0% 100%;
-  background-image:linear-gradient(rgba(53,237,126,0.22),rgba(53,237,126,0.22));
-  transition:color 0.4s ease,background-size 0.8s cubic-bezier(.25,1,.5,1);color:inherit}
-.text-highlight.active{background-size:100% 100%;color:#35ed7e}
-/* Info popup progress bar */
-.info-popup-progress{position:sticky;top:0;left:0;width:100%;height:3px;z-index:10;
-  background:rgba(53,237,126,0.12);flex-shrink:0}
-.info-popup-progress-fill{height:100%;width:0%;
-  background:linear-gradient(90deg,#35ed7e,#19d0e8);transition:width 0.15s linear}
-/* Magic stars on popup title */
-.info-popup-title{position:relative;display:inline-block}
-.magic-star{--size:clamp(16px,2vw,26px);display:block;height:var(--size);width:var(--size);
-  position:absolute;left:var(--star-left);top:var(--star-top);
-  animation:starScale 800ms ease forwards;pointer-events:none;z-index:6}
-.magic-star svg{animation:starRotate 1.2s linear infinite;display:block;opacity:0.9;width:100%;height:100%;
-  filter:drop-shadow(0 0 4px rgba(53,237,126,0.8))}
-.magic-star svg path{fill:#35ed7e}
-.magic-star:nth-child(2) svg path{fill:#19d0e8}
-.magic-star:nth-child(3) svg path{fill:#f5a623}
-@keyframes starScale{0%,100%{transform:scale(0)}50%{transform:scale(1.2)}}
-@keyframes starRotate{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
+/* (text-highlight, progress bar, magic-star removed — vienkāršots stils) */
 </style>
 </head>
 <body>
@@ -1894,52 +1847,30 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 <div class="info-popup-overlay" id="infoOverlay" onclick="if(event.target===this)toggleInfoPopup()">
   <div class="info-popup">
     <div class="info-popup-header">
-      <span class="info-popup-title" id="infoTitle">/// SYS.INFO _
-        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
-        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
-        <span class="magic-star"><svg viewBox="0 0 512 512"><path d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"/></svg></span>
-      </span>
+      <span class="info-popup-title" id="infoTitle">LOM TV — INFO</span>
       <button class="info-popup-close" onclick="toggleInfoPopup()">✕</button>
     </div>
     <div class="info-popup-body" id="infoBody">
-      <div class="info-popup-progress"><div class="info-popup-progress-fill" id="infoProgressFill"></div></div>
-      <div class="info-strap">ON AIR — LOM TV Paziņojums</div>
-      <p><strong>LOM TV</strong> — <mark class="text-highlight">Latvijas Online Mūzikas</mark> Kanāls.</p>
-      <p>Retro televīzijas formātā vari baudīt <mark class="text-highlight">labāko latviešu un ārzemju</mark> mūziku — no klasiskiem šlāgeriem līdz jaunākajiem hitiem. Sākam ar POP, ROKS un RETRO, bet vienmēr var pārslēgties uz ko košāku.</p>
-      <p>Kanālu pārslēgšana, SMS rindas un dalīšanās pogas ir veidotas kā <mark class="text-highlight">TV paziņojumi</mark>, lai sajūta būtu tieši kā pie ekrāna: spied MUTE, VOL vai CH, un pamanīsi spilgtus ziņojumus, kas iegrimst fonā, bet <mark class="text-highlight">paliek skaidri salasāmi</mark>.</p>
-      <p>Ja kas nestrādā vai vēlies ieteikumus nākamajai laidienai, <mark class="text-highlight">dod ziņu</mark> — uzturam ēteru kopā.</p>
-      <!-- Dziesmu ieteikuma forma -->
-      <div class="info-contact-form">
-        <div class="info-strap" style="margin-top:16px">IESAKI DZIESMU</div>
-        <p style="font-size:12px;color:#aaa;margin:6px 0 10px">Zini labu dziesmu, ko pievienot LOM TV? Iesūti ieteikumu!</p>
-        <form id="infoSuggestForm" class="contact-form" onsubmit="submitInfoSuggestion(event)">
-          <input type="text" name="suggestSong" placeholder="YouTube links vai izpildītājs — dziesma" required class="contact-input" id="infoSuggestSong">
-          <select name="suggestChannel" class="contact-input" id="infoSuggestChannel">
-            <option value="">Kanāls (neobligāts)</option>
-          </select>
-          <textarea name="suggestNote" placeholder="Piezīmes (neobligāts)" rows="2" class="contact-input contact-textarea" id="infoSuggestNote"></textarea>
-          <button type="submit" class="contact-submit" id="infoSuggestBtn">IESNIEGT IETEIKUMU</button>
-          <div class="contact-status" id="infoSuggestStatus"></div>
-        </form>
-      </div>
-      <!-- Kontaktu forma -->
-      <div class="info-contact-form">
-        <div class="info-strap" style="margin-top:16px">SAZINIES AR MUMS</div>
-        <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
-          <input type="text" name="name" placeholder="Tavs vārds" required class="contact-input">
+      <p><strong>LOM TV</strong> — Latvijas Online Mūzikas kanāls. Retro TV formātā baudi labāko latviešu un ārzemju mūziku — pārslēdz kanālus, sūti SMS un dalies ar draugiem.</p>
+      <!-- Iesaki dziesmu — 1 rinda -->
+      <div class="info-section-label">Iesaki dziesmu</div>
+      <form id="infoSuggestForm" class="contact-form" onsubmit="submitInfoSuggestion(event)" style="flex-direction:row;gap:8px;align-items:center">
+        <input type="text" name="suggestSong" placeholder="Izpildītājs — dziesma vai YouTube links" required class="contact-input" id="infoSuggestSong" style="flex:1">
+        <button type="submit" class="contact-submit" id="infoSuggestBtn" style="white-space:nowrap;flex-shrink:0">IETEIKT</button>
+      </form>
+      <div class="contact-status" id="infoSuggestStatus"></div>
+      <!-- Sazinies ar mums — kompakts -->
+      <div class="info-section-label">Sazinies ar mums</div>
+      <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
+        <div class="contact-form-row">
+          <input type="text" name="name" placeholder="Vārds" required class="contact-input">
           <input type="email" name="email" placeholder="E-pasts" required class="contact-input">
-          <select name="type" class="contact-input">
-            <option value="request">Pieprasi dziesmu</option>
-            <option value="feedback">Atsauksme</option>
-            <option value="bug">Kļūdas ziņojums</option>
-            <option value="other">Cits</option>
-          </select>
-          <textarea name="message" placeholder="Tava ziņa..." rows="3" required class="contact-input contact-textarea"></textarea>
-          <button type="submit" class="contact-submit" id="contactSubmitBtn">NOSŪTĪT</button>
-          <div class="contact-status" id="contactStatus"></div>
-        </form>
-      </div>
-      <span class="info-version">/// ver 2.0 — kopš 2003 _</span>
+        </div>
+        <textarea name="message" placeholder="Tava ziņa..." rows="2" required class="contact-input contact-textarea"></textarea>
+        <button type="submit" class="contact-submit" id="contactSubmitBtn">NOSŪTĪT</button>
+        <div class="contact-status" id="contactStatus"></div>
+      </form>
+      <span class="info-version">ver 2.0 — kopš 2003</span>
     </div>
   </div>
 </div>
@@ -2271,7 +2202,6 @@ loadFromSheets().then(loaded=>{
   if(loaded){
     syncAllChannels();
     buildChannelGrid();
-    populateInfoChannelSelect();
   }
 });
 // TV startē tikai ar pogu klikšķi (nodrošina autoplay ar skaņu)
@@ -2997,15 +2927,14 @@ document.getElementById('tvScreen').addEventListener('click',(e)=>{
   toggleMute();
 });
 document.addEventListener('keydown',(e)=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
-  if(e.key==='Enter'&&(e.target.id==='smsName'||e.target.id==='smsText')){if(document.getElementById('smsSendBtn').classList.contains('active'))sendSMS();return}
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
   const n=parseInt(e.key);if(n>=1&&n<=9&&n<=channels.length)switchChannel(n-1);if(e.key==='0'&&channels.length>=10)switchChannel(9);
   // Kad spēle aktīva — bultiņas kontrolē tikai spēli, ne skaļumu/kanālus
   if(!gameRunning){
     if(e.key==='ArrowUp'){e.preventDefault();changeChannel(-1)}if(e.key==='ArrowDown'){e.preventDefault();changeChannel(1)}
     if(e.key==='ArrowLeft'){e.preventDefault();changeVolume(-5)}if(e.key==='ArrowRight'){e.preventDefault();changeVolume(5)}
   }
-  if(e.key==='n'||e.key==='N')nextVideo();if(e.key==='p'||e.key==='P')togglePower();if(e.key==='f'||e.key==='F')toggleFullscreen();if(e.key==='Escape'&&document.fullscreenElement)document.exitFullscreen();
+  if(e.key==='n'||e.key==='N')nextVideo();if(e.key==='Escape'&&document.fullscreenElement)document.exitFullscreen();
 });
 function setChatEnabled(on){
   const ticker=document.querySelector('.sms-ticker-screen');if(ticker)ticker.classList.toggle('off',!on);
@@ -3266,62 +3195,10 @@ document.addEventListener('DOMContentLoaded',function(){
   if(tr)tr.addEventListener('touchstart',function(e){if(!gameRunning)return;e.preventDefault();if(gameCarLane<2){gameCarLane++;updateCarPosition()}},{passive:false});
 });
 
-// ====== INFO POPUP ENHANCEMENTS ======
-// Text highlight on scroll (IntersectionObserver)
-function initTextHighlights(){
-  const body=document.getElementById('infoBody');
-  const highlights=document.querySelectorAll('#infoBody .text-highlight');
-  if(!body||!highlights.length)return;
-  // Reset highlights
-  highlights.forEach(h=>h.classList.remove('active'));
-  const observer=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')});
-  },{root:body,threshold:0.5});
-  highlights.forEach(h=>observer.observe(h));
-  return observer;
-}
-// Progress bar on popup scroll
-function initInfoProgress(){
-  const body=document.getElementById('infoBody');
-  const fill=document.getElementById('infoProgressFill');
-  if(!body||!fill)return;
-  body.addEventListener('scroll',function(){
-    const scrollTop=body.scrollTop;
-    const scrollHeight=body.scrollHeight-body.clientHeight;
-    const pct=scrollHeight>0?Math.round(scrollTop/scrollHeight*100):0;
-    fill.style.width=pct+'%';
-  });
-}
-// Magic stars animation on popup title
-function initMagicStars(){
-  const title=document.getElementById('infoTitle');
-  if(!title)return;
-  const stars=title.querySelectorAll('.magic-star');
-  const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
-  let idx=0;
-  function animateStar(star){
-    star.style.setProperty('--star-left',rand(-10,110)+'%');
-    star.style.setProperty('--star-top',rand(-60,80)+'%');
-    star.style.animation='none';star.offsetHeight;star.style.animation='';
-  }
-  stars.forEach(star=>{
-    setTimeout(()=>{animateStar(star);setInterval(()=>animateStar(star),1000)},idx++*333);
-  });
-}
-// Info popup with text highlights, progress bar, magic stars
-let infoHighlightObserver=null;
+// ====== INFO POPUP ======
 function toggleInfoPopup(){
   const ov=document.getElementById('infoOverlay');
   ov.classList.toggle('show');
-  if(ov.classList.contains('show')){
-    setTimeout(()=>{
-      infoHighlightObserver=initTextHighlights();
-      initInfoProgress();
-      initMagicStars();
-    },100);
-  }else{
-    if(infoHighlightObserver){infoHighlightObserver.disconnect();infoHighlightObserver=null}
-  }
 }
 
 // KONTAKTU FORMA — tagad caur Google Sheets
@@ -3345,28 +3222,14 @@ function submitInfoSuggestion(e){
   const btn=document.getElementById('infoSuggestBtn');
   const status=document.getElementById('infoSuggestStatus');
   const song=document.getElementById('infoSuggestSong').value.trim();
-  const channel=document.getElementById('infoSuggestChannel').value;
-  const note=document.getElementById('infoSuggestNote').value.trim();
   if(!song)return;
   btn.disabled=true;btn.textContent='SŪTA...';status.textContent='';
-  submitToSheets({type:'suggestion',suggestion:song,channel:channel||'nav norādīts',note,time:new Date().toISOString()}).then(()=>{
+  submitToSheets({type:'suggestion',suggestion:song,time:new Date().toISOString()}).then(()=>{
     status.textContent='Paldies par ieteikumu!';status.style.color='#35ed7e';
     document.getElementById('infoSuggestForm').reset();
   }).catch(()=>{
     status.textContent='Kļūda. Mēģini vēlreiz.';status.style.color='#ff6b6b';
-  }).finally(()=>{btn.disabled=false;btn.textContent='IESNIEGT IETEIKUMU'});
-}
-
-// Aizpildīt kanālu select INFO formā
-function populateInfoChannelSelect(){
-  const sel=document.getElementById('infoSuggestChannel');
-  if(!sel)return;
-  channels.forEach(ch=>{
-    if(ch._isGame)return;
-    const opt=document.createElement('option');
-    opt.value=ch.name;opt.textContent=ch.name;
-    sel.appendChild(opt);
-  });
+  }).finally(()=>{btn.disabled=false;btn.textContent='IETEIKT'});
 }
 
 // ADMIN MODERĀCIJAS PANELIS — ?admin=1
