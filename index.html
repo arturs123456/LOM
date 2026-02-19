@@ -1736,7 +1736,7 @@ let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady
 let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
-const CROSSFADE_DURATION=4000; // 4 sek crossfade — abi skan paralēli
+const CROSSFADE_DURATION=3000; // 3 sek crossfade — abi skan paralēli, video uzreiz redzams
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 
 // ═══════════════════════════════════════
@@ -1919,8 +1919,9 @@ function crossfadeTo(v){
   preloadedVideoId=null;
   nextPlayer.setVolume(0);
   nextPlayer.unMute();
-  // Rādi nākamo slotu (vēl caurspīdīgs)
+  // Rādi nākamo slotu UZREIZ — video redzams ātrāk nekā skaņas pāreja
   nextEl.classList.remove('yt-hidden');
+  currEl.classList.add('yt-hidden');
   // Volume fade: curr (pre-faded)→0, next 0→full pa CROSSFADE_DURATION
   const steps=20,interval=CROSSFADE_DURATION/steps;
   let step=0;
@@ -1932,13 +1933,11 @@ function crossfadeTo(v){
   crossfadeTimer=setInterval(()=>{
     step++;
     const pct=step/steps;
-    // Smooth crossfade: abi vienlaicīgi, vidū abi ~70%
+    // Smooth crossfade: abi skan paralēli ~3 sek
     const fadeOutVol=Math.round(currVol*Math.cos(pct*Math.PI/2));
     const fadeInVol=Math.round(vol*Math.sin(pct*Math.PI/2));
     try{currPlayer.setVolume(fadeOutVol)}catch(e){}
     try{nextPlayer.setVolume(fadeInVol)}catch(e){}
-    // CSS opacity: pakāpenisks, ne uzreiz
-    if(step===Math.round(steps*0.3))currEl.classList.add('yt-hidden');
     if(step>=steps){
       clearInterval(crossfadeTimer);
       try{currPlayer.pauseVideo()}catch(e){}
@@ -2050,14 +2049,15 @@ function startProgressTracker(){
       if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
-      // Pre-fade: pēdējās 7 sek pakāpeniski samazina volume (100%→40%)
-      if(remaining<=7&&remaining>4&&!crossfading&&!isMuted){
-        const fadeProgress=(remaining-4)/3; // 1.0 pie 7s → 0.0 pie 4s
-        const fadeVol=Math.round(currentVolume*(0.4+0.6*fadeProgress));
+      // Pre-fade: pēdējās 15 sek pakāpeniski samazina volume (100%→30%)
+      if(remaining<=15&&remaining>5&&!crossfading&&!isMuted){
+        const fadeProgress=(remaining-5)/10; // 1.0 pie 15s → 0.0 pie 5s
+        const fadeVol=Math.round(currentVolume*(0.3+0.7*fadeProgress));
         try{ap.setVolume(fadeVol)}catch(e){}
       }
       // Crossfade: 4 sek pirms beigām sāk pāreju uz nākamo (4s paralēli abi skan)
-      if(remaining<=4&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
+      // Crossfade: 5 sek pirms beigām — video pārslēdzas uzreiz, skaņa fade 3 sek
+      if(remaining<=5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
     }catch(e){}
   },500);
 }
