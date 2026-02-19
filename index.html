@@ -376,18 +376,18 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-react-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
 .tv-react-report:hover{color:#ffdd57;border-color:#ffdd5750}
 .tv-react-btn.reacted{transform:scale(1.3);transition:transform .15s}
-/* Report popup — "Vai dziesma neatbilstoša?" */
+/* Report popup — 2 soļi: atbilst/neatbilst + iesaki dziesmu */
 .tv-report-popup{position:absolute;top:100%;right:0;margin-top:6px;z-index:20;
-  background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);border:1px solid rgba(255,221,87,0.3);
-  border-radius:8px;padding:14px 18px;min-width:220px;
-  font-family:'Press Start 2P',monospace;font-size:clamp(7px,0.9vw,10px);color:#fff;
-  line-height:1.6;letter-spacing:0.5px;
+  background:rgba(0,0,0,0.94);backdrop-filter:blur(12px);border:1px solid rgba(255,221,87,0.3);
+  border-radius:10px;padding:16px 20px;min-width:300px;max-width:380px;width:max-content;
+  font-family:'Press Start 2P',monospace;font-size:clamp(7px,0.85vw,9px);color:#fff;
+  line-height:1.7;letter-spacing:0.5px;
   opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .2s ease;
-  box-shadow:0 8px 24px rgba(0,0,0,0.6);
+  box-shadow:0 8px 24px rgba(0,0,0,0.7);
   animation:none;text-shadow:none}
 .tv-report-popup.show{opacity:1;pointer-events:auto;transform:translateY(0)}
-.tv-report-q{color:#ffdd57;margin-bottom:10px}
-.tv-report-btns{display:flex;gap:8px;justify-content:center}
+.tv-report-q{color:#ffdd57;margin-bottom:10px;text-align:center}
+.tv-report-btns{display:flex;gap:8px;justify-content:center;margin-bottom:0}
 .tv-report-btn{padding:6px 16px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);
   background:rgba(255,255,255,0.06);color:#fff;font-family:inherit;font-size:inherit;
   cursor:pointer;transition:all .15s;letter-spacing:1px}
@@ -397,6 +397,19 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-report-btn.no{border-color:rgba(53,237,126,0.4);color:#35ed7e}
 .tv-report-btn.no:hover{background:rgba(53,237,126,0.15);border-color:#35ed7e}
 .tv-report-thanks{color:#35ed7e;text-align:center;font-size:inherit}
+/* Ieteikuma forma (2. solis) */
+.tv-report-divider{height:1px;background:rgba(255,255,255,0.1);margin:12px 0}
+.tv-report-suggest-label{color:#8be9fd;margin-bottom:8px;font-size:inherit}
+.tv-report-input{width:100%;padding:8px 10px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.07);color:#fff;font-family:var(--font-main);font-size:12px;
+  outline:none;transition:border-color .2s;box-sizing:border-box;margin-bottom:8px}
+.tv-report-input:focus{border-color:rgba(139,233,253,0.5)}
+.tv-report-input::placeholder{color:rgba(255,255,255,0.3);font-size:11px}
+.tv-report-submit{width:100%;padding:8px;border-radius:5px;border:1px solid rgba(139,233,253,0.4);
+  background:rgba(139,233,253,0.1);color:#8be9fd;font-family:'Press Start 2P',monospace;
+  font-size:clamp(7px,0.8vw,9px);cursor:pointer;transition:all .15s;letter-spacing:1px}
+.tv-report-submit:hover{background:rgba(139,233,253,0.2);border-color:#8be9fd}
+.tv-report-submit:disabled{opacity:0.4;cursor:default}
 /* TV Info Overlay — 3 phase system */
 .tv-overlay{position:absolute;bottom:100px;left:24px;z-index:14;pointer-events:none;
   transform:translateX(-110%);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease;
@@ -1088,7 +1101,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .tv-live-strip{top:6px;right:10px;gap:5px}
   .tv-live-badge{font-size:7px;padding:3px 6px}
   .tv-react-btn{font-size:9px;padding:3px 5px}
-  .tv-report-popup{min-width:180px;padding:10px 12px;font-size:7px}
+  .tv-report-popup{min-width:240px;max-width:320px;padding:12px 14px;font-size:7px}
+  .tv-report-input{font-size:11px;padding:7px 8px}
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
   .vhs-osd-time{top:60px;left:14px}
   .panel-header-wrapper{padding:4px 8px}
@@ -1578,9 +1592,14 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
             <div class="tv-report-popup" id="reportPopup">
               <div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div>
               <div class="tv-report-btns">
-                <button class="tv-report-btn no" id="reportYes">neatbilst</button>
-                <button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button>
+                <button class="tv-report-btn yes" id="reportFits">atbilst</button>
+                <button class="tv-report-btn no" id="reportNotFits">neatbilst</button>
               </div>
+              <div class="tv-report-divider"></div>
+              <div class="tv-report-suggest-label">Iesaki dziesmu šim kanālam:</div>
+              <input type="text" class="tv-report-input" id="suggestInput" placeholder="YouTube links vai izpildītājs — dziesma">
+              <button class="tv-report-submit" id="suggestSubmit">IESNIEGT</button>
+              <div class="tv-report-thanks" id="reportStatus" style="display:none;margin-top:8px"></div>
             </div>
           </div>
         </div>
@@ -1769,7 +1788,21 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <p>Retro televīzijas formātā vari baudīt <mark class="text-highlight">labāko latviešu un ārzemju</mark> mūziku — no klasiskiem šlāgeriem līdz jaunākajiem hitiem. Sākam ar POP, ROKS un RETRO, bet vienmēr var pārslēgties uz ko košāku.</p>
       <p>Kanālu pārslēgšana, SMS rindas un dalīšanās pogas ir veidotas kā <mark class="text-highlight">TV paziņojumi</mark>, lai sajūta būtu tieši kā pie ekrāna: spied MUTE, VOL vai CH, un pamanīsi spilgtus ziņojumus, kas iegrimst fonā, bet <mark class="text-highlight">paliek skaidri salasāmi</mark>.</p>
       <p>Ja kas nestrādā vai vēlies ieteikumus nākamajai laidienai, <mark class="text-highlight">dod ziņu</mark> — uzturam ēteru kopā.</p>
-      <!-- Kontaktu forma (Formbase) -->
+      <!-- Dziesmu ieteikuma forma -->
+      <div class="info-contact-form">
+        <div class="info-strap" style="margin-top:16px">IESAKI DZIESMU</div>
+        <p style="font-size:12px;color:#aaa;margin:6px 0 10px">Zini labu dziesmu, ko pievienot LOM TV? Iesūti ieteikumu!</p>
+        <form id="infoSuggestForm" class="contact-form" onsubmit="submitInfoSuggestion(event)">
+          <input type="text" name="suggestSong" placeholder="YouTube links vai izpildītājs — dziesma" required class="contact-input" id="infoSuggestSong">
+          <select name="suggestChannel" class="contact-input" id="infoSuggestChannel">
+            <option value="">Kanāls (neobligāts)</option>
+          </select>
+          <textarea name="suggestNote" placeholder="Piezīmes (neobligāts)" rows="2" class="contact-input contact-textarea" id="infoSuggestNote"></textarea>
+          <button type="submit" class="contact-submit" id="infoSuggestBtn">IESNIEGT IETEIKUMU</button>
+          <div class="contact-status" id="infoSuggestStatus"></div>
+        </form>
+      </div>
+      <!-- Kontaktu forma -->
       <div class="info-contact-form">
         <div class="info-strap" style="margin-top:16px">SAZINIES AR MUMS</div>
         <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
@@ -2117,6 +2150,7 @@ loadFromSheets().then(loaded=>{
   if(loaded){
     syncAllChannels();
     buildChannelGrid();
+    populateInfoChannelSelect();
   }
 });
 // TV startē tikai ar pogu klikšķi (nodrošina autoplay ar skaņu)
@@ -2652,54 +2686,85 @@ function updateLiveCount(){
 updateLiveCount();
 setInterval(updateLiveCount,7000+Math.random()*6000); // Ik 7-13 sek
 
-// ═══ REPORT POGA ═══
+// ═══ REPORT + IETEIKUMU SISTĒMA ═══
+// Google Sheets Apps Script Web App URL — nomainīt uz savu!
+const SHEETS_SUBMIT_URL=''; // TODO: ielīmē savu Google Apps Script deploy URL
+
+function getReportContext(){
+  const v=getCurrentVideo();
+  const chName=channels[currentChannel]?channels[currentChannel].name:'?';
+  return{videoId:v?v.id:'',title:v?v.title:'',artist:v?v.artist:'',song:v?v.song:'',channel:chName};
+}
+
+function submitToSheets(data){
+  if(!SHEETS_SUBMIT_URL){console.log('📋 Sheets submit (nav URL):',data);return Promise.resolve(true)}
+  return fetch(SHEETS_SUBMIT_URL,{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  }).then(()=>true).catch(e=>{console.warn('Sheets submit kļūda:',e);return false});
+}
+
+function showReportStatus(msg,color){
+  const el=document.getElementById('reportStatus');
+  if(!el)return;
+  el.textContent=msg;el.style.color=color||'#35ed7e';el.style.display='block';
+  setTimeout(()=>{el.style.display='none'},2500);
+}
+
+// Report poga toggle
 document.getElementById('reactReport').addEventListener('click',(e)=>{
   e.stopPropagation();
   const popup=document.getElementById('reportPopup');
+  // Reset status un input katru reizi atverot
+  if(!popup.classList.contains('show')){
+    const st=document.getElementById('reportStatus');if(st)st.style.display='none';
+    const inp=document.getElementById('suggestInput');if(inp)inp.value='';
+  }
   popup.classList.toggle('show');
 });
-document.getElementById('reportYes').addEventListener('click',(e)=>{
+
+// ATBILST poga
+document.getElementById('reportFits').addEventListener('click',(e)=>{
   e.stopPropagation();
-  const popup=document.getElementById('reportPopup');
-  const v=getCurrentVideo();
-  const chName=channels[currentChannel]?channels[currentChannel].name:'?';
-  console.log('REPORT: dziesma neatbilst kanālam',chName,v?v.title:'?',v?v.id:'');
-  // TODO: nosūtīt uz Sheets/Formbase — videoId, kanāls, timestamp
-  // Rādām pateicību
-  popup.innerHTML='<div class="tv-report-thanks">Paldies! Atzīmēts.</div>';
-  setTimeout(()=>{popup.classList.remove('show');
-    popup.innerHTML='<div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn no" id="reportYes">neatbilst</button><button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button></div>';
-    // Re-attach listeners
-    attachReportListeners();
-  },1500);
+  const ctx=getReportContext();
+  submitToSheets({type:'vote',vote:'atbilst',...ctx,time:new Date().toISOString()});
+  showReportStatus('Paldies! Atzīmēts.','#35ed7e');
 });
-document.getElementById('reportNo').addEventListener('click',(e)=>{
+
+// NEATBILST poga
+document.getElementById('reportNotFits').addEventListener('click',(e)=>{
   e.stopPropagation();
-  document.getElementById('reportPopup').classList.remove('show');
+  const ctx=getReportContext();
+  submitToSheets({type:'vote',vote:'neatbilst',...ctx,time:new Date().toISOString()});
+  showReportStatus('Atzīmēts — neatbilst.','#ffdd57');
 });
-function attachReportListeners(){
-  const y=document.getElementById('reportYes'),n=document.getElementById('reportNo');
-  if(y)y.addEventListener('click',(e)=>{
-    e.stopPropagation();
-    const popup=document.getElementById('reportPopup');
-    const v=getCurrentVideo();
-    const chName=channels[currentChannel]?channels[currentChannel].name:'?';
-    console.log('REPORT: dziesma neatbilst kanālam',chName,v?v.title:'?',v?v.id:'');
-    popup.innerHTML='<div class="tv-report-thanks">Paldies! Atzīmēts.</div>';
-    setTimeout(()=>{popup.classList.remove('show');
-      popup.innerHTML='<div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn no" id="reportYes">neatbilst</button><button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button></div>';
-      attachReportListeners();
-    },1500);
+
+// IESNIEGT IETEIKUMU poga
+document.getElementById('suggestSubmit').addEventListener('click',(e)=>{
+  e.stopPropagation();
+  const input=document.getElementById('suggestInput');
+  const val=input.value.trim();
+  if(!val){input.style.borderColor='rgba(255,107,107,0.6)';setTimeout(()=>{input.style.borderColor=''},1500);return}
+  const ctx=getReportContext();
+  const btn=document.getElementById('suggestSubmit');
+  btn.disabled=true;btn.textContent='SŪTA...';
+  submitToSheets({type:'suggestion',suggestion:val,...ctx,time:new Date().toISOString()}).then(()=>{
+    btn.disabled=false;btn.textContent='IESNIEGT IETEIKUMU';
+    input.value='';
+    showReportStatus('Paldies par ieteikumu!','#8be9fd');
   });
-  if(n)n.addEventListener('click',(e)=>{
-    e.stopPropagation();
-    document.getElementById('reportPopup').classList.remove('show');
-  });
-}
+});
+
+// Enter taustiņš input laukā
+document.getElementById('suggestInput').addEventListener('keydown',(e)=>{
+  if(e.key==='Enter'){e.preventDefault();document.getElementById('suggestSubmit').click()}
+});
+
 // Aizvērt report popup klikšķinot ārpus tā
 document.addEventListener('click',(e)=>{
   const popup=document.getElementById('reportPopup');
-  if(popup&&popup.classList.contains('show')&&!e.target.closest('.tv-reactions')){
+  if(popup&&popup.classList.contains('show')&&!e.target.closest('.tv-reactions')&&!e.target.closest('.tv-report-popup')){
     popup.classList.remove('show');
   }
 });
@@ -3088,9 +3153,7 @@ function toggleInfoPopup(){
   }
 }
 
-// KONTAKTU FORMA — Formbase.dev submit
-// TODO: Nomainīt FORMBASE_ENDPOINT uz tavu reālo Formbase form ID
-const FORMBASE_ENDPOINT='https://formbase.dev/s/YOUR_FORM_ID';
+// KONTAKTU FORMA — tagad caur Google Sheets
 function submitContactForm(e){
   e.preventDefault();
   const form=document.getElementById('contactForm');
@@ -3098,15 +3161,41 @@ function submitContactForm(e){
   const status=document.getElementById('contactStatus');
   const data=Object.fromEntries(new FormData(form));
   btn.disabled=true;btn.textContent='SŪTA...';status.textContent='';
-  fetch(FORMBASE_ENDPOINT,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(data)
-  }).then(r=>{
-    if(r.ok){status.textContent='Paldies! Ziņa nosūtīta.';status.style.color='#35ed7e';form.reset()}
-    else{status.textContent='Kļūda. Mēģini vēlreiz.';status.style.color='#ff6b6b'}
+  submitToSheets({type:'contact',...data,time:new Date().toISOString()}).then(()=>{
+    status.textContent='Paldies! Ziņa nosūtīta.';status.style.color='#35ed7e';form.reset();
   }).catch(()=>{
-    status.textContent='Nav savienojuma. Mēģini vēlreiz.';status.style.color='#ff6b6b';
+    status.textContent='Kļūda. Mēģini vēlreiz.';status.style.color='#ff6b6b';
   }).finally(()=>{btn.disabled=false;btn.textContent='NOSŪTĪT'});
+}
+
+// INFO POPUP — dziesmu ieteikuma forma
+function submitInfoSuggestion(e){
+  e.preventDefault();
+  const btn=document.getElementById('infoSuggestBtn');
+  const status=document.getElementById('infoSuggestStatus');
+  const song=document.getElementById('infoSuggestSong').value.trim();
+  const channel=document.getElementById('infoSuggestChannel').value;
+  const note=document.getElementById('infoSuggestNote').value.trim();
+  if(!song)return;
+  btn.disabled=true;btn.textContent='SŪTA...';status.textContent='';
+  submitToSheets({type:'suggestion',suggestion:song,channel:channel||'nav norādīts',note,time:new Date().toISOString()}).then(()=>{
+    status.textContent='Paldies par ieteikumu!';status.style.color='#35ed7e';
+    document.getElementById('infoSuggestForm').reset();
+  }).catch(()=>{
+    status.textContent='Kļūda. Mēģini vēlreiz.';status.style.color='#ff6b6b';
+  }).finally(()=>{btn.disabled=false;btn.textContent='IESNIEGT IETEIKUMU'});
+}
+
+// Aizpildīt kanālu select INFO formā
+function populateInfoChannelSelect(){
+  const sel=document.getElementById('infoSuggestChannel');
+  if(!sel)return;
+  channels.forEach(ch=>{
+    if(ch._isGame)return;
+    const opt=document.createElement('option');
+    opt.value=ch.name;opt.textContent=ch.name;
+    sel.appendChild(opt);
+  });
 }
 
 // ADMIN MODERĀCIJAS PANELIS — ?admin=1
