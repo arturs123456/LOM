@@ -272,19 +272,54 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .yt-bottom-hide{position:absolute;bottom:0;left:0;right:0;height:90px;z-index:2;background:linear-gradient(to top,#000 60%,transparent 100%);pointer-events:none}
 
 /* ERA EFFECTS */
-.tv-screen.era-vintage .yt-slot{filter:grayscale(1) brightness(0.82) contrast(1.12);transition:filter .8s ease,opacity 2s ease}
-.tv-screen.era-vcr .yt-slot{filter:saturate(0.6) contrast(1.08) brightness(0.9);transition:filter .8s ease,opacity 2s ease}
+/* VINTAGE (≤1989): Melnbalts, tumšas malas/stūri, vecā TV estētika */
+.tv-screen.era-vintage .yt-slot{filter:grayscale(1) brightness(0.78) contrast(1.18) sepia(0.15);transition:filter .8s ease,opacity 2s ease}
+.tv-screen.era-vcr .yt-slot{filter:saturate(0.55) contrast(1.1) brightness(0.88) sepia(0.05);transition:filter .8s ease,opacity 2s ease}
 .tv-screen.era-modern .yt-slot{filter:none;transition:filter .8s ease,opacity 2s ease}
-.era-overlay-vintage{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;background:radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,0.62) 70%,rgba(0,0,0,0.9) 100%);opacity:0;transition:opacity .8s ease}
+/* Vintage vinjete — tumši stūri un malas, kā vecā TV */
+.era-overlay-vintage{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;
+  background:
+    radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.5) 65%,rgba(0,0,0,0.85) 100%),
+    radial-gradient(circle at 8% 8%,rgba(0,0,0,0.4) 0%,transparent 35%),
+    radial-gradient(circle at 92% 8%,rgba(0,0,0,0.4) 0%,transparent 35%),
+    radial-gradient(circle at 8% 92%,rgba(0,0,0,0.4) 0%,transparent 35%),
+    radial-gradient(circle at 92% 92%,rgba(0,0,0,0.4) 0%,transparent 35%)}
 .tv-screen.era-vintage .era-overlay-vintage{opacity:1}
-.era-overlay-vcr{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.09) 2px,rgba(0,0,0,0.09) 3px,transparent 3px,transparent 6px,rgba(255,255,255,0.012) 6px,rgba(255,255,255,0.012) 7px)}
-.tv-screen.era-vcr .era-overlay-vcr{opacity:1;animation:vcrNoise .15s steps(1) infinite}
+/* Vintage grain/noise overlay */
+.era-overlay-vintage-grain{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  background-size:128px 128px;mix-blend-mode:overlay}
+.tv-screen.era-vintage .era-overlay-vintage-grain{opacity:1;animation:vintageGrain .08s steps(1) infinite}
+@keyframes vintageGrain{0%{background-position:0 0}25%{background-position:-32px 16px}50%{background-position:16px -32px}75%{background-position:-16px -16px}100%{background-position:0 0}}
+/* Vintage horizontal lines (old TV scanline effect, thicker) */
+.era-overlay-vintage-lines{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.12) 3px,rgba(0,0,0,0.12) 4px)}
+.tv-screen.era-vintage .era-overlay-vintage-lines{opacity:1}
+
+/* VHS/VCR (1990-2000): Noise, tracking lines, chromatic aberration */
+.era-overlay-vcr{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 3px,transparent 3px,transparent 5px)}
+.tv-screen.era-vcr .era-overlay-vcr{opacity:1;animation:vcrNoise .12s steps(1) infinite}
 @keyframes vcrNoise{0%{background-position:0 0}25%{background-position:0 -2px}50%{background-position:0 1px}75%{background-position:0 -1px}100%{background-position:0 0}}
-.era-overlay-vcr-chroma{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:3;opacity:0;transition:opacity .8s ease;background:linear-gradient(90deg,rgba(255,0,80,0.025) 0%,transparent 25%,rgba(0,80,255,0.025) 75%,transparent 100%)}
+/* VHS chromatic aberration (color fringing) */
+.era-overlay-vcr-chroma{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:3;opacity:0;transition:opacity .8s ease;
+  background:linear-gradient(90deg,rgba(255,0,80,0.035) 0%,transparent 20%,transparent 80%,rgba(0,80,255,0.035) 100%)}
 .tv-screen.era-vcr .era-overlay-vcr-chroma{opacity:1}
-.era-overlay-vcr-band{position:absolute;left:0;right:0;pointer-events:none;z-index:5;opacity:0;transition:opacity .8s ease;height:3px;background:rgba(255,255,255,0.06);filter:blur(0.5px)}
-.tv-screen.era-vcr .era-overlay-vcr-band{opacity:1;animation:vcrBandDrift 5s linear infinite}
-@keyframes vcrBandDrift{0%{top:100%;opacity:0}4%{opacity:1}96%{opacity:1}100%{top:-4px;opacity:0}}
+/* VHS tracking band — horizontal white line drifting up */
+.era-overlay-vcr-band{position:absolute;left:0;right:0;pointer-events:none;z-index:5;opacity:0;transition:opacity .8s ease;
+  height:4px;background:rgba(255,255,255,0.08);filter:blur(1px);box-shadow:0 0 12px rgba(255,255,255,0.04)}
+.tv-screen.era-vcr .era-overlay-vcr-band{opacity:1;animation:vcrBandDrift 6s linear infinite}
+@keyframes vcrBandDrift{0%{top:100%;opacity:0}3%{opacity:1}97%{opacity:1}100%{top:-4px;opacity:0}}
+/* VHS noise/grain overlay */
+.era-overlay-vcr-grain{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size:100px 100px;mix-blend-mode:overlay}
+.tv-screen.era-vcr .era-overlay-vcr-grain{opacity:1;animation:vhsGrain .1s steps(1) infinite}
+@keyframes vhsGrain{0%{background-position:0 0}33%{background-position:-20px 10px}66%{background-position:10px -20px}100%{background-position:0 0}}
+/* VHS occasional glitch — horizontal shift */
+.era-overlay-vcr-glitch{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:5;opacity:0;overflow:hidden}
+.tv-screen.era-vcr .era-overlay-vcr-glitch{animation:vhsGlitchFlash 8s ease-in-out infinite}
+@keyframes vhsGlitchFlash{0%,92%,100%{opacity:0}93%{opacity:1}94%{opacity:0}96%{opacity:1}97%{opacity:0}}
 
 /* SCREEN OVERLAYS */
 @keyframes logoPulse{0%,100%{text-shadow:0 0 8px var(--neon-purple),0 0 16px rgba(155,77,255,0.4)}50%{text-shadow:0 0 14px var(--neon-purple),0 0 28px rgba(155,77,255,0.7)}}
@@ -892,9 +927,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         <div class="yt-blocker" id="ytBlocker"></div>
         <div class="yt-bottom-hide"></div>
         <div class="era-overlay-vintage"></div>
+        <div class="era-overlay-vintage-grain"></div>
+        <div class="era-overlay-vintage-lines"></div>
         <div class="era-overlay-vcr"></div>
         <div class="era-overlay-vcr-chroma"></div>
         <div class="era-overlay-vcr-band"></div>
+        <div class="era-overlay-vcr-grain"></div>
+        <div class="era-overlay-vcr-glitch"></div>
         <div class="screen-logo"><span class="screen-logo-l">L</span><span class="screen-logo-o-sphere"><span class="screen-logo-sphere"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></span></span><span class="screen-logo-m">M</span><span class="screen-logo-tv">tv</span></div>
         <button class="fs-exit-btn" id="fsExitBtn" onclick="toggleFullscreen()" title="Iziet no pilnekrāna">✕</button>
         <div class="ch-switch-overlay" id="chOverlay"></div>
@@ -1199,9 +1238,10 @@ function sheetsToChannels(rows){
     const album=row['Albums']||row['album']||'';
     const year=parseInt(row['Gads']||row['year'])||0;
     const duration=parseInt(row['Garums']||row['duration'])||240;
-    const era=row['Era']||row['era']||'modern';
     const trimStart=parseInt(row['Trim Start']||row['trim_start'])||5;
     const trimEnd=parseInt(row['Trim End']||row['trim_end'])||5;
+    // Era automātiski pēc gada: ≤1989=vintage, 1990-2000=vcr, 2001+=modern
+    const era=year>0?(year<=1989?'vintage':year<=2000?'vcr':'modern'):'modern';
     const video={id,title:artist+' — '+song,artist,song,album,year,decade:era,duration,trimStart,trimEnd};
     const addedTo=new Set();
     // 1) Pārbaudīt tiešās CSV kolonnas (X atzīmes)
