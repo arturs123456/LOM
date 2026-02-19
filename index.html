@@ -3133,8 +3133,8 @@ function submitContactForm(e){
     const meta=parseVideoMeta(nextV);
     const artist=meta.artist||'nezināms izpildītājs';
     const song=meta.title||nextV.title||'nezināma dziesma';
-    // Pilns teksts ar nākamās dziesmas pieteikumu
-    const fullText=text+' Nākošā dziesma - '+song+', ko izpilda '+artist+', lai skan visiem Rīgā... un visiem visā Latvijā!';
+    // Pilns teksts: ievads + lietotāja teksts + nākamās dziesmas pieteikums
+    const fullText='Jūs klausaties Latvijas Online mūzikas kanālu. '+text+' Nākošā dziesma - '+song+', ko izpilda '+artist+', lai skan visiem Rīgā... un visiem visā Latvijā!';
     if(status){status.textContent='⏳ Ģenerē audio (gaidīs crossfade)...';status.style.color='#f5a623'}
     if(pubBtn)pubBtn.disabled=true;
     try{
