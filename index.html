@@ -255,14 +255,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     repeating-linear-gradient(90deg,rgba(155,77,255,0.01) 0px,transparent 1px,transparent 4px);
   animation:scanlineFlicker 8s linear infinite}
 @keyframes scanlineFlicker{0%,100%{opacity:0.8}50%{opacity:0.95}}
-#yt-player{width:100%;height:100%;border:none;position:relative;z-index:1}
-#yt-player.yt-ready{position:absolute;top:-60px;left:-10px;width:calc(100% + 20px);height:calc(100% + 120px);pointer-events:none;transform:scale(1.2)}
+.yt-slot{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:1;transition:opacity 2s ease}
+.yt-slot.yt-ready{top:-60px;left:-10px;width:calc(100% + 20px);height:calc(100% + 120px);pointer-events:none;transform:scale(1.2)}
+.yt-slot.yt-hidden{opacity:0}
 .yt-blocker{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
 
 /* ERA EFFECTS */
-.tv-screen.era-vintage #yt-player{filter:grayscale(1) brightness(0.82) contrast(1.12);transition:filter .8s ease}
-.tv-screen.era-vcr #yt-player{filter:saturate(0.6) contrast(1.08) brightness(0.9);transition:filter .8s ease}
-.tv-screen.era-modern #yt-player{filter:none;transition:filter .8s ease}
+.tv-screen.era-vintage .yt-slot{filter:grayscale(1) brightness(0.82) contrast(1.12);transition:filter .8s ease,opacity 2s ease}
+.tv-screen.era-vcr .yt-slot{filter:saturate(0.6) contrast(1.08) brightness(0.9);transition:filter .8s ease,opacity 2s ease}
+.tv-screen.era-modern .yt-slot{filter:none;transition:filter .8s ease,opacity 2s ease}
 .era-overlay-vintage{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;background:radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,0.62) 70%,rgba(0,0,0,0.9) 100%);opacity:0;transition:opacity .8s ease}
 .tv-screen.era-vintage .era-overlay-vintage{opacity:1}
 .era-overlay-vcr{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:4;opacity:0;transition:opacity .8s ease;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.09) 2px,rgba(0,0,0,0.09) 3px,transparent 3px,transparent 6px,rgba(255,255,255,0.012) 6px,rgba(255,255,255,0.012) 7px)}
@@ -729,7 +730,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-casing.fs-mode{border-radius:0;border:none;box-shadow:none}
 .tv-casing.fs-mode::after{display:none}
 /* Fullscreen: zoom video to fill (cover letterbox) */
-.tv-casing.fs-mode #yt-player.yt-ready{position:absolute;top:-60px;left:-10px;width:calc(100% + 20px);height:calc(100% + 120px);transform:scale(1.2);object-fit:cover}
+.tv-casing.fs-mode .yt-slot.yt-ready{position:absolute;top:-60px;left:-10px;width:calc(100% + 20px);height:calc(100% + 120px);transform:scale(1.2);object-fit:cover}
 /* Fullscreen exit button — top right */
 .fs-exit-btn{display:none;position:absolute;top:16px;right:20px;z-index:50;
   width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
@@ -872,7 +873,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     <div class="tv-screen-area">
       <div class="tv-screen" id="tvScreen">
         <div class="scanlines"></div>
-        <div id="yt-player"></div>
+        <div id="yt-slot-a" class="yt-slot"></div>
+        <div id="yt-slot-b" class="yt-slot yt-hidden"></div>
         <div class="yt-blocker" id="ytBlocker"></div>
         <div class="era-overlay-vintage"></div>
         <div class="era-overlay-vcr"></div>
@@ -1203,6 +1205,11 @@ async function loadFromSheets(){
 }
 
 let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady=false,smsMessages=[],progressInterval=null,isMuted=false,currentVolume=80,volumeBeforeMute=80;
+// Dual-player crossfade sistēma
+let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
+let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
+let crossfading=false,crossfadeTimer=null;
+const CROSSFADE_DURATION=2000; // 2 sek crossfade
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
 function startTV(){
@@ -1238,41 +1245,107 @@ loadFromSheets().then(loaded=>{
 // TV startē tikai ar pogu klikšķi (nodrošina autoplay ar skaņu)
 
 function initYTPlayer(){const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
+const YT_VARS={autoplay:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin};
+function setupSlot(p,slot){
+  try{p.getIframe().classList.add('yt-ready')}catch(ex){}
+  try{p.loadModule('captions');p.unloadModule('captions')}catch(ex){}
+}
 window.onYouTubeIframeAPIReady=function(){
   const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
   const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
-  player=new YT.Player('yt-player',{
+  // Slot A — pirmais aktīvais player
+  playerA=new YT.Player('yt-slot-a',{
     videoId:v.id,
-    playerVars:{autoplay:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin,start:trimS,end:dur>trimE?dur-trimE:undefined},
+    playerVars:{...YT_VARS,start:trimS,end:dur>trimE?dur-trimE:undefined},
     events:{
-      onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();setVolume(80);
-        // Oversize iframe lai paslēptu YouTube UI
-        try{player.getIframe().classList.add('yt-ready')}catch(ex){}
-        // Izslēgt subtitrus
-        try{player.loadModule('captions');player.unloadModule('captions')}catch(ex){}
+      onReady:(e)=>{playerAReady=true;playerReady=true;player=playerA;activeSlot='a';
+        e.target.playVideo();updateNowPlaying();setVolume(80);setupSlot(playerA,'a');
       },
       onStateChange:(e)=>{
-        if(e.data===YT.PlayerState.ENDED)nextVideo();
-        if(e.data===YT.PlayerState.PLAYING){document.getElementById('ledPower').classList.remove('off');
-          // Pārliecināties, ka subtitri ir izslēgti
-          try{player.unloadModule('captions')}catch(ex){}
+        if(activeSlot==='a'){
+          if(e.data===YT.PlayerState.ENDED&&!crossfading)nextVideo();
+          if(e.data===YT.PlayerState.PLAYING){document.getElementById('ledPower').classList.remove('off');try{playerA.unloadModule('captions')}catch(ex){}}
+        }
+      }
+    }
+  });
+  // Slot B — otrs player priekš crossfade
+  playerB=new YT.Player('yt-slot-b',{
+    playerVars:{...YT_VARS},
+    events:{
+      onReady:(e)=>{playerBReady=true;setupSlot(playerB,'b')},
+      onStateChange:(e)=>{
+        if(activeSlot==='b'){
+          if(e.data===YT.PlayerState.ENDED&&!crossfading)nextVideo();
+          if(e.data===YT.PlayerState.PLAYING){document.getElementById('ledPower').classList.remove('off');try{playerB.unloadModule('captions')}catch(ex){}}
         }
       }
     }
   });
 };
 
-function playVideo(v){
+function crossfadeTo(v){
   if(!playerReady)return;
+  if(crossfading)return;
+  crossfading=true;
   const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
   const opts={videoId:v.id,startSeconds:trimS};
   if(dur>trimE)opts.endSeconds=dur-trimE;
-  player.loadVideoById(opts);
+  // Kurš ir nākamais slots?
+  const nextSlot=activeSlot==='a'?'b':'a';
+  const nextPlayer=nextSlot==='a'?playerA:playerB;
+  const currPlayer=activeSlot==='a'?playerA:playerB;
+  const nextEl=document.getElementById('yt-slot-'+nextSlot);
+  const currEl=document.getElementById('yt-slot-'+activeSlot);
+  // Ielādē video nākamajā slotā
+  nextPlayer.loadVideoById(opts);
+  nextPlayer.setVolume(0);
+  nextPlayer.unMute();
+  // Rādi nākamo slotu (vēl caurspīdīgs)
+  nextEl.classList.remove('yt-hidden');
+  // Volume fade: curr 80→0, next 0→80 pa CROSSFADE_DURATION
+  const steps=20,interval=CROSSFADE_DURATION/steps;
+  let step=0;
+  const vol=isMuted?0:currentVolume;
+  clearInterval(crossfadeTimer);
+  crossfadeTimer=setInterval(()=>{
+    step++;
+    const pct=step/steps;
+    const fadeOutVol=Math.round(vol*(1-pct));
+    const fadeInVol=Math.round(vol*pct);
+    try{currPlayer.setVolume(fadeOutVol)}catch(e){}
+    try{nextPlayer.setVolume(fadeInVol)}catch(e){}
+    // CSS opacity transition notiek automātiski ar klasi
+    if(step===1)currEl.classList.add('yt-hidden'); // sāk CSS fade out
+    if(step>=steps){
+      clearInterval(crossfadeTimer);
+      // Pabeigt crossfade
+      try{currPlayer.pauseVideo()}catch(e){}
+      activeSlot=nextSlot;
+      player=nextPlayer;
+      crossfading=false;
+      try{nextPlayer.setVolume(vol)}catch(e){}
+    }
+  },interval);
+  updateNowPlaying();resetOverlayPhases();
+}
+function playVideo(v){crossfadeTo(v)}
+function playVideoHard(v){
+  // Bez crossfade — tūlītēja pārslēgšana (kanāla maiņa ar static)
+  if(!playerReady)return;
+  crossfading=false;clearInterval(crossfadeTimer);
+  const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
+  const opts={videoId:v.id,startSeconds:trimS};
+  if(dur>trimE)opts.endSeconds=dur-trimE;
+  const currPlayer=activeSlot==='a'?playerA:playerB;
+  currPlayer.loadVideoById(opts);
+  const vol=isMuted?0:currentVolume;
+  try{currPlayer.setVolume(vol)}catch(e){}
   updateNowPlaying();resetOverlayPhases();
 }
 function getCurrentVideo(){return channels[currentChannel].videos[currentVideoIdx[currentChannel]]}
-function nextVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]])}
-function prevVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]])}
+function nextVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;crossfadeTo(channels[ch].videos[currentVideoIdx[ch]])}
+function prevVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;crossfadeTo(channels[ch].videos[currentVideoIdx[ch]])}
 function getNextVideoInfo(){
   const ch=currentChannel,nextIdx=(currentVideoIdx[ch]+1)%channels[ch].videos.length;
   return channels[ch].videos[nextIdx];
@@ -1286,8 +1359,8 @@ function parseVideoMeta(v){
   return{artist:'',title:v.title};
 }
 // TV Overlay — 3 phase system
-let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false};
-function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay()}
+let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false,xfade:false};
+function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay()}
 function showOverlay(phase,videoData,duration){
   const ov=document.getElementById('tvOverlay');
   const meta=parseVideoMeta(videoData);
@@ -1320,7 +1393,8 @@ function startProgressTracker(){
   progressInterval=setInterval(()=>{
     if(!playerReady||!isPoweredOn)return;
     try{
-      const d=player.getDuration(),c=player.getCurrentTime();
+      const ap=activeSlot==='a'?playerA:playerB;
+      const d=ap.getDuration(),c=ap.getCurrentTime();
       if(d<=0)return;
       const p=(c/d)*100+'%';document.getElementById('npProgressFill').style.width=p;
       const remaining=d-c;
@@ -1331,6 +1405,8 @@ function startProgressTracker(){
       if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15)}
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
+      // Crossfade: 2.5 sek pirms beigām sāk pāreju uz nākamo
+      if(remaining<=2.5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
     }catch(e){}
   },500);
 }
@@ -1343,7 +1419,7 @@ function switchChannel(ch){
   currentChannel=ch;
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
-  showStatic(()=>playVideo(channels[ch].videos[currentVideoIdx[ch]]));
+  showStatic(()=>playVideoHard(channels[ch].videos[currentVideoIdx[ch]]));
 }
 function changeChannel(dir){let n=currentChannel+dir;if(n<0)n=channels.length-1;if(n>=channels.length)n=0;switchChannel(n)}
 function showStatic(cb){
@@ -1355,11 +1431,17 @@ function showStatic(cb){
 function togglePower(){
   const btn=document.getElementById('powerBtnHorizontal'),off=document.getElementById('powerOff'),led=document.getElementById('ledPower'),bars=document.querySelectorAll('.indicator-bar'),pt=document.getElementById('powerText');
   if(isPoweredOn){
-    isPoweredOn=false;btn.classList.remove('active');led.classList.add('off');if(playerReady)player.pauseVideo();off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});if(pt)pt.textContent='ON';
+    isPoweredOn=false;btn.classList.remove('active');led.classList.add('off');
+    try{if(playerAReady)playerA.pauseVideo()}catch(e){}
+    try{if(playerBReady)playerB.pauseVideo()}catch(e){}
+    off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});if(pt)pt.textContent='ON';
     setChatEnabled(false);
   }
   else{
-    isPoweredOn=true;btn.classList.add('active');led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));if(pt)pt.textContent='OFF';setChatEnabled(true);showStatic(()=>{if(playerReady)player.playVideo()})}
+    isPoweredOn=true;btn.classList.add('active');led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));if(pt)pt.textContent='OFF';setChatEnabled(true);showStatic(()=>{
+      const ap=activeSlot==='a'?playerA:playerB;
+      if(playerReady&&ap)ap.playVideo();
+    })}
 }
 function toggleMute(){
   const btn=document.getElementById('muteBtn');
@@ -1421,7 +1503,8 @@ function setVolume(val){
   if(val===0&&!isMuted){volumeBeforeMute=prevVolume||volumeBeforeMute;isMuted=true;if(muteBtn)muteBtn.classList.add('active');showMuteOSD(true)}
   else if(val>0&&isMuted){isMuted=false;if(muteBtn)muteBtn.classList.remove('active');showMuteOSD(false);volumeBeforeMute=val}
   if(playerReady)try{
-    if(val===0){player.mute()}else{player.unMute();player.setVolume(val)}
+    const ap=activeSlot==='a'?playerA:playerB;
+    if(val===0){ap.mute()}else{ap.unMute();ap.setVolume(val)}
   }catch(e){}
   // sync circular knob
   const pct2=val/100;
