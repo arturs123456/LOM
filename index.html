@@ -1196,6 +1196,7 @@ async function loadFromSheets(){
 }
 
 let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady=false,smsMessages=[],progressInterval=null,isMuted=false,currentVolume=80,volumeBeforeMute=80;
+let firstPlayDone=false; // true pēc pirmā unmute
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
 function startTV(){
@@ -1236,9 +1237,13 @@ window.onYouTubeIframeAPIReady=function(){
   const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
   player=new YT.Player('yt-player',{
     videoId:v.id,
-    playerVars:{autoplay:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin},
+    playerVars:{autoplay:1,mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin},
     events:{
-      onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();setVolume(80);
+      onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();
+        // Sāk muted — rāda unmute overlay, gaidīs pirmo klikšķi
+        isMuted=true;currentVolume=0;
+        document.getElementById('muteBtn').classList.add('active');
+        showMuteOSD(true);
         // Oversize iframe lai paslēptu YouTube UI
         try{player.getIframe().classList.add('yt-ready')}catch(ex){}
         // Izslēgt subtitrus
@@ -1405,7 +1410,9 @@ function setVolume(val){
   const muteBtn=document.getElementById('muteBtn');
   if(val===0&&!isMuted){volumeBeforeMute=prevVolume||volumeBeforeMute;isMuted=true;if(muteBtn)muteBtn.classList.add('active');showMuteOSD(true)}
   else if(val>0&&isMuted){isMuted=false;if(muteBtn)muteBtn.classList.remove('active');showMuteOSD(false);volumeBeforeMute=val}
-  if(playerReady)try{player.setVolume(val)}catch(e){}
+  if(playerReady)try{
+    if(val===0){player.mute()}else{player.unMute();player.setVolume(val)}
+  }catch(e){}
   // sync circular knob
   const pct2=val/100;
   const arc=document.querySelector('.vc-arc'),glow=document.querySelector('.vc-glow');
@@ -1446,11 +1453,21 @@ function checkSMSForm(){
 }
 function sendSMS(){if(!isPoweredOn)return;const n=document.getElementById('smsName'),t=document.getElementById('smsText');if(!n.value.trim()||!t.value.trim())return;smsMessages.push({name:n.value.trim(),text:t.value.trim()});renderTicker();n.value='';t.value='';checkSMSForm()}
 function shareApp(){const u=location.href;if(navigator.share)navigator.share({title:'LOM TV',text:'LOM TV — Latvijas Online Mūzika 📺🇱🇻',url:u}).catch(()=>{});else navigator.clipboard.writeText(u).catch(()=>{})}
-// Click on screen = toggle mute
+// Click on screen = first click unmutes, then toggle mute
 document.getElementById('tvScreen').addEventListener('click',(e)=>{
   if(!isPoweredOn)return;
   // Don't mute if clicking on overlays that have their own handlers
   if(e.target.closest('.screen-logo')||e.target.closest('.now-playing')||e.target.closest('.fs-exit-btn'))return;
+  // Pirmais klikšķis — unmute (autoplay sāka muted)
+  if(!firstPlayDone){
+    firstPlayDone=true;
+    isMuted=false;
+    document.getElementById('muteBtn').classList.remove('active');
+    try{player.unMute();player.setVolume(80)}catch(ex){}
+    currentVolume=80;
+    showMuteOSD(false);
+    return;
+  }
   toggleMute();
 });
 document.addEventListener('keydown',(e)=>{
