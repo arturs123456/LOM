@@ -1080,50 +1080,102 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .start-sub{font-size:14px}
 }
 
+/* MOBILE LANDSCAPE — Sākuma ekrāns */
+@media(max-height:500px) and (orientation:landscape){
+  .start-screen{gap:8px;justify-content:center}
+  .logo-letter{font-size:80px !important}
+  .logo-letter.logo-M{font-size:90px !important}
+  .logo-o-sphere{width:65px;height:80px}
+  .logo-o-sphere .logo-sphere{width:65px;height:65px}
+  .logo-tv{font-size:40px;top:-14px;margin-left:-30px}
+  .lomk-sub{font-size:13px;letter-spacing:4px;margin-top:8px}
+  .start-sub{font-size:12px;margin-top:4px}
+  .start-btn{width:64px;height:64px;margin-top:10px}
+  .start-btn .play-tri{border-width:14px 0 14px 24px}
+  .start-btn-label{font-size:10px;bottom:-22px}
+}
+@media(max-height:380px) and (orientation:landscape){
+  .start-screen{gap:4px}
+  .logo-letter{font-size:56px !important}
+  .logo-letter.logo-M{font-size:64px !important}
+  .logo-o-sphere{width:46px;height:56px}
+  .logo-o-sphere .logo-sphere{width:46px;height:46px}
+  .logo-tv{font-size:28px;top:-10px;margin-left:-22px}
+  .lomk-sub{font-size:11px;letter-spacing:3px;margin-top:4px}
+  .start-sub{font-size:10px;margin-top:2px}
+  .start-btn{width:52px;height:52px;margin-top:6px}
+  .start-btn .play-tri{border-width:12px 0 12px 20px}
+  .start-btn-label{font-size:9px;bottom:-20px}
+}
+
 /* MOBILE LANDSCAPE — TV skats optimizēts */
 @media(max-width:900px) and (orientation:landscape){
   :root{--panel-w:200px}
+  /* Panelis scrollējams */
+  .tv-panel{overflow-y:auto;overflow-x:hidden;padding:6px 10px 0;gap:5px}
   .tv-screen-area{top:4px;bottom:4px;left:4px;right:calc(var(--panel-w)+4px)}
   .tv-screen{top:4px;bottom:4px;left:4px;right:4px}
+  /* Overlay */
   .tv-overlay{bottom:44px;left:6px;max-width:65%}
   .tv-overlay-inner{padding:8px 14px 6px}
   .tv-overlay-title{font-size:20px}
   .tv-overlay-artist{font-size:15px}
   .tv-overlay-label{font-size:16px;letter-spacing:3px;margin-bottom:4px}
+  /* SMS ticker uz ekrāna */
   .sms-ticker-screen{height:40px}
   .sms-item{font-size:13px;padding:0 16px}
   .screen-progress{bottom:18px}
+  /* Kanālu grid */
   .channel-grid{gap:3px;padding:4px}
-  .ch-btn{height:32px;border-radius:5px}
-  .ch-btn-front,.ch-btn-back{font-size:11px;letter-spacing:0.5px}
+  .ch-btn{height:36px;border-radius:5px}
+  .ch-face .ch-icon{font-size:18px}
+  .ch-face .ch-name{font-size:11px;letter-spacing:0.5px}
+  /* Panel header */
   .panel-logo-lom{font-size:14px}
-  .controls-section{padding:2px 8px}
-  .ctrl-btn{height:28px;font-size:11px}
-  .ch-vertical-btn{min-height:60px;width:44px}
-  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:24px}
-  .ch-vertical-btn-center{font-size:12px}
-  .power-top-row{gap:4px}
-  .power-btn-pair{gap:4px}
-  .power-pair-btn{height:40px}
-  .pair-btn-icon{width:15px;height:22px}
-  .pair-btn-text{font-size:12px;letter-spacing:1px}
-  .power-toggle{font-size:0.25em}
+  .panel-header-wrapper{padding:4px 6px}
+  .panel-divider{margin:2px 0}
+  /* Controls — kompaktāks */
+  .controls-section{padding:4px 6px}
+  .controls-3col{gap:4px}
+  .ctrl-btn{height:36px;font-size:12px}
+  #muteBtn,#infoBtn,#volDownBtn,#volUpBtn{height:36px;font-size:12px}
+  .ctrl-btn .ctrl-arrow{font-size:20px}
+  #volDownBtn .ctrl-arrow{font-size:28px}
+  #volUpBtn .ctrl-arrow{font-size:24px}
+  .ch-vertical-btn{min-height:76px;width:40px}
+  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:22px}
+  .ch-vertical-btn-center{font-size:11px}
+  /* ON/OFF + FULL/CHILL */
+  .power-top-row{gap:3px}
+  .power-btn-pair{gap:3px}
+  .power-pair-btn{height:34px}
+  .pair-btn-icon{width:14px;height:20px}
+  .pair-btn-icon-text{font-size:18px}
+  .pair-btn-text{font-size:11px;letter-spacing:1px}
+  .power-toggle{font-size:0.22em}
+  /* Live strip */
   .tv-live-strip{top:6px;right:10px;gap:5px}
   .tv-live-badge{font-size:7px;padding:3px 6px}
   .tv-react-btn{font-size:9px;padding:3px 5px}
-  .tv-report-popup{min-width:240px;max-width:320px;padding:12px 14px;font-size:12px}
-  .tv-report-input{font-size:12px;padding:7px 10px}
+  .tv-report-popup{min-width:220px;max-width:300px;padding:10px 12px;font-size:11px;right:-40px}
+  .tv-report-input{font-size:11px;padding:6px 8px}
+  /* VHS OSD */
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
   .vhs-osd-time{top:60px;left:14px}
-  .panel-header-wrapper{padding:4px 8px}
-  .panel-divider{margin:2px 0}
-  .speaker-grille{display:none}
-  .sms-panel{padding:4px}
+  /* SMS panelis — kompaktāks */
+  .sms-panel{padding:4px 6px}
   .sms-panel-row{gap:4px}
-  .sms-send-btn{font-size:12px;padding:6px 8px}
-  .sms-name-input{font-size:14px;padding:4px 6px}
-  .sms-text-input{min-height:30px;font-size:13px;padding:4px 6px}
-  .util-btns-bottom .wood-btn{height:36px;font-size:14px}
+  .sms-send-btn{font-size:11px;padding:5px 8px}
+  .sms-name-input{font-size:13px;padding:4px 6px}
+  .sms-text-input{min-height:28px;font-size:12px;padding:4px 6px;rows:1}
+  /* Apakšējās pogas */
+  .util-btns-bottom .wood-btn{height:32px;font-size:13px}
+  .util-btns-bottom .wood-btn span{font-size:18px}
+  /* Speaker */
+  .speaker-grille{display:none}
+  /* Bottom zone — sticky */
+  .panel-bottom-zone{padding:3px 0 2px}
+  /* Logo uz ekrāna */
   .screen-logo{top:4px;left:6px;padding:2px 6px;gap:1px}
   .screen-logo-l{font-size:18px}
   .screen-logo-m{font-size:17px}
@@ -1131,6 +1183,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .screen-logo-o-sphere .screen-logo-sphere{width:18px;height:18px}
   .screen-logo-tv{font-size:9px}
   .screen-logo-l,.screen-logo-m{text-shadow:none}
+  /* Indicator bars kompaktāki */
+  .indicator-bars{padding-right:4px}
+  .indicator-bar{width:3px;height:12px}
 }
 @media(max-height:400px) and (orientation:landscape){
   .sms-ticker-screen{height:32px}
@@ -1138,6 +1193,28 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .tv-overlay{bottom:40px}
   .screen-progress{bottom:14px}
   #app{inset:6px !important}
+  /* Panelis vēl kompaktāks */
+  .tv-panel{padding:4px 8px 0;gap:3px}
+  .panel-header-wrapper{padding:2px 4px}
+  .power-toggle{font-size:0.18em}
+  .power-pair-btn{height:28px}
+  .pair-btn-text{font-size:10px}
+  .pair-btn-icon-text{font-size:15px}
+  .controls-section{padding:2px 4px}
+  .ctrl-btn{height:28px;font-size:10px}
+  #muteBtn,#infoBtn,#volDownBtn,#volUpBtn{height:28px;font-size:10px}
+  .ch-vertical-btn{min-height:60px;width:36px}
+  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
+  .ch-btn{height:28px}
+  .ch-face .ch-icon{font-size:14px}
+  .ch-face .ch-name{font-size:10px}
+  .sms-panel{padding:3px 4px}
+  .sms-send-btn{font-size:10px;padding:4px 6px}
+  .sms-name-input{font-size:12px;padding:3px 5px}
+  .sms-text-input{min-height:24px;font-size:11px;padding:3px 5px}
+  .util-btns-bottom .wood-btn{height:28px;font-size:12px}
+  .panel-bottom-zone{padding:2px 0}
+  /* Logo */
   .screen-logo{top:2px;left:4px;padding:2px 4px;gap:0}
   .screen-logo-l{font-size:14px}
   .screen-logo-m{font-size:13px}
