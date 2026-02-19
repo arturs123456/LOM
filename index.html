@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LOM TV — Latvijas Online Mūzika</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Retro-Futurism Palette (80s inspired) */
@@ -447,10 +447,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-panel::-webkit-scrollbar-thumb:hover{background:rgba(88,101,242,0.4)}
 .tv-panel::before{content:'';position:absolute;inset:0;border-radius:inherit;
   background:
+    linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.04) 35%,rgba(255,255,255,0.07) 38%,rgba(255,255,255,0.04) 41%,transparent 46%),
     radial-gradient(ellipse 80% 30% at 70% 15%,rgba(255,255,255,0.06) 0%,transparent 50%),
     radial-gradient(ellipse 60% 60% at 50% 50%,rgba(155,77,255,0.04) 0%,transparent 70%),
     radial-gradient(ellipse 100% 100% at 50% 100%,rgba(0,0,0,0.3) 0%,transparent 60%);
   pointer-events:none;z-index:0}
+.tv-panel::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  opacity:0.15;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px 128px}
 .tv-panel > *{position:relative;z-index:1}
 .panel-divider{height:1px;flex-shrink:0;background:linear-gradient(90deg,transparent,rgba(88,101,242,0.2),transparent);margin:0}
 .panel-header-wrapper{position:relative;flex-shrink:0;margin-bottom:0;margin-top:-20px;padding-top:20px}
@@ -471,15 +476,16 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* CHANNEL GRID */
 .channel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;flex-shrink:0;justify-items:center;width:100%;margin-top:4px;
-  background:#151515;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;
-  box-shadow:inset 2px 2px 6px rgba(0,0,0,0.6),inset -1px -1px 2px rgba(255,255,255,0.03)}
+  background:linear-gradient(180deg,rgba(255,255,255,0.025) 0%,rgba(0,0,0,0.15) 100%),#151515;
+  border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,0.7),inset 0 -1px 2px rgba(255,255,255,0.04),inset 2px 0 6px rgba(0,0,0,0.4),inset -2px 0 6px rgba(0,0,0,0.4)}
 .ch-btn{position:relative;border:none;background:transparent;cursor:pointer;width:100%;max-width:100%;height:52px;padding:0;overflow:hidden;border-radius:8px;perspective:600px;-webkit-tap-highlight-color:transparent;flex-shrink:0}
 .ch-flipdisc{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 0.52s cubic-bezier(0.7,0,0.2,1)}
 .ch-btn.active .ch-flipdisc{transform:rotateX(-180deg)}
 .ch-btn:hover:not(.active) .ch-flipdisc{transform:rotateX(-14deg)}
 .ch-face{position:absolute;inset:0;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;padding:0 10px}
-.ch-face-front{background:linear-gradient(145deg,#2e2e2e 0%,#1a1a1a 100%);border:none;
-  box-shadow:0 3px #0a0a0a,0 4px 4px rgba(0,0,0,0.5),inset 1px 1px rgba(255,255,255,0.08),inset 0 -1px 1px rgba(0,0,0,0.5)}
+.ch-face-front{background:linear-gradient(180deg,#333 0%,#252525 40%,#1a1a1a 100%);border:none;
+  box-shadow:0 3px #0a0a0a,0 4px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 1px rgba(0,0,0,0.5)}
 .ch-face-back{background:linear-gradient(145deg,rgba(155,77,255,0.35) 0%,rgba(155,77,255,0.15) 100%);transform:rotateX(180deg);border:none;
   box-shadow:0 3px rgba(60,20,120,0.9),0 4px 4px rgba(0,0,0,0.5),0 0 12px rgba(155,77,255,0.4),inset 1px 1px rgba(255,255,255,0.1)}
 .ch-face .ch-icon{font-size:20px;line-height:1;filter:grayscale(0.4);flex-shrink:0}
@@ -491,18 +497,18 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* RETRO CHROME BUTTON */
 .wood-btn{border-radius:8px;border:none;cursor:pointer;font-family:var(--font-main);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .12s;
-  background:linear-gradient(145deg,#333 0%,#222 100%);
+  background:linear-gradient(180deg,#383838 0%,#2a2a2a 40%,#222 100%);
   color:var(--electric-blue);
-  box-shadow:0 3px #111,0 4px 4px rgba(0,0,0,0.4),inset 1px 1px rgba(255,255,255,0.1),0 0 8px rgba(25,208,232,0.15);
+  box-shadow:0 3px #111,0 4px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.12),inset 0 -1px 1px rgba(0,0,0,0.4),0 0 8px rgba(25,208,232,0.15);
   padding:8px 12px}
-.wood-btn:hover{background:linear-gradient(145deg,#3a3a3a,#2a2a2a);
+.wood-btn:hover{background:linear-gradient(180deg,#424242 0%,#333 40%,#2a2a2a 100%);
   color:var(--pure-white);
-  box-shadow:0 3px #111,0 4px 4px rgba(0,0,0,0.4),inset 1px 1px rgba(255,255,255,0.12),0 0 14px rgba(25,208,232,0.3)}
+  box-shadow:0 3px #111,0 4px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15),inset 0 -1px 1px rgba(0,0,0,0.4),0 0 14px rgba(25,208,232,0.3)}
 .wood-btn:active{transform:translateY(3px);box-shadow:0 0 #111,inset 2px 2px 4px rgba(0,0,0,0.6),0 0 10px rgba(25,208,232,0.3)}
 
 /* NOW PLAYING */
-.panel-np{flex-shrink:0;background:#151515;border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:10px 12px;display:flex;flex-direction:column;gap:8px;
-  box-shadow:inset 2px 2px 6px rgba(0,0,0,0.6),inset -1px -1px 2px rgba(255,255,255,0.03)}
+.panel-np{flex-shrink:0;background:linear-gradient(180deg,rgba(255,255,255,0.025) 0%,rgba(0,0,0,0.15) 100%),#151515;border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:10px 12px;display:flex;flex-direction:column;gap:8px;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,0.7),inset 0 -1px 2px rgba(255,255,255,0.04),inset 2px 0 6px rgba(0,0,0,0.4),inset -2px 0 6px rgba(0,0,0,0.4)}
 .panel-np-row1{display:flex;align-items:center;gap:8px}
 .np-indicator{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:rgba(224,227,255,0.2);box-shadow:none;animation:npPulse 2s ease-in-out infinite}
 .np-indicator.playing{background:var(--discord-green);box-shadow:0 0 7px var(--green-glow)}
@@ -511,8 +517,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .panel-np-row2{display:flex;align-items:center;gap:8px}
 .panel-np-btns{display:flex;gap:6px}
 .np-sm-btn{width:40px;height:40px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .12s;
-  background:linear-gradient(145deg,#333,#222);color:var(--light-blurple);
-  box-shadow:0 2px #111,0 3px 3px rgba(0,0,0,0.4),inset 1px 1px rgba(255,255,255,0.08)}
+  background:linear-gradient(180deg,#383838 0%,#282828 40%,#222 100%);color:var(--light-blurple);
+  box-shadow:0 2px #111,0 3px 4px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 1px rgba(0,0,0,0.3)}
 .np-sm-btn:hover{background:linear-gradient(145deg,#3a3a3a,#2a2a2a);color:var(--pure-white)}
 .np-sm-btn:active{transform:translateY(2px);box-shadow:0 0 #111,inset 2px 2px 4px rgba(0,0,0,0.6)}
 .panel-progress{flex:1;height:3px;background:rgba(88,101,242,0.1);border-radius:2px;overflow:hidden}
@@ -532,8 +538,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .ch-dpad-center{grid-column:2;grid-row:2;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:12px;font-weight:700;color:rgba(224,227,255,0.2);text-transform:uppercase;pointer-events:none;letter-spacing:1px}
 /* CONTROL BUTTONS — 3-Column Layout */
 .controls-section{display:flex;flex-direction:column;gap:10px;align-items:stretch;width:100%;flex-shrink:0;position:relative;
-  background:#151515;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;
-  box-shadow:inset 2px 2px 6px rgba(0,0,0,0.6),inset -1px -1px 2px rgba(255,255,255,0.03)}
+  background:linear-gradient(180deg,rgba(255,255,255,0.025) 0%,rgba(0,0,0,0.15) 100%),#151515;
+  border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,0.7),inset 0 -1px 2px rgba(255,255,255,0.04),inset 2px 0 6px rgba(0,0,0,0.4),inset -2px 0 6px rgba(0,0,0,0.4)}
 .controls-section > *{position:relative;z-index:1}
 
 /* 3-column grid: [MUTE/VOL−] [CH] [INFO/VOL+] */
@@ -545,10 +552,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .ctrl-btn{height:36px;border:none;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
   font-family:var(--font-main);font-size:17px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   color:rgba(224,227,255,0.8);
-  background:linear-gradient(145deg,#333,#222);
-  box-shadow:0 3px #111,0 4px 4px rgba(0,0,0,0.4),inset 1px 1px rgba(255,255,255,0.1);
+  background:linear-gradient(180deg,#383838 0%,#282828 40%,#222 100%);
+  box-shadow:0 3px #111,0 4px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.12),inset 0 -1px 1px rgba(0,0,0,0.4);
   transition:all .12s}
-.ctrl-btn:hover{background:linear-gradient(145deg,#3a3a3a,#2a2a2a);color:var(--pure-white)}
+.ctrl-btn:hover{background:linear-gradient(180deg,#424242 0%,#333 40%,#2a2a2a 100%);color:var(--pure-white)}
 .ctrl-btn:active{transform:translateY(3px);box-shadow:0 0 #111,inset 2px 2px 4px rgba(0,0,0,0.6)}
 .ctrl-btn .ctrl-arrow{font-size:18px;color:rgba(224,227,255,0.5)}
 /* VOL triangles: left ◄ bigger, right ► bigger, pushed to edges */
@@ -590,26 +597,75 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .power-btn-horizontal .power-icon{position:relative;z-index:1;font-size:21px}
 .power-btn-horizontal .power-text{position:relative;z-index:1;font-weight:700}
 /* (Old extra-wide-btn, mute-vol-row, #muteBtn, #extraRightBtn removed — replaced by .controls-3col layout) */
-/* ON/OFF — always red/crimson */
-#powerBtnHorizontal{
-  background:linear-gradient(145deg,#4a1818,#2a0e0e);
-  border:none;
-  color:#ff4444;
-  box-shadow:0 3px #1a0a0a,0 4px 4px rgba(0,0,0,0.4),0 0 12px rgba(255,68,68,0.25),inset 1px 1px rgba(255,255,255,0.08)}
-#powerBtnHorizontal:hover{
-  background:linear-gradient(145deg,#6a2222,#4a1414);
-  color:#ff6666;
-  box-shadow:0 3px #1a0a0a,0 4px 4px rgba(0,0,0,0.4),0 0 24px rgba(255,68,68,0.5),inset 1px 1px rgba(255,255,255,0.12);
-  transform:scale(1.03)}
-#powerBtnHorizontal.active{
-  background:linear-gradient(145deg,#4a1818,#2a0e0e);
-  color:#ff4444;
-  box-shadow:0 3px #1a0a0a,0 4px 4px rgba(0,0,0,0.4),0 0 16px rgba(255,68,68,0.35),inset 1px 1px rgba(255,255,255,0.08)}
-#powerBtnHorizontal.active:hover{
-  background:linear-gradient(145deg,#6a2222,#4a1414);
-  color:#ff6666;
-  box-shadow:0 3px #1a0a0a,0 4px 4px rgba(0,0,0,0.4),0 0 24px rgba(255,68,68,0.5),inset 1px 1px rgba(255,255,255,0.12);
-  transform:scale(1.03)}
+/* 3D ON/OFF Toggle Switch */
+.power-toggle{
+  font-size:0.35em;
+  appearance:none;-webkit-appearance:none;
+  background:linear-gradient(45deg,#0008 40%,#0000 60%) 50% 50% / 50% 20% no-repeat,#111;
+  width:100%;
+  aspect-ratio:7/2;
+  border-radius:2.5em;
+  box-shadow:
+    inset 0 -0.3em 0.4em -0.2em #fff2,
+    inset 0 0.25em 0.5em #0001,
+    inset 0 0.5em 0.5em #0001,
+    inset 0 0 0 1.25em #222;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  transform-style:preserve-3d;
+  perspective:250em;
+  cursor:pointer;
+  border:none;outline:none}
+.power-toggle::before,.power-toggle::after{
+  --chip:100%;
+  position:absolute;top:50%;left:50%;
+  content:"";height:75%;border-radius:0.5em;aspect-ratio:2.15;
+  border:0.125em solid #0000;box-sizing:border-box;
+  transition:all 0.15s linear;
+  display:grid;place-items:center;
+  font-family:var(--font-main);font-size:2em;font-weight:800;letter-spacing:0.2em;
+  background:
+    linear-gradient(#fff1,#fff0) var(--chip) 50% / 10.25% 12% no-repeat,
+    radial-gradient(at 20% 20%,#0000,#0003) 0 40% / 110% 120% padding-box,
+    linear-gradient(#44444a,#28282f) 0 40% / 110% 120% padding-box,
+    linear-gradient(#5b5b61,#28282f 50%,#202028) 0 40% / 110% 120% border-box}
+.power-toggle::before{
+  content:"ON";color:#fff8;
+  transform:translate(-100%,-50%) rotateY(30deg);
+  box-shadow:
+    -0.5em 0 0.5em -0.25em #3334,
+    -1em 0 #333,
+    -0.5em 1em 1em -0.25em #0002,
+    -1.5em 1.5em 1em -1em #0004,
+    -2em 2em 1em -2em #0006,
+    inset 0 0 2.5em #0004;
+  transform-origin:100% 50%;
+  border-radius:0.5em 0 0 0.5em;
+  clip-path:polygon(-100% 0,105% 0,105% 45%,90% 45%,90% 55%,105% 55%,105% 200%,-100% 200%)}
+.power-toggle::after{
+  --chip:-5%;
+  content:"OFF";color:#e6503c;text-shadow:0 0 1em #e6503c;
+  transform:translate(0,-50%) rotateY(-0.1deg);
+  box-shadow:
+    0 0 0 -0.25em #000,0 0 #222,0 0 0 0 #0002,0 0 0 0 #0004,0 0 0 0 #0006,0 0 0 0 #0004,
+    inset 2em 0 1.5em -1.5em #0001,inset 0 0 0 #0004;
+  transform-origin:0% 50%;
+  border-radius:0 0.5em 0.5em 0;
+  clip-path:polygon(0 -100%,200% -100%,200% 200%,0 200%,0 55%,10% 55%,10% 45%,0 45%)}
+.power-toggle:checked::before{
+  color:#35ed7e;text-shadow:0 0 1em rgba(53,237,126,0.8);
+  transform:translate(-100%,-50%) rotateY(0.1deg);
+  box-shadow:0 0 0 -0.25em #fff1,0 0 #333,0 0 0 0 #0002,0 0 0 0 #0004,0 0 0 0 #0006,
+    inset 0 0 2.5em #0002}
+.power-toggle:checked::after{
+  color:#aa281a;text-shadow:0 0 0;
+  transform:translate(0,-50%) rotateY(-30deg);
+  box-shadow:
+    0.5em 0 0.5em -0.25em #000,1em 0 #282828,
+    0.5em 1em 1em -0.25em #0002,1.5em 1.5em 1em -1em #0004,
+    2em 2em 1em -2em #0006,2em 0.25em 1em #0004,
+    inset 0 0 0 0 #0001,inset 0 0 1.5em #ffffff08;
+  z-index:1}
 /* FULL — always green */
 #fullscreenBtn{
   background:linear-gradient(145deg,#183a18,#0e2a0e);
@@ -621,12 +677,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   color:#66ff99;
   box-shadow:0 3px #0a1a0a,0 4px 4px rgba(0,0,0,0.4),0 0 24px rgba(53,237,126,0.5),inset 1px 1px rgba(255,255,255,0.12);
   transform:scale(1.03)}
-.power-top-row{display:flex;justify-content:center;align-items:stretch;gap:8px;width:100%;flex-shrink:0;overflow:visible;position:relative}
-.power-top-row .power-btn-horizontal{aspect-ratio:1;width:auto;height:auto;min-width:0;flex:1;flex-direction:column;gap:0;padding:8px;border-radius:8px;justify-content:center;align-items:center}
-.power-top-row .power-btn-horizontal.fullscreen{aspect-ratio:1;width:auto;height:auto;flex:1;flex-direction:column;gap:0;padding:8px}
+.power-top-row{display:flex;flex-direction:column;gap:8px;width:100%;flex-shrink:0;overflow:visible;position:relative}
+.power-top-row .power-btn-horizontal.fullscreen{aspect-ratio:auto;width:100%;height:36px;flex-direction:row;gap:6px;padding:4px 8px;border-radius:8px;justify-content:center;align-items:center}
 .btn-icon-wrap{display:flex;align-items:center;justify-content:center;width:80%;aspect-ratio:1;position:relative}
-.power-circle{border:6px solid currentColor;border-radius:50%;position:relative}
-.power-circle::before{content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:6px;height:30px;background:currentColor;border-radius:4px}
+/* power-circle removed — replaced by .power-toggle */
 .full-square{border:none;border-radius:0;position:relative}
 .full-square::before,
 .full-square::after{content:'';position:absolute}
@@ -681,8 +735,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .util-btns-bottom .wood-btn:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,0.5)}
 
 /* SMS */
-.sms-panel{background:#151515;border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:10px 12px;display:flex;gap:8px;flex-direction:column;flex-shrink:0;
-  box-shadow:inset 2px 2px 6px rgba(0,0,0,0.6),inset -1px -1px 2px rgba(255,255,255,0.03)}
+.sms-panel{background:linear-gradient(180deg,rgba(255,255,255,0.025) 0%,rgba(0,0,0,0.15) 100%),#151515;border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:10px 12px;display:flex;gap:8px;flex-direction:column;flex-shrink:0;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,0.7),inset 0 -1px 2px rgba(255,255,255,0.04),inset 2px 0 6px rgba(0,0,0,0.4),inset -2px 0 6px rgba(0,0,0,0.4)}
 .sms-panel.disabled{opacity:0.35;pointer-events:none}
 .sms-panel-row{display:flex;gap:8px;align-items:center}
 .sms-panel input,.sms-panel textarea{background:rgba(0,0,0,0.5);border:1px solid rgba(88,101,242,0.25);border-radius:6px;color:var(--light-blurple);font-family:var(--font-main);font-size:20px;font-weight:500;padding:8px 10px;outline:none;-webkit-user-select:text;user-select:text}
@@ -786,6 +840,16 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-casing.fs-mode .sms-ticker-screen{display:none}
 .tv-casing.fs-mode .sms-item{font-size:28px;padding:0 40px}
 
+/* VHS OSD OVERLAY */
+.vhs-osd{position:absolute;inset:0;z-index:15;pointer-events:none;font-family:'Press Start 2P',monospace;font-size:clamp(8px,1.2vw,14px);color:#fff}
+.vhs-osd-ch{position:absolute;top:16px;left:20px;animation:vhsRgbText 2s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
+.vhs-osd-time{position:absolute;top:16px;right:20px;animation:vhsRgbText 1.5s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
+@keyframes vhsRgbText{
+  0%,25%{text-shadow:-1px 1px 6px rgba(255,255,255,0.5),0 0 2px rgba(251,0,231,0.6),0 0 2px rgba(0,233,235,0.6)}
+  45%,55%{text-shadow:-1px 1px 6px rgba(255,255,255,0.5),3px 0 1px rgba(251,0,231,0.7),-3px 0 1px rgba(0,233,235,0.7)}
+  90%,100%{text-shadow:-1px 1px 6px rgba(255,255,255,0.5),-2px 0 1px rgba(251,0,231,0.6),2px 0 1px rgba(0,233,235,0.6)}
+}
+
 /* RESPONSIVE */
 @media(max-width:1100px){:root{--panel-w:300px}}
 @media(max-width:900px){:root{--panel-w:260px}.tv-screen-area{top:10px;bottom:10px;left:10px;right:calc(var(--panel-w)+8px)}.tv-screen{top:9px;bottom:9px;left:9px;right:9px}.ch-btn{height:50px}}
@@ -836,8 +900,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
   .ch-vertical-btn-center{font-size:12px}
   .power-top-row{gap:4px}
-  .power-btn-horizontal{font-size:12px}
-  .power-btn-horizontal .power-icon{font-size:16px}
+  .power-toggle{font-size:0.25em}
+  .vhs-osd{font-size:clamp(6px,1vw,10px)}
+  .vhs-osd-ch{top:8px;left:10px}
+  .vhs-osd-time{top:8px;right:10px}
   .panel-header-wrapper{padding:4px 8px}
   .panel-divider{margin:2px 0}
   .speaker-grille{display:none}
@@ -1185,6 +1251,11 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
           <div class="now-playing-text" id="npText">—</div>
           <div class="now-playing-ch" id="npCh">KAN 1</div>
         </div>
+        <!-- VHS OSD Overlay -->
+        <div class="vhs-osd" id="vhsOsd">
+          <div class="vhs-osd-ch" id="vhsOsdCh">▶ POP</div>
+          <div class="vhs-osd-time" id="vhsOsdTime">--:--</div>
+        </div>
         <!-- TV Info Overlay (Now Playing / Up Next / Just Played) -->
         <div class="tv-overlay" id="tvOverlay">
           <div class="tv-overlay-inner">
@@ -1226,11 +1297,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         <div class="panel-header">
           <div class="panel-header-top-row">
             <div class="power-top-row">
-              <button class="power-btn-horizontal fullscreen" id="powerBtnHorizontal" onclick="togglePower()">
-                <div class="btn-icon-wrap power-circle">
-                  <span class="power-text" id="powerText">OFF</span>
-                </div>
-              </button>
+              <!-- 3D Toggle Switch -->
+              <input type="checkbox" class="power-toggle" id="powerToggleInput" role="switch" checked>
+              <!-- FULL poga zem toggle -->
               <button class="power-btn-horizontal fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
                 <div class="btn-icon-wrap full-square">
                   <span class="full-corner-tr"></span>
@@ -1634,12 +1703,13 @@ function startTV(){
     ss.classList.add('hidden');
     document.getElementById('app').style.display='block';
     isPoweredOn=true;
-    document.getElementById('powerBtnHorizontal').classList.add('active');
-    const pt=document.getElementById('powerText');if(pt)pt.textContent='OFF';
+    document.getElementById('powerToggleInput').checked=true;
     document.getElementById('ledPower').classList.remove('off');
     document.querySelectorAll('.indicator-bar').forEach(b=>b.classList.add('active'));
     // Uzreiz sāk atskaņot — bez kalibrācijas joslām
     initYTPlayer();initSMS();startProgressTracker();
+    // VHS OSD — laika atjaunošana katru sekundi
+    setInterval(()=>{const osd=document.getElementById('vhsOsdTime');if(osd&&isPoweredOn){const now=new Date();osd.textContent=now.toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}},1000);
   },600);
 }
 // Ielādē CMS datus sākuma ekrāna laikā, tad startē TV
@@ -1895,6 +1965,8 @@ function switchChannel(ch){
   currentChannel=ch;
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
+  // VHS OSD — atjaunināt kanāla nosaukumu
+  const osdCh=document.getElementById('vhsOsdCh');if(osdCh)osdCh.textContent='▶ '+channels[ch].name;
   if(isGameChannel(ch)){
     // Spēles kanāls — pauzēt YouTube, startēt spēli
     try{const ap=activeSlot==='a'?playerA:playerB;if(ap)ap.pauseVideo()}catch(e){}
@@ -1917,21 +1989,28 @@ function showStatic(cb){
   draw();
 }
 function togglePower(){
-  const btn=document.getElementById('powerBtnHorizontal'),off=document.getElementById('powerOff'),led=document.getElementById('ledPower'),bars=document.querySelectorAll('.indicator-bar'),pt=document.getElementById('powerText');
+  const tog=document.getElementById('powerToggleInput'),off=document.getElementById('powerOff'),led=document.getElementById('ledPower'),bars=document.querySelectorAll('.indicator-bar');
+  const vhsOsd=document.getElementById('vhsOsd');
   if(isPoweredOn){
-    isPoweredOn=false;btn.classList.remove('active');led.classList.add('off');
+    isPoweredOn=false;tog.checked=false;led.classList.add('off');
     if(typeof stopGame==='function'){try{stopGame()}catch(e){}}
     try{if(playerAReady)playerA.pauseVideo()}catch(e){}
     try{if(playerBReady)playerB.pauseVideo()}catch(e){}
-    off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});if(pt)pt.textContent='ON';
+    off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});
+    if(vhsOsd)vhsOsd.style.display='none';
     setChatEnabled(false);
   }
   else{
-    isPoweredOn=true;btn.classList.add('active');led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));if(pt)pt.textContent='OFF';setChatEnabled(true);showStatic(()=>{
+    isPoweredOn=true;tog.checked=true;led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));
+    if(vhsOsd)vhsOsd.style.display='';
+    setChatEnabled(true);showStatic(()=>{
       const ap=activeSlot==='a'?playerA:playerB;
       if(playerReady&&ap)ap.playVideo();
     })}
 }
+document.getElementById('powerToggleInput').addEventListener('change',function(){
+  if(this.checked!==isPoweredOn)togglePower();
+});
 function toggleMute(){
   const btn=document.getElementById('muteBtn');
   if(isMuted){isMuted=false;btn.classList.remove('active');setVolume(volumeBeforeMute);showMuteOSD(false)}
