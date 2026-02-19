@@ -15,6 +15,9 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a0a0a'/><text x='256' y='200' font-family='sans-serif' font-size='120' font-weight='900' fill='%239b4dff' text-anchor='middle'>LOM</text><text x='256' y='350' font-family='sans-serif' font-size='140' font-weight='900' fill='%2335ed7e' text-anchor='middle'>TV</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<!-- Firebase Realtime Database -->
+<script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root{
   /* Retro-Futurism Palette (80s inspired) */
@@ -2610,6 +2613,76 @@ var smsTickerInterval=null;
 var smsFakeIdx=0;
 var smsStartTime=0;
 
+// ═══ FIREBASE REĀLLAIKA ČATS ═══
+var FIREBASE_CONFIG={apiKey:"AIzaSyBPn0GZ47qig6ydO1WD_vx8Qve9XMWna70",authDomain:"lom-tv-chat.firebaseapp.com",databaseURL:"https://lom-tv-chat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"lom-tv-chat",storageBucket:"lom-tv-chat.firebasestorage.app",messagingSenderId:"633916715129",appId:"1:633916715129:web:5d3c65b1d5471e99c524a8"};
+var firebaseDB=null,firebaseChatRef=null,firebaseConnected=false,firebaseMessages=[];
+var CHAT_RATE={min:5000,perMin:6,perHour:60,ts:[]};
+
+function canSendMsg(){
+  var now=Date.now();
+  CHAT_RATE.ts=CHAT_RATE.ts.filter(function(t){return t>now-3600000});
+  if(CHAT_RATE.ts.length>=CHAT_RATE.perHour)return false;
+  if(CHAT_RATE.ts.filter(function(t){return t>now-60000}).length>=CHAT_RATE.perMin)return false;
+  var last=CHAT_RATE.ts[CHAT_RATE.ts.length-1];
+  if(last&&now-last<CHAT_RATE.min)return false;
+  return true;
+}
+
+function initFirebaseChat(){
+  try{
+    if(typeof firebase==='undefined'||!firebase.initializeApp){
+      console.warn('Firebase SDK nav ielādēts');return;
+    }
+    firebase.initializeApp(FIREBASE_CONFIG);
+    firebaseDB=firebase.database();
+    firebaseChatRef=firebaseDB.ref('messages');
+    firebaseDB.ref('.info/connected').on('value',function(s){firebaseConnected=!!s.val()});
+    listenForMessages();
+    setTimeout(cleanupOldMessages,10000);
+    setInterval(cleanupOldMessages,1800000);
+    console.log('Firebase čats inicializēts ✓');
+  }catch(e){console.warn('Firebase:',e)}
+}
+
+function listenForMessages(){
+  if(!firebaseChatRef)return;
+  var cutoff=Date.now()-7200000;
+  firebaseChatRef.orderByChild('ts').startAt(cutoff).on('child_added',function(snap){
+    var msg=snap.val();if(!msg||!msg.name||!msg.text)return;
+    msg.name=sanitizeChat(msg.name).substring(0,15);
+    msg.text=sanitizeChat(msg.text).substring(0,280);
+    if(!msg.name||!msg.text)return;
+    msg.real=true;msg._key=snap.key;
+    // Novērst dublikātus (ja jau pievienots caur sendSMS/sendLedChat)
+    if(firebaseMessages.some(function(m){return m._key===snap.key}))return;
+    firebaseMessages.push(msg);
+    firebaseMessages=firebaseMessages.filter(function(m){return m.ts>Date.now()-7200000});
+    rebuildSmsMessages();
+  });
+}
+
+function rebuildSmsMessages(){
+  var real=firebaseMessages.filter(function(m){return m.ts>Date.now()-7200000});
+  if(real.length>=3){
+    smsMessages=real.slice(-20);
+  }else{
+    var fakes=[];
+    if(typeof fakeSMS!=='undefined'&&fakeSMS){
+      for(var i=0;i<Math.max(0,3-real.length);i++){fakes.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++}
+    }
+    smsMessages=[].concat(fakes,real).slice(-20);
+  }
+  renderTicker();
+}
+
+function cleanupOldMessages(){
+  if(!firebaseChatRef)return;
+  firebaseChatRef.orderByChild('ts').endAt(Date.now()-7200000).once('value',function(snap){
+    var u={};snap.forEach(function(c){u[c.key]=null});
+    if(Object.keys(u).length)firebaseChatRef.update(u);
+  });
+}
+
 // ═══ LIVE VIEWERS COUNTER ═══
 // Simulē skatītāju skaitu: dienas laikā augstāk (~160-200), naktī zemāk (~100-130)
 function getLiveViewerBase(){
@@ -2715,18 +2788,22 @@ document.addEventListener('click',(e)=>{
 
 function initSMS(){
   smsMessages=[];smsFakeIdx=0;smsStartTime=Date.now();
-  // Sākotnēji pievienot 3 ziņas lai ticker nav tukšs
+  // Firebase reāllaika čats — inicializēt (async, nebloķē)
+  try{initFirebaseChat()}catch(e){console.warn('Firebase init:',e)}
+  // Atjaunot saglabāto vārdu
+  try{var savedName=localStorage.getItem('lom_chat_name');if(savedName){var sN=document.getElementById('smsName');if(sN)sN.value=savedName;var lN=document.getElementById('ledChatName');if(lN)lN.value=savedName}}catch(e){}
+  // Sākotnēji pievienot 3 fake ziņas lai ticker nav tukšs (kamēr Firebase vēl nav ielādēts)
   if(typeof fakeSMS!=='undefined'&&fakeSMS)for(let i=0;i<3;i++){smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++}
   renderTicker();
-  // Ik 60 sek pievienot jaunu viltotu ziņu
+  // Ik 90 sek pievienot jaunu viltotu ziņu (tikai ja Firebase ziņu maz)
   if(smsTickerInterval)clearInterval(smsTickerInterval);
   smsTickerInterval=setInterval(()=>{
     if(!fakeSMS||!fakeSMS.length)return;
+    if(firebaseMessages.length>=3)return; // pietiek reālu ziņu
     smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++;
-    // Noņemt vecākās ja par daudz (max 20 redzamas)
     if(smsMessages.length>20)smsMessages.shift();
     renderTicker();
-  },60000);
+  },90000);
   const n=document.getElementById('smsName'),t=document.getElementById('smsText');
   if(n&&t){n.addEventListener('input',checkSMSForm);t.addEventListener('input',checkSMSForm);checkSMSForm()}
 }
@@ -2768,20 +2845,25 @@ function sendSMS(){
   const cleanName=sanitizeChat(n.value.trim()).substring(0,15);
   const cleanText=sanitizeChat(t.value.trim()).substring(0,280);
   if(!cleanName||!cleanText)return;
-  const msg={name:cleanName,text:cleanText,ts:Date.now(),real:true};
-  smsMessages.push(msg);renderTicker();
-  // Saglabāt localStorage
-  try{
-    let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');
-    stored.push(msg);
-    // Noņemt vecākos par 1h
-    const cutoff=Date.now()-3600000;
-    stored=stored.filter(m=>m.ts>cutoff);
-    localStorage.setItem('lom_chat',JSON.stringify(stored));
-  }catch(e){}
-  // Pirmajās 2 minūtēs — atkārtot pēc 30 sek
-  const elapsed=Date.now()-smsStartTime;
-  if(elapsed<120000){setTimeout(()=>{smsMessages.push(msg);renderTicker()},30000)}
+  // Rate limit pārbaude
+  if(!canSendMsg()){
+    var el=document.getElementById('smsText');if(el)el.placeholder='⏳ Pagaidi nedaudz...';
+    setTimeout(function(){if(el)el.placeholder='Tava ziņa...'},3000);
+    return;
+  }
+  CHAT_RATE.ts.push(Date.now());
+  const msg={name:cleanName,text:cleanText,ts:Date.now()};
+  // Push uz Firebase (ja pieslēgts)
+  if(firebaseConnected&&firebaseChatRef){
+    firebaseChatRef.push(msg).catch(function(e){console.warn('Firebase push:',e)});
+  }else{
+    // Offline fallback — lokāli
+    msg.real=true;
+    smsMessages.push(msg);renderTicker();
+    try{let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');stored.push(msg);stored=stored.filter(m=>m.ts>Date.now()-3600000);localStorage.setItem('lom_chat',JSON.stringify(stored))}catch(e){}
+  }
+  // Saglabāt vārdu
+  try{localStorage.setItem('lom_chat_name',cleanName)}catch(e){}
   n.value='';t.value='';checkSMSForm();
   // Sinhronizēt ar LED čata vārdu lauku
   const ledN=document.getElementById('ledChatName');
@@ -2796,11 +2878,24 @@ function sendLedChat(){
   const cleanName=sanitizeChat(n.value.trim()).substring(0,15);
   const cleanText=sanitizeChat(t.value.trim()).substring(0,280);
   if(!cleanName||!cleanText)return;
-  const msg={name:cleanName,text:cleanText,ts:Date.now(),real:true};
-  smsMessages.push(msg);renderTicker();
-  try{let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');stored.push(msg);stored=stored.filter(m=>m.ts>Date.now()-3600000);localStorage.setItem('lom_chat',JSON.stringify(stored))}catch(e){}
+  // Rate limit pārbaude
+  if(!canSendMsg()){
+    t.placeholder='⏳ Pagaidi...';
+    setTimeout(function(){t.placeholder='Ziņa...'},3000);
+    return;
+  }
+  CHAT_RATE.ts.push(Date.now());
+  const msg={name:cleanName,text:cleanText,ts:Date.now()};
+  // Push uz Firebase
+  if(firebaseConnected&&firebaseChatRef){
+    firebaseChatRef.push(msg).catch(function(e){console.warn('Firebase push:',e)});
+  }else{
+    msg.real=true;
+    smsMessages.push(msg);renderTicker();
+    try{let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');stored.push(msg);stored=stored.filter(m=>m.ts>Date.now()-3600000);localStorage.setItem('lom_chat',JSON.stringify(stored))}catch(e){}
+  }
+  try{localStorage.setItem('lom_chat_name',cleanName)}catch(e){}
   t.value='';
-  // Sinhronizēt ar panelī esošo vārdu
   const smsN=document.getElementById('smsName');if(smsN)smsN.value=cleanName;
 }
 // LED chat noņemts — SMS ticker uz TV ekrāna
