@@ -34,6 +34,11 @@
   --font-mono:'Noto Sans',monospace;
   /* Layout */
   --panel-w:360px;
+  /* Discord / UI akcenta krāsas */
+  --blurple:#5865f2;
+  --light-blurple:#7983f5;
+  --dark-blurple:#3e4ab0;
+  --discord-green:#57f287;
   /* Glow helpers */
   --purple-glow:rgba(155,77,255,0.6);
   --blue-glow:rgba(25,208,232,0.6);
@@ -100,10 +105,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .start-btn-label{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);white-space:nowrap;
   font-family:'Handjet',var(--font-main);font-size:15px;letter-spacing:5px;color:rgba(155,77,255,0.6);text-transform:uppercase}
 @keyframes startBtnPulse{0%,100%{box-shadow:0 0 30px rgba(155,77,255,0.35),0 0 60px rgba(155,77,255,0.12),inset 0 0 30px rgba(155,77,255,0.08),0 8px 32px rgba(0,0,0,0.5);border-color:rgba(155,77,255,0.6)}50%{box-shadow:0 0 45px rgba(155,77,255,0.5),0 0 90px rgba(155,77,255,0.2),inset 0 0 35px rgba(155,77,255,0.12),0 8px 32px rgba(0,0,0,0.5);border-color:rgba(155,77,255,0.85)}}
-/* Konfeti */
-.confetti-container{position:fixed;inset:0;z-index:400;pointer-events:none;overflow:hidden}
-.confetti{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 1.5s ease-out forwards}
-@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotateZ(0deg) scale(1.2)}20%{opacity:1}100%{opacity:0;transform:translateY(80vh) rotateZ(540deg) scale(0.2)}}
 @keyframes sphereSpin{0%{transform:rotateX(-210deg) rotateY(0deg) rotateZ(185deg)}100%{transform:rotateX(-210deg) rotateY(360deg) rotateZ(185deg)}}
 @keyframes sphereShine{50%,100%{border-color:transparent;box-shadow:0 0 1px 1px transparent,0 0 1px 1px transparent inset;filter:hue-rotate(180deg)}}
 @keyframes letterGlow{
@@ -154,8 +155,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   pointer-events:none;border-radius:12px;
   backdrop-filter:blur(2px)}
 .logo-o-sphere{display:inline-flex;align-items:center;justify-content:center;width:160px;height:200px;position:relative;margin:0 -4px;flex-shrink:0;perspective:600px}
-.logo-o-sphere .logo-sphere{--c:var(--neon-purple);width:160px;height:160px;margin:0;left:10px;top:20px;position:absolute;transform-style:preserve-3d;animation:sphereSpin 10s linear infinite}
-.logo-o-sphere .logo-sphere div{--sz:23%;--s:2s;--d:40;--dv:calc(var(--s)/var(--d));--dl:calc(var(--dv)*-1);width:var(--sz);height:var(--sz);position:absolute;border:0.15vmin solid var(--c);border-radius:100%;transform:rotateX(90deg) translateZ(86px);box-shadow:0 0 0.3vmin 0.3vmin var(--c),0 0 0.3vmin 0.3vmin var(--c) inset;animation:sphereShine var(--s) linear var(--dl) infinite;background:transparent;left:50%;top:50%;margin-left:calc(var(--sz)/-2);margin-top:calc(var(--sz)/-2)}
+.logo-o-sphere .logo-sphere{--c:var(--neon-purple);width:160px;height:160px;margin:0;left:10px;top:20px;position:absolute;transform-style:preserve-3d;transform:rotateX(-210deg) rotateY(45deg) rotateZ(185deg)}
+.logo-o-sphere .logo-sphere div{--sz:23%;width:var(--sz);height:var(--sz);position:absolute;border:0.15vmin solid var(--c);border-radius:100%;transform:rotateX(90deg) translateZ(86px);box-shadow:0 0 0.3vmin 0.3vmin var(--c),0 0 0.3vmin 0.3vmin var(--c) inset;background:transparent;left:50%;top:50%;margin-left:calc(var(--sz)/-2);margin-top:calc(var(--sz)/-2)}
 .logo-o-sphere .logo-sphere div:nth-child(2){--sz:40%;--dl:calc(var(--dv)*-2);transform:rotateX(90deg) translateZ(79px)}
 .logo-o-sphere .logo-sphere div:nth-child(3){--sz:55%;--dl:calc(var(--dv)*-3);transform:rotateX(90deg) translateZ(72px)}
 .logo-o-sphere .logo-sphere div:nth-child(4){--sz:68%;--dl:calc(var(--dv)*-4);transform:rotateX(90deg) translateZ(63px)}
@@ -206,7 +207,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .logo-sphere div:nth-child(21){--sz:10%;--dl:calc(var(--dv)*-21);transform:rotateX(90deg) translateZ(-78px)}
 .lomk-sub{font-family:'Handjet',var(--font-main),sans-serif;font-size:26px;font-weight:700;color:rgba(224,227,255,0.65);letter-spacing:8px;text-transform:uppercase;margin-top:34px;width:100%;text-align:left;padding-left:0;margin-left:10px}
 .start-sub{font-family:var(--font-main);font-size:18px;font-weight:400;color:rgba(224,227,255,0.35);letter-spacing:5px;width:auto;text-align:left;margin-top:10px;position:relative;z-index:10;align-self:flex-start;margin-left:20px}
-/* old start-btn override removed — round play button styles are above */
 
 /* CALIBRATION (УЭИТ) */
 .calib-screen{position:absolute;inset:0;z-index:25;display:none;flex-direction:column;border-radius:inherit}
@@ -461,8 +461,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:22px;font-weight:400;color:rgba(200,210,240,0.75);
   white-space:normal;word-wrap:break-word;font-style:normal;letter-spacing:0.3px}
 .tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:18px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:3px;margin-top:4px}
-/* Legacy now-playing compat — keep for channel display */
-.now-playing{display:none}
 .screen-progress{position:absolute;bottom:28px;left:0;right:0;z-index:10;height:3px;background:rgba(255,255,255,0.05);pointer-events:none}
 .screen-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--hot-pink),var(--neon-purple),var(--electric-blue));box-shadow:0 0 8px rgba(255,76,210,0.6);transition:width .3s}
 .sms-ticker-screen{position:absolute;bottom:0;left:0;right:0;z-index:26;height:64px;overflow:hidden;background:rgba(0,0,10,0.88);border-top:2px solid rgba(88,101,242,0.25);pointer-events:none}
@@ -563,11 +561,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .panel-header{display:flex;flex-direction:column;align-items:stretch;flex-shrink:0;padding:0 0 2px;background:transparent;border-radius:4px;gap:6px;position:relative}
 .panel-header > *{position:relative;z-index:1}
 .panel-header-top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;overflow:hidden;position:relative}
-.panel-logo{display:none}
-.panel-logo-lom{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
-  background:linear-gradient(135deg,#fff 0%,#e0e3ff 40%,#9b4dff 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.panel-logo-tv{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--blurple);letter-spacing:3px;opacity:0.9;margin-bottom:5px}
 .panel-led{width:8px;height:8px;border-radius:50%;background:var(--neon-green);box-shadow:0 0 10px rgba(53,237,126,0.9),0 0 20px rgba(53,237,126,0.5);transition:all .3s;flex-shrink:0;animation:ledPulse 2s ease-in-out infinite}
 @keyframes ledPulse{0%,100%{box-shadow:0 0 10px rgba(53,237,126,0.9),0 0 20px rgba(53,237,126,0.5)}50%{box-shadow:0 0 15px rgba(53,237,126,1),0 0 30px rgba(53,237,126,0.7)}}
 .panel-led.off{background:#1a1a1a;box-shadow:inset 0 1px 2px rgba(0,0,0,0.8);animation:none}
@@ -867,7 +860,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:linear-gradient(180deg,#4a2a70,#3a1e60);color:#d0a0ff;
   box-shadow:0 1px #120a20,inset 0 2px 4px rgba(0,0,0,0.6),0 0 18px rgba(155,77,255,0.3)}
 .btn-icon-wrap{display:flex;align-items:center;justify-content:center;width:80%;aspect-ratio:1;position:relative}
-/* power-circle removed — replaced by .power-toggle */
 .full-square{border:none;border-radius:0;position:relative}
 .full-square::before,
 .full-square::after{content:'';position:absolute}
@@ -1056,7 +1048,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* RESPONSIVE */
 @media(max-width:1100px){:root{--panel-w:300px}}
 @media(max-width:900px){:root{--panel-w:260px}.tv-screen-area{top:10px;bottom:10px;left:10px;right:calc(var(--panel-w)+8px)}.tv-screen{top:9px;bottom:9px;left:9px;right:9px}.ch-btn{height:50px}}
-@media(max-width:540px){:root{--panel-w:220px}.channel-grid{grid-template-columns:repeat(2,1fr)}.ch-btn{height:44px}.panel-logo-lom{font-size:20px}}
+@media(max-width:540px){:root{--panel-w:220px}.channel-grid{grid-template-columns:repeat(2,1fr)}.ch-btn{height:44px}}
 
 /* MOBILE — sākuma ekrāna logo samazināšana */
 @media(max-width:540px){
@@ -1082,29 +1074,29 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* MOBILE LANDSCAPE — Sākuma ekrāns */
 @media(max-height:500px) and (orientation:landscape){
-  .start-screen{gap:8px;justify-content:center}
-  .logo-letter{font-size:80px !important}
-  .logo-letter.logo-M{font-size:90px !important}
-  .logo-o-sphere{width:65px;height:80px}
-  .logo-o-sphere .logo-sphere{width:65px;height:65px}
-  .logo-tv{font-size:40px;top:-14px;margin-left:-30px}
-  .lomk-sub{font-size:13px;letter-spacing:4px;margin-top:8px}
-  .start-sub{font-size:12px;margin-top:4px}
-  .start-btn{width:64px;height:64px;margin-top:10px}
-  .start-btn .play-tri{border-width:14px 0 14px 24px}
+  .start-screen{gap:6px;justify-content:center}
+  .logo-letter{font-size:88px !important}
+  .logo-letter.logo-M{font-size:98px !important}
+  .logo-o-sphere{width:70px;height:70px}
+  .logo-o-sphere .logo-sphere{width:68px;height:68px}
+  .logo-tv{font-size:44px;top:-16px;margin-left:-32px}
+  .lomk-sub{font-size:14px;letter-spacing:4px;margin-top:6px}
+  .start-sub{font-size:12px;margin-top:2px}
+  .start-btn{width:60px;height:60px;margin-top:8px}
+  .start-btn .play-tri{border-width:13px 0 13px 22px}
   .start-btn-label{font-size:10px;bottom:-22px}
 }
 @media(max-height:380px) and (orientation:landscape){
-  .start-screen{gap:4px}
-  .logo-letter{font-size:56px !important}
-  .logo-letter.logo-M{font-size:64px !important}
-  .logo-o-sphere{width:46px;height:56px}
-  .logo-o-sphere .logo-sphere{width:46px;height:46px}
-  .logo-tv{font-size:28px;top:-10px;margin-left:-22px}
-  .lomk-sub{font-size:11px;letter-spacing:3px;margin-top:4px}
-  .start-sub{font-size:10px;margin-top:2px}
-  .start-btn{width:52px;height:52px;margin-top:6px}
-  .start-btn .play-tri{border-width:12px 0 12px 20px}
+  .start-screen{gap:3px}
+  .logo-letter{font-size:62px !important}
+  .logo-letter.logo-M{font-size:70px !important}
+  .logo-o-sphere{width:50px;height:50px}
+  .logo-o-sphere .logo-sphere{width:48px;height:48px}
+  .logo-tv{font-size:30px;top:-10px;margin-left:-22px}
+  .lomk-sub{font-size:11px;letter-spacing:3px;margin-top:3px}
+  .start-sub{font-size:10px;margin-top:1px}
+  .start-btn{width:48px;height:48px;margin-top:4px}
+  .start-btn .play-tri{border-width:11px 0 11px 18px}
   .start-btn-label{font-size:9px;bottom:-20px}
 }
 
@@ -1132,7 +1124,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .ch-face .ch-name{font-size:11px;letter-spacing:0.5px}
   .ch-face{gap:0;padding:0 6px}
   /* Panel header */
-  .panel-logo-lom{font-size:14px}
   .panel-header-wrapper{padding:4px 6px}
   .panel-divider{margin:2px 0}
   /* Controls — kompaktāks, šaurāks CH lai ietilpst 200px */
@@ -1239,93 +1230,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   #app{display:none !important}
 }
 
-/* CIRCULAR VOLUME KNOB — Discord style */
-@property --vc-pct{syntax:'<number>';inherits:false;initial-value:0.8}
-.vol-circle-section{display:none}
-.vol-circle-label{font-family:var(--font-main);font-size:18px;font-weight:700;letter-spacing:3px;color:rgba(224,227,255,0.25);text-transform:uppercase}
-/* outer bezel ring */
-.vc-bezel{position:relative;width:110px;height:110px;border-radius:50%;
-  background:radial-gradient(circle at 35% 28%, rgba(88,101,242,0.12) 0%, transparent 55%),
-             linear-gradient(145deg,rgba(25,23,92,0.6) 0%,rgba(5,5,15,0.9) 50%,rgba(10,9,26,0.8) 100%);
-  box-shadow:0 4px 16px rgba(0,0,0,0.8),
-             inset 0 1px 2px rgba(88,101,242,0.2),
-             inset 0 -2px 4px rgba(0,0,0,0.7),
-             0 0 0 1px rgba(88,101,242,0.15);
-  display:flex;align-items:center;justify-content:center;cursor:pointer}
-/* glass layer */
-.vc-glass{position:absolute;inset:6px;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%, rgba(88,101,242,0.1) 0%, transparent 60%),
-             rgba(5,5,15,0.85);
-  filter:url(#vcTurb);
-  overflow:hidden;pointer-events:none}
-.vc-glass::after{content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 40% 30%, rgba(88,101,242,0.08) 0%, transparent 65%)}
-/* particle ring */
-.vc-particles{position:absolute;inset:0;border-radius:50%;pointer-events:none;
-  transition:opacity .2s}
-.vc-particles::before{content:'';position:absolute;top:50%;left:50%;
-  width:3px;height:3px;border-radius:50%;margin:-1.5px;
-  background:transparent;
-  box-shadow:
-    -38px -14px 0 1px rgba(88,101,242,0),
-    -33px -26px 0 1px rgba(88,101,242,0),
-    -24px -34px 0 1px rgba(88,101,242,0),
-    -12px -38px 0 1px rgba(88,101,242,0),
-     0px  -39px 0 1px rgba(88,101,242,0),
-     12px -38px 0 1px rgba(88,101,242,0),
-     24px -34px 0 1px rgba(88,101,242,0),
-     33px -26px 0 1px rgba(88,101,242,0),
-     38px -14px 0 1px rgba(88,101,242,0);
-  transition:box-shadow .12s ease}
-.vc-bezel:active .vc-particles::before,
-.vc-bezel.active .vc-particles::before{
-  box-shadow:
-    -48px -18px 0 2px rgba(88,101,242,0.9),
-    -42px -34px 0 1px rgba(88,101,242,0.7),
-    -30px -44px 0 2px rgba(224,227,255,0.8),
-    -15px -49px 0 1px rgba(88,101,242,0.6),
-     2px  -50px 0 2px rgba(88,101,242,0.85),
-     17px -48px 0 1px rgba(224,227,255,0.7),
-     31px -42px 0 2px rgba(88,101,242,0.75),
-     42px -32px 0 1px rgba(88,101,242,0.65),
-     49px -16px 0 2px rgba(224,227,255,0.8)}
-.vc-wrap{position:relative;width:98px;height:98px;cursor:pointer}
-.vc-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-/* outer diffused glow */
-.vc-glow2{fill:none;stroke-linecap:round;stroke-width:18;
-  stroke:rgba(88,101,242,0.12);
-  stroke-dasharray:calc(var(--vc-pct,0.8)*220) 220;
-  transition:stroke-dasharray 0.06s linear;
-  filter:blur(6px)}
-/* inner tight glow */
-.vc-glow{fill:none;stroke-linecap:round;stroke-width:10;
-  stroke:rgba(88,101,242,0.35);
-  stroke-dasharray:calc(var(--vc-pct,0.8)*220) 220;
-  transition:stroke-dasharray 0.06s linear;
-  filter:blur(2.5px)}
-/* dark track */
-.vc-track{fill:none;stroke:rgba(224,227,255,0.08);stroke-width:6;stroke-linecap:round}
-/* main arc */
-.vc-arc{fill:none;stroke-linecap:round;stroke-width:6;
-  stroke:url(#vcGrad);
-  stroke-dasharray:calc(var(--vc-pct,0.8)*220) 220;
-  transition:stroke-dasharray 0.06s linear}
-/* center readout */
-.vc-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;line-height:1;pointer-events:none;gap:1px}
-.vc-val{font-family:var(--font-display);font-size:29px;font-weight:900;
-  color:var(--light-blurple);
-  text-shadow:0 0 6px rgba(88,101,242,0.6),0 0 14px rgba(88,101,242,0.3)}
-.vc-unit{font-family:var(--font-main);font-size:16px;font-weight:700;letter-spacing:3px;color:rgba(224,227,255,0.25);text-transform:uppercase}
-/* rotating indicator tick */
-.vc-dot{position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;
-  background:var(--blurple);
-  box-shadow:0 0 5px 2px rgba(88,101,242,0.9),0 0 10px 4px rgba(88,101,242,0.5);
-  transform-origin:0 0;pointer-events:none;
-  translate:-2.5px calc(-39px)}
-.vc-input{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);
-  opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;margin:0;
-  border-radius:50%;z-index:10}
 
 /* ====== SYNTHWAVE GAME CHANNEL ====== */
 .game-slot{position:absolute;inset:0;z-index:6;overflow:hidden;background:#0a0014}
@@ -1830,43 +1734,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <div class="panel-divider"></div>
       <!-- Speaker grille fills remaining space -->
       <div class="speaker-grille" id="speakerGrille"></div>
-      <div class="vol-circle-section" id="volCircleSection">
-        <div class="vol-circle-label">Skaļums — podziņa</div>
-        <div class="vc-wrap" id="vcWrap">
-          <div class="vc-bezel">
-            <div class="vc-glass"></div>
-            <div class="vc-particles"></div>
-          </div>
-          <svg class="vc-svg" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="vcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#19175c"/>
-                <stop offset="50%" stop-color="#5865f2"/>
-                <stop offset="100%" stop-color="#e0e3ff"/>
-              </linearGradient>
-              <filter id="vcTurb">
-                <feTurbulence type="fractalNoise" baseFrequency="0.015 0.15" numOctaves="5" seed="3"/>
-              </filter>
-            </defs>
-            <!-- track: starts at -216deg (bottom-left), sweeps 252deg -->
-            <circle class="vc-glow" cx="50" cy="50" r="35"
-              transform="rotate(-216 50 50)"
-              pathLength="220"/>
-            <circle class="vc-track" cx="50" cy="50" r="35"
-              transform="rotate(-216 50 50)"
-              pathLength="220"/>
-            <circle class="vc-arc" cx="50" cy="50" r="35"
-              transform="rotate(-216 50 50)"
-              pathLength="220"/>
-          </svg>
-          <div class="vc-center">
-            <span class="vc-val" id="vcVal">80</span>
-            <span class="vc-unit">VOL</span>
-          </div>
-          <div class="vc-dot" id="vcDot"></div>
-          <input type="range" class="vc-input" id="vcInput" min="0" max="100" value="80">
-        </div>
-      </div>
       <div class="panel-bottom-zone">
         <div class="util-btns-bottom" style="flex-direction:row;gap:6px">
           <button class="wood-btn" onclick="shareApp()" style="flex:1;min-width:0"><span>📤</span> Iesaki</button>
@@ -1940,7 +1807,6 @@ const CHANNEL_CONFIG = [
   {key:'KLASIKA', name:'KLASIKA', label:'Klasika',           color:'#d4af37',  icon:'🎻', csvPrefix:'KLASIKA'}
 ];
 
-// Fallback dati (izmanto, ja Google Sheets nav pieejams)
 // Fallback dati (izmanto, ja Google Sheets nav pieejams)
 const FALLBACK_CHANNELS=[
   {name:'POP',label:'Pop',color:'#9b4dff',videos:[
@@ -2193,27 +2059,6 @@ function buildChannelGrid(){
 }
 buildChannelGrid();
 
-function fireConfetti(){
-  const container=document.createElement('div');container.className='confetti-container';document.body.appendChild(container);
-  const colors=['#9b4dff','#19d0e8','#ff4cd2','#35ed7e','#ffdd57','#ff6b6b','#fff','#b366ff','#00e5ff'];
-  const shapes=['circle','square','strip'];
-  for(let i=0;i<150;i++){
-    const c=document.createElement('div');c.className='confetti';
-    const color=colors[Math.floor(Math.random()*colors.length)];
-    const shape=shapes[Math.floor(Math.random()*shapes.length)];
-    const size=4+Math.random()*12;
-    c.style.left=(5+Math.random()*90)+'%';
-    c.style.top=(20+Math.random()*30)+'%';
-    c.style.width=shape==='strip'?size/3+'px':size+'px';
-    c.style.height=shape==='strip'?size*2.5+'px':size+'px';
-    c.style.background=color;
-    c.style.borderRadius=shape==='circle'?'50%':shape==='strip'?'2px':'0';
-    c.style.animationDelay=(Math.random()*0.3)+'s';
-    c.style.animationDuration=(0.8+Math.random()*1)+'s';
-    container.appendChild(c);
-  }
-  setTimeout(()=>container.remove(),2000);
-}
 function launchTV(){startTV()}
 function startTV(){
   if(startTV._started)return;startTV._started=true;
@@ -2466,9 +2311,9 @@ function showOverlay(phase,videoData,duration){
 function hideOverlay(){const ov=document.getElementById('tvOverlay');if(ov)ov.classList.remove('show')}
 function updateNowPlaying(){
   const ch=channels[currentChannel],v=ch.videos[currentVideoIdx[currentChannel]];
-  document.getElementById('npText').textContent=v.title;
-  document.getElementById('npCh').textContent='KAN '+(currentChannel+1)+' \u2014 '+ch.name;
-  document.getElementById('npCh').style.color=ch.color;
+  const npt=document.getElementById('npText'),npc=document.getElementById('npCh');
+  if(npt)npt.textContent=v.title;
+  if(npc){npc.textContent='KAN '+(currentChannel+1)+' \u2014 '+ch.name;npc.style.color=ch.color}
   applyEraEffect(v.decade||'modern');
 }
 function applyEraEffect(decade){
@@ -2885,21 +2730,29 @@ function initSMS(){
   if(n&&t){n.addEventListener('input',checkSMSForm);t.addEventListener('input',checkSMSForm);checkSMSForm()}
 }
 function renderTicker(){
-  // TV ekrāna ticker
-  const t=document.getElementById('smsTicker');let h='';
-  for(let r=0;r<2;r++)smsMessages.forEach(m=>{h+='<span class="sms-item"><span class="sms-name">'+m.name+':</span> <span class="sms-text">'+m.text+'</span><span class="sms-sep">|</span></span>'});
-  t.innerHTML=h;t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
-  // LED čata josla apakšā
+  // TV ekrāna ticker — drošs DOM API (bez innerHTML)
+  const t=document.getElementById('smsTicker');
+  t.textContent='';
+  for(let r=0;r<2;r++)smsMessages.forEach(m=>{
+    const item=document.createElement('span');item.className='sms-item';
+    const name=document.createElement('span');name.className='sms-name';name.textContent=m.name+':';
+    const text=document.createElement('span');text.className='sms-text';text.textContent=' '+m.text;
+    const sep=document.createElement('span');sep.className='sms-sep';sep.textContent='|';
+    item.append(name,text,sep);t.appendChild(item);
+  });
+  t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
   renderLedChat();
 }
 function renderLedChat(){
   const el=document.getElementById('ledMarqueeText');if(!el)return;
-  let h='';
+  el.textContent='';
   const msgs=smsMessages.length>0?smsMessages:[{name:'LOM TV',text:'Sūti ziņu — tā parādīsies šeit!'}];
   for(let r=0;r<2;r++)msgs.forEach(m=>{
-    h+='<span class="chat-name">'+m.name+':</span> '+m.text+'<span class="chat-sep">·</span>';
+    const name=document.createElement('span');name.className='chat-name';name.textContent=m.name+':';
+    const text=document.createTextNode(' '+m.text);
+    const sep=document.createElement('span');sep.className='chat-sep';sep.textContent='·';
+    el.append(name,text,sep);
   });
-  el.innerHTML=h;
   el.style.animationDuration=Math.max(50,el.scrollWidth/2/25)+'s';
 }
 function checkSMSForm(){
