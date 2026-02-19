@@ -842,8 +842,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* VHS OSD OVERLAY */
 .vhs-osd{position:absolute;inset:0;z-index:15;pointer-events:none;font-family:'Press Start 2P',monospace;font-size:clamp(8px,1.2vw,14px);color:#fff}
-.vhs-osd-ch{position:absolute;top:16px;left:20px;animation:vhsRgbText 2s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
-.vhs-osd-time{position:absolute;top:16px;right:20px;animation:vhsRgbText 1.5s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
+.vhs-osd-ch{position:absolute;bottom:48px;left:20px;animation:vhsRgbText 2s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
+.vhs-osd-time{position:absolute;bottom:48px;right:20px;animation:vhsRgbText 1.5s steps(9) infinite alternate;text-shadow:0 0 6px rgba(255,255,255,0.4)}
 @keyframes vhsRgbText{
   0%,25%{text-shadow:-1px 1px 6px rgba(255,255,255,0.5),0 0 2px rgba(251,0,231,0.6),0 0 2px rgba(0,233,235,0.6)}
   45%,55%{text-shadow:-1px 1px 6px rgba(255,255,255,0.5),3px 0 1px rgba(251,0,231,0.7),-3px 0 1px rgba(0,233,235,0.7)}
@@ -902,8 +902,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .power-top-row{gap:4px}
   .power-toggle{font-size:0.25em}
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
-  .vhs-osd-ch{top:8px;left:10px}
-  .vhs-osd-time{top:8px;right:10px}
+  .vhs-osd-ch{bottom:36px;left:10px}
+  .vhs-osd-time{bottom:36px;right:10px}
   .panel-header-wrapper{padding:4px 8px}
   .panel-divider{margin:2px 0}
   .speaker-grille{display:none}
