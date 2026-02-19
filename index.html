@@ -79,12 +79,21 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .start-screen{transition:opacity 0.6s ease}
 .start-screen.fade-out{opacity:0;pointer-events:none}
 .start-screen.hidden{display:none}
-.start-btn{position:relative;z-index:10;margin-top:32px;padding:16px 48px;font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:var(--pure-white);
-  background:linear-gradient(145deg,rgba(155,77,255,0.3),rgba(155,77,255,0.1));border:2px solid var(--neon-purple);border-radius:8px;cursor:pointer;
-  box-shadow:0 0 20px rgba(155,77,255,0.3),0 0 40px rgba(155,77,255,0.1),inset 0 0 20px rgba(155,77,255,0.1);
+.start-btn{position:relative;z-index:10;margin-top:40px;width:100px;height:100px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,rgba(155,77,255,0.25),rgba(155,77,255,0.08));border:3px solid var(--neon-purple);cursor:pointer;
+  box-shadow:0 0 30px rgba(155,77,255,0.4),0 0 60px rgba(155,77,255,0.15),inset 0 0 25px rgba(155,77,255,0.12);
   transition:all .3s ease;animation:startBtnPulse 2s ease-in-out infinite}
-.start-btn:hover{background:linear-gradient(145deg,rgba(155,77,255,0.5),rgba(155,77,255,0.2));box-shadow:0 0 30px rgba(155,77,255,0.5),0 0 60px rgba(155,77,255,0.2),inset 0 0 30px rgba(155,77,255,0.15);transform:scale(1.05)}
-@keyframes startBtnPulse{0%,100%{box-shadow:0 0 20px rgba(155,77,255,0.3),0 0 40px rgba(155,77,255,0.1)}50%{box-shadow:0 0 30px rgba(155,77,255,0.5),0 0 60px rgba(155,77,255,0.2)}}
+.start-btn:hover{background:linear-gradient(145deg,rgba(155,77,255,0.45),rgba(155,77,255,0.2));
+  box-shadow:0 0 40px rgba(155,77,255,0.6),0 0 80px rgba(155,77,255,0.25),inset 0 0 30px rgba(155,77,255,0.2);transform:scale(1.1)}
+.start-btn svg{width:48px;height:48px;filter:drop-shadow(0 0 10px rgba(155,77,255,0.8))}
+.start-btn-label{position:absolute;bottom:-32px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Handjet',var(--font-main);font-size:14px;letter-spacing:4px;color:rgba(155,77,255,0.7);text-transform:uppercase}
+@keyframes startBtnPulse{0%,100%{box-shadow:0 0 30px rgba(155,77,255,0.4),0 0 60px rgba(155,77,255,0.15)}50%{box-shadow:0 0 50px rgba(155,77,255,0.6),0 0 100px rgba(155,77,255,0.25)}}
+/* Konfeti */
+.confetti-container{position:fixed;inset:0;z-index:400;pointer-events:none;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotateZ(0deg) scale(1)}30%{opacity:1}100%{opacity:0;transform:translateY(100vh) rotateZ(720deg) scale(0.3)}}
 @keyframes sphereSpin{0%{transform:rotateX(-210deg) rotateY(0deg) rotateZ(185deg)}100%{transform:rotateX(-210deg) rotateY(360deg) rotateZ(185deg)}}
 @keyframes sphereShine{50%,100%{border-color:transparent;box-shadow:0 0 1px 1px transparent,0 0 1px 1px transparent inset;filter:hue-rotate(180deg)}}
 @keyframes letterGlow{
@@ -330,7 +339,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 12px rgba(25,208,232,0.7),0 0 24px rgba(25,208,232,0.3)}
 .tv-overlay.phase-just .tv-overlay-inner{border-left-color:var(--hot-pink);opacity:0.85;box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(255,76,210,0.2),0 0 60px rgba(255,76,210,0.08)}
 .tv-overlay.phase-just .tv-overlay-label{color:var(--hot-pink);text-shadow:0 0 12px rgba(255,76,210,0.7),0 0 24px rgba(255,76,210,0.3)}
-.tv-overlay-title{font-family:var(--font-display);font-size:28px;font-weight:800;color:#fff;margin-bottom:4px;
+.tv-overlay-title{font-family:'Bowlby One SC',var(--font-display),sans-serif;font-size:26px;font-weight:400;color:#fff;margin-bottom:4px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
 .tv-overlay-artist{font-family:var(--font-main);font-size:20px;font-weight:600;color:rgba(224,227,255,0.85);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -860,7 +869,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <div class="start-sub">kopš 2003. gada</div>
     </div>
   </div>
-  <button class="start-btn" id="startBtn" onclick="startTV()">IESLĒGT TV</button>
+  <button class="start-btn" id="startBtn" onclick="launchTV()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#b366ff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v6"/><path d="M16.24 7.76a6 6 0 1 1-8.49 0"/></svg>
+    <span class="start-btn-label">nospied</span>
+  </button>
 </div>
 
 <!-- CALIBRATION moved inside tv-screen -->
@@ -1212,6 +1224,28 @@ let crossfading=false,crossfadeTimer=null;
 const CROSSFADE_DURATION=2000; // 2 sek crossfade
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
+function fireConfetti(){
+  const container=document.createElement('div');container.className='confetti-container';document.body.appendChild(container);
+  const colors=['#9b4dff','#19d0e8','#ff4cd2','#35ed7e','#ffdd57','#ff6b6b','#c0c0c0','#fff'];
+  const shapes=['circle','square','strip'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div');c.className='confetti';
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    const shape=shapes[Math.floor(Math.random()*shapes.length)];
+    const size=6+Math.random()*10;
+    c.style.left=(15+Math.random()*70)+'%';
+    c.style.top=(30+Math.random()*20)+'%';
+    c.style.width=shape==='strip'?size/3+'px':size+'px';
+    c.style.height=shape==='strip'?size*2+'px':size+'px';
+    c.style.background=color;
+    c.style.borderRadius=shape==='circle'?'50%':shape==='strip'?'2px':'0';
+    c.style.animationDelay=(Math.random()*0.6)+'s';
+    c.style.animationDuration=(1.5+Math.random()*1.5)+'s';
+    container.appendChild(c);
+  }
+  setTimeout(()=>container.remove(),3500);
+}
+function launchTV(){fireConfetti();startTV()}
 function startTV(){
   if(startTV._started)return;startTV._started=true;
   const ss=document.getElementById('startScreen');
