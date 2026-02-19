@@ -827,7 +827,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   z-index:1}
 /* FULL/SPĒLE poga stili ir .power-pair-btn klasē */
 .power-top-row{display:flex;flex-direction:column;gap:5px;width:100%;flex-shrink:0;overflow:visible;position:relative}
-.power-btn-pair{display:flex;gap:5px;width:100%}
+.power-btn-pair{display:flex;gap:5px;width:90%;margin:0 auto}
 .power-pair-btn{flex:1;height:44px;display:flex;align-items:center;justify-content:center;gap:5px;border:none;border-radius:8px;cursor:pointer;
   font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
 .pair-btn-icon{width:22px;height:31px;flex-shrink:0}
@@ -2606,9 +2606,9 @@ function sanitizeChat(text){
   return filterBadWords(s);
 }
 // smsMessages jau deklarēts augstāk (globālajā let blokā)
-let smsTickerInterval=null;
-let smsFakeIdx=0;
-let smsStartTime=0;
+var smsTickerInterval=null;
+var smsFakeIdx=0;
+var smsStartTime=0;
 
 // ═══ LIVE VIEWERS COUNTER ═══
 // Simulē skatītāju skaitu: dienas laikā augstāk (~160-200), naktī zemāk (~100-130)
@@ -2832,9 +2832,9 @@ function setChatEnabled(on){
 // Lofi YouTube video priekš spēles fona audio (~12h)
 const GAME_LOFI_ID='nNgIMdc6wqU';
 const GAME_LOFI_DURATION=42600; // ~11h50min sekundēs
-let gameAudio=new Audio(); // Legacy fallback
+var gameAudio=new Audio(); // Legacy fallback
 gameAudio.loop=true;gameAudio.volume=0.5;
-let gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=1.2,gameLastSpawn=0;
+var gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=1.2,gameLastSpawn=0;
 let gameLives=3,gameHiscore=0,gameInvincible=false;
 let gameTouchStartX=0;
 
