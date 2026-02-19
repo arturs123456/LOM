@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LOM TV — Latvijas Online Mūzika</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Retro-Futurism Palette (80s inspired) */
@@ -209,8 +209,55 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .calib-bottom-bar:nth-child(8){background:#000}
 .calib-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:26px;color:rgba(255,255,255,0.75);letter-spacing:8px;background:rgba(0,0,0,0.45);padding:8px 24px}
 
+/* LED MARQUEE DISPLEJS — zem TV */
+.led-marquee-wrap{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  display:none; /* Rādīsim tikai kad TV ieslēgts */
+  justify-content:center;
+  padding:0 12px 6px;
+  pointer-events:none;
+}
+.led-marquee-wrap.on{display:flex}
+.led-marquee-housing{
+  width:100%;max-width:1200px;
+  background:linear-gradient(180deg,#0a0816 0%,#050310 50%,#0a0816 100%);
+  border-radius:6px;
+  border:2px solid #1a1828;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.6),
+    inset 0 2px 6px rgba(0,0,0,0.5),
+    inset 0 -1px 3px rgba(155,77,255,0.05),
+    0 0 12px rgba(155,77,255,0.08);
+  padding:4px 6px;
+  overflow:hidden;
+}
+.led-marquee-viewport{
+  width:100%;height:32px;
+  background:#0f0a1e;
+  border-radius:3px;
+  overflow:hidden;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,0.6),inset 0 -1px 3px rgba(0,0,0,0.3);
+  position:relative;
+}
+.led-marquee-text{
+  position:absolute;top:0;left:0;height:100%;
+  display:flex;align-items:center;
+  white-space:nowrap;
+  font-family:'VT323',monospace;
+  font-size:26px;
+  color:#e8a832;
+  text-shadow:0 0 8px rgba(232,168,50,0.5),0 0 2px rgba(232,168,50,0.8);
+  letter-spacing:2px;
+  animation:ledScroll 40s linear infinite;
+  padding-left:100%;
+}
+@keyframes ledScroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-100%)}
+}
+
 /* MAIN APP */
-#app{position:fixed;inset:12px;display:none}
+#app{position:fixed;inset:12px 12px 44px;display:none}
 
 /* TV CASING — Retro Plastic Shell with unified frame */
 .tv-casing{position:absolute;inset:0;overflow:hidden;
@@ -1124,6 +1171,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .sms-item{font-size:11px;padding:0 12px}
   .tv-overlay{bottom:40px}
   .screen-progress{bottom:14px}
+  .led-marquee-viewport{height:22px}
+  .led-marquee-text{font-size:18px}
+  .led-marquee-housing{padding:2px 4px}
+  #app{inset:6px 6px 32px !important}
 }
 
 /* "PAGRIEZ TELEFONU" OVERLAY — tikai portrait mobilajā */
@@ -1137,6 +1188,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 @media(max-width:768px) and (orientation:portrait){
   .rotate-overlay{display:flex !important}
   #app{display:none !important}
+  .led-marquee-wrap{display:none !important}
 }
 
 /* CIRCULAR VOLUME KNOB — Discord style */
@@ -1770,6 +1822,17 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   </div>
 </div>
 
+<!-- LED MARQUEE DISPLEJS — zem TV -->
+<div class="led-marquee-wrap" id="ledMarqueeWrap">
+  <div class="led-marquee-housing">
+    <div class="led-marquee-viewport">
+      <div class="led-marquee-text" id="ledMarqueeText">
+        LOM TV — LATVIJAS ONLINE MŪZIKAS KANĀLS ★ KLAUSIES LABĀKO MŪZIKU 24/7 ★ PĀRSLĒDZ KANĀLUS — POP, ROKS, ŠLĀGERI, RAP, JAZZ ★ SŪTI SMS UN IESAKI DZIESMAS ★ LOM.TV ★
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- INFO POPUP -->
 <div class="info-popup-overlay" id="infoOverlay" onclick="if(event.target===this)toggleInfoPopup()">
   <div class="info-popup">
@@ -2135,6 +2198,7 @@ function startTV(){
   setTimeout(()=>{
     ss.classList.add('hidden');
     document.getElementById('app').style.display='block';
+    const ledM=document.getElementById('ledMarqueeWrap');if(ledM)ledM.classList.add('on');
     isPoweredOn=true;
     document.getElementById('powerToggleInput').checked=true;
     document.getElementById('ledPower').classList.remove('off');
@@ -2487,11 +2551,13 @@ function togglePower(){
     try{if(playerBReady)playerB.pauseVideo()}catch(e){}
     off.classList.add('show');const d=off.querySelector('.power-dot');d.style.animation='none';d.offsetHeight;d.style.animation='';bars.forEach((b,i)=>{if(i<3)b.classList.add('active');else b.classList.remove('active')});
     if(vhsOsd)vhsOsd.style.display='none';
+    const ledMq=document.getElementById('ledMarqueeWrap');if(ledMq)ledMq.classList.remove('on');
     setChatEnabled(false);
   }
   else{
     isPoweredOn=true;tog.checked=true;led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));
     if(vhsOsd)vhsOsd.style.display='';
+    const ledMq=document.getElementById('ledMarqueeWrap');if(ledMq)ledMq.classList.add('on');
     setChatEnabled(true);
     // Ja bija uz spēles vai tikko ienāca — random mūzikas kanāls (ne spēle)
     if(isGameChannel(currentChannel)||!lastMusicChannel){
@@ -2532,22 +2598,25 @@ function toggleMute(){
   if(typeof gameAudio!=='undefined'&&gameAudio){gameAudio.muted=isMuted}
 }
 function toggleFullscreen(){
+  const ledMq=document.getElementById('ledMarqueeWrap');
   if(!document.fullscreenElement){
     document.documentElement.requestFullscreen().catch(()=>{});
     document.getElementById('fullscreenBtn').classList.add('active');
-    // Fullscreen: hide panel, screen fills everything
     document.querySelector('.tv-casing').classList.add('fs-mode');
+    if(ledMq)ledMq.classList.remove('on'); // Slēpt marquee fullscreenā
   }
   else{
     document.exitFullscreen().catch(()=>{});
     document.getElementById('fullscreenBtn').classList.remove('active');
     document.querySelector('.tv-casing').classList.remove('fs-mode');
+    if(ledMq&&isPoweredOn)ledMq.classList.add('on');
   }
 }
 document.addEventListener('fullscreenchange',()=>{
   if(!document.fullscreenElement){
     document.getElementById('fullscreenBtn').classList.remove('active');
     document.querySelector('.tv-casing').classList.remove('fs-mode');
+    const ledMq=document.getElementById('ledMarqueeWrap');if(ledMq&&isPoweredOn)ledMq.classList.add('on');
   }
 });
 let volOsdTimer=null,muteOsdTimer=null;
