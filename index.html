@@ -274,7 +274,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   padding-left:100%;
 }
 .led-marquee-text .chat-name{color:rgba(139,233,253,0.7);text-shadow:0 0 4px rgba(139,233,253,0.25)}
-.led-marquee-text .chat-sep{color:rgba(232,168,50,0.2);margin:0 10px}
+.led-marquee-text .chat-sep{color:rgba(255,255,255,0.1);margin:0 16px;font-size:14px}
 @keyframes ledScroll{
   0%{transform:translateX(0)}
   100%{transform:translateX(-100%)}
@@ -2885,10 +2885,10 @@ function renderLedChat(){
   let h='';
   const msgs=smsMessages.length>0?smsMessages:[{name:'LOM TV',text:'Sūti ziņu — tā parādīsies šeit!'}];
   for(let r=0;r<2;r++)msgs.forEach(m=>{
-    h+='<span class="chat-name">'+m.name+':</span> '+m.text+'<span class="chat-sep">★</span>';
+    h+='<span class="chat-name">'+m.name+':</span> '+m.text+'<span class="chat-sep">·</span>';
   });
   el.innerHTML=h;
-  el.style.animationDuration=Math.max(30,el.scrollWidth/2/40)+'s';
+  el.style.animationDuration=Math.max(50,el.scrollWidth/2/25)+'s';
 }
 function checkSMSForm(){
   const n=document.getElementById('smsName'),t=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
