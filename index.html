@@ -509,23 +509,22 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-report-submit:hover{background:rgba(53,237,126,0.2);border-color:rgba(53,237,126,0.45)}
 .tv-report-submit:disabled{opacity:0.4;cursor:default}
 /* TV Info Overlay — 3 phase system */
-.tv-overlay{position:absolute;bottom:100px;left:24px;z-index:14;pointer-events:none;
+.tv-overlay{position:absolute;bottom:80px;left:20px;z-index:14;pointer-events:none;
   transform:translateX(-110%);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease;
-  max-width:680px}
+  max-width:520px}
 .tv-overlay.show{transform:translateX(0);opacity:1}
-.tv-overlay-inner{background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);border-left:5px solid var(--neon-purple);
-  padding:26px 36px 20px;border-radius:0 10px 10px 0;
-  box-shadow:0 6px 30px rgba(0,0,0,0.6),0 0 30px rgba(155,77,255,0.15),0 0 60px rgba(155,77,255,0.06)}
-.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:40px;font-weight:700;letter-spacing:8px;text-transform:uppercase;margin-bottom:12px;
-  color:var(--neon-purple);text-shadow:0 0 12px rgba(155,77,255,0.7),0 0 24px rgba(155,77,255,0.3)}
-.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue);box-shadow:0 6px 30px rgba(0,0,0,0.6),0 0 30px rgba(25,208,232,0.15),0 0 60px rgba(25,208,232,0.06)}
-.tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 12px rgba(25,208,232,0.7),0 0 24px rgba(25,208,232,0.3)}
-/* phase-just (TIKKO SKANĒJA) — tāds pats izskats kā phase-now (TAGAD SKAN), tikai cits teksts */
-.tv-overlay-title{font-family:'Russo One',var(--font-display),sans-serif;font-size:50px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.15;
-  white-space:normal;word-wrap:break-word;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
-.tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:38px;font-weight:400;color:rgba(200,210,240,0.75);
-  white-space:normal;word-wrap:break-word;font-style:normal;letter-spacing:0.5px}
-.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:28px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:4px;margin-top:8px}
+.tv-overlay-inner{background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);border-left:4px solid var(--neon-purple);
+  padding:14px 22px 12px;border-radius:0 8px 8px 0;
+  box-shadow:0 4px 20px rgba(0,0,0,0.6),0 0 20px rgba(155,77,255,0.12)}
+.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:24px;font-weight:700;letter-spacing:6px;text-transform:uppercase;margin-bottom:6px;
+  color:var(--neon-purple);text-shadow:0 0 10px rgba(155,77,255,0.6),0 0 20px rgba(155,77,255,0.25)}
+.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue);box-shadow:0 4px 20px rgba(0,0,0,0.6),0 0 20px rgba(25,208,232,0.12)}
+.tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 10px rgba(25,208,232,0.6),0 0 20px rgba(25,208,232,0.25)}
+.tv-overlay-title{font-family:'Russo One',var(--font-display),sans-serif;font-size:30px;font-weight:400;color:#fff;margin-bottom:4px;line-height:1.2;
+  white-space:normal;word-wrap:break-word;text-shadow:0 2px 6px rgba(0,0,0,0.9),0 0 12px rgba(155,77,255,0.1)}
+.tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:22px;font-weight:400;color:rgba(200,210,240,0.75);
+  white-space:normal;word-wrap:break-word;font-style:normal;letter-spacing:0.3px}
+.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:18px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:3px;margin-top:4px}
 /* Legacy now-playing compat — keep for channel display */
 .now-playing{display:none}
 .screen-progress{position:absolute;bottom:28px;left:0;right:0;z-index:10;height:3px;background:rgba(255,255,255,0.05);pointer-events:none}
@@ -1149,11 +1148,11 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   :root{--panel-w:200px}
   .tv-screen-area{top:4px;bottom:4px;left:4px;right:calc(var(--panel-w)+4px)}
   .tv-screen{top:4px;bottom:4px;left:4px;right:4px}
-  .tv-overlay{bottom:56px;left:8px;max-width:75%}
-  .tv-overlay-inner{padding:14px 20px 10px}
-  .tv-overlay-title{font-size:30px}
-  .tv-overlay-artist{font-size:22px}
-  .tv-overlay-label{font-size:26px;letter-spacing:4px;margin-bottom:8px}
+  .tv-overlay{bottom:44px;left:6px;max-width:65%}
+  .tv-overlay-inner{padding:8px 14px 6px}
+  .tv-overlay-title{font-size:20px}
+  .tv-overlay-artist{font-size:15px}
+  .tv-overlay-label{font-size:16px;letter-spacing:3px;margin-bottom:4px}
   .sms-ticker-screen{height:40px}
   .sms-item{font-size:13px;padding:0 16px}
   .screen-progress{bottom:18px}
@@ -2339,22 +2338,13 @@ function crossfadeTo(v){
   },interval);
   updateNowPlaying();resetOverlayPhases();
   startWatchdog(v.id); // Watchdog: ja 12s nesāk spēlēt — auto-skip
-  // Pēc crossfade: viens overlay ar jauno dziesmu — sāk kā "TAGAD SKAN", pēc tam pārsauc uz "TIKKO SKANĒJA"
+  // Pēc crossfade: rāda "TAGAD SKAN" ar jauno dziesmu ~12s
   const t1=setTimeout(()=>{
-    showOverlay('now',v,0); // 0 = bez auto-hide (mēs paši kontrolēsim)
+    showOverlay('now',v,12); // 12s un pazūd
     ovPhasesDone.now=true;
     try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}
   },3000);
   ovTimers.push(t1);
-  // Pēc 13s nomaina virsrakstu uz "TIKKO SKANĒJA" (dati paliek tie paši)
-  const t2=setTimeout(()=>{
-    const lbl=document.getElementById('tvOvLabel');
-    if(lbl)lbl.textContent='TIKKO SKANĒJA';
-  },16000);
-  ovTimers.push(t2);
-  // Pēc vēl 10s paslēpj overlay
-  const t3=setTimeout(()=>{hideOverlay()},26000);
-  ovTimers.push(t3);
 }
 function playVideo(v){crossfadeTo(v)}
 function playVideoLive(v,seekTo){
@@ -2421,13 +2411,13 @@ function parseVideoMeta(v){
 }
 // TV Overlay — 4 phase system with previous video tracking
 let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false,xfade:false,newNow:false};
-let previousVideo=null; // Saglabā iepriekšējo dziesmu priekš "TIKKO SKANĒJA"
+let previousVideo=null;
 function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false,newNow:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay();const dim=document.getElementById('tvDimOverlay');if(dim)dim.classList.remove('dimming')}
 function showOverlay(phase,videoData,duration){
   const ov=document.getElementById('tvOverlay');
   const meta=parseVideoMeta(videoData);
   ov.className='tv-overlay phase-'+phase;
-  document.getElementById('tvOvLabel').textContent=phase==='now'?'TAGAD SKAN':phase==='next'?'NĀKAMAIS':'TIKKO SKANĒJA';
+  document.getElementById('tvOvLabel').textContent=phase==='now'?'TAGAD SKAN':'NĀKAMAIS';
   document.getElementById('tvOvTitle').textContent=meta.title;
   document.getElementById('tvOvArtist').textContent=meta.artist;
   document.getElementById('tvOvMeta').textContent='';
@@ -2464,11 +2454,10 @@ function startProgressTracker(){
       const remaining=effectiveEnd-c; // Laiks līdz efektīvajām beigām
       const p=(c/effectiveEnd)*100+'%';document.getElementById('npProgressFill').style.width=p;
       const dimOv=document.getElementById('tvDimOverlay');
-      // TAGAD SKAN / TIKKO SKANĒJA — triggerē crossfadeTo() caur setTimeout
-      // Backup: ja crossfade nav nostrādājis, rāda TAGAD SKAN pēc 30s
-      if(c>=30&&c<50&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,15)}
+      // TAGAD SKAN — backup: ja crossfade taimeris nebija parādījis
+      if(c>=30&&c<50&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,10)}
       // NĀKAMAIS — 40 sek. pirms beigām + preload
-      if(remaining<=40&&remaining>25&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),12);preloadNext()}
+      if(remaining<=40&&remaining>25&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),8);preloadNext()}
       // ═══ JAUNA CROSSFADE MEHĀNIKA: 20s → 15s → 10s ═══
       // 20s pirms beigām: Ekrāns sāk aptumšoties + volume lēnām samazinās
       if(remaining<=20&&remaining>15&&!crossfading&&!isMuted){
