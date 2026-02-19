@@ -1376,6 +1376,9 @@ const FALLBACK_CHANNELS=[
   ]},
   {name:'JAUNUMI',label:'Jaunumi (2020+)',color:'#7a2ed9',videos:[
     {id:'Z0ZTfUM2-9w',title:'Arvis Reiks — Thinkin Bout You',artist:'Arvis Reiks',song:'Thinkin Bout You',decade:'modern',duration:200}
+  ]},
+  {name:'SPĒLE',label:'Spēle',color:'#ff2975',_isGame:true,videos:[
+    {id:'_game_',title:'Synthwave Racer',artist:'LOM',song:'Game',duration:9999}
   ]}
 ];
 
@@ -1409,6 +1412,7 @@ function parseCSVLine(line){
 // CSV kolonnu nosaukumi ir gari ("POP, POP-ROKS, DISCO" utt.)
 // Meklējam pēc prefiksa un arī piešķiram pēc gada (RETRO/ATMODA/JAUNUMI)
 function findCSVColumn(headers,prefix){
+  if(!prefix)return null; // game kanālam nav CSV prefiksa
   if(prefix.startsWith('_'))return null; // _ATMODA = nav CSV kolonna, aprēķina pēc gada
   return headers.find(h=>h.toUpperCase().startsWith(prefix.toUpperCase()))||null;
 }
