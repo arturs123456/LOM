@@ -362,6 +362,23 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   text-shadow:0 0 10px rgba(255,255,255,0.5);opacity:0;transition:opacity .15s;background:rgba(0,0,0,0.65);padding:6px 16px;border:none;border-radius:4px;letter-spacing:2px;
   animation:vhsRgbText 1.5s steps(9) infinite alternate}
 .ch-switch-overlay.show{opacity:1}
+/* LIVE badge + reaction buttons — labajā augšā */
+.tv-live-strip{position:absolute;top:14px;right:16px;z-index:15;display:flex;align-items:center;gap:10px;pointer-events:auto;
+  animation:vhsRgbText 2.5s steps(9) infinite alternate}
+.tv-live-badge{display:flex;align-items:center;gap:5px;font-family:'Press Start 2P',monospace;font-size:clamp(8px,1.1vw,13px);color:#fff;
+  background:rgba(0,0,0,0.55);padding:5px 10px;border-radius:4px;letter-spacing:1px;white-space:nowrap}
+.tv-live-dot{width:8px;height:8px;border-radius:50%;background:#e53935;display:inline-block;animation:livePulse 1.5s ease-in-out infinite;margin-right:2px;flex-shrink:0}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 4px #e53935}50%{opacity:.4;box-shadow:0 0 10px #ff5252,0 0 18px #e53935}}
+.tv-live-count{color:#e53935;margin-left:3px}
+.tv-reactions{display:flex;gap:4px}
+.tv-react-btn{background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);
+  font-size:clamp(10px,1.3vw,16px);padding:4px 8px;border-radius:4px;cursor:pointer;transition:all .2s;line-height:1}
+.tv-react-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+.tv-react-up:hover{color:#35ed7e;border-color:#35ed7e50}
+.tv-react-down:hover{color:#ff6b6b;border-color:#ff6b6b50}
+.tv-react-report:hover{color:#ffdd57;border-color:#ffdd5750}
+.tv-react-btn.reacted{transform:scale(1.3);transition:transform .15s}
+@keyframes floatUp{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-20px)}}
 /* TV Info Overlay — 3 phase system */
 .tv-overlay{position:absolute;bottom:100px;left:24px;z-index:14;pointer-events:none;
   transform:translateX(-110%);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease;
@@ -740,35 +757,40 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     2em 2em 1em -2em #0006,2em 0.25em 1em #0004,
     inset 0 0 0 0 #0001,inset 0 0 1.5em #ffffff08;
   z-index:1}
-/* FULL — always green */
-#fullscreenBtn{
-  background:
-    linear-gradient(#fff1,#fff0) 100% 50% / 8% 16% no-repeat,
-    radial-gradient(at 20% 20%,#0000,rgba(0,30,0,0.3)) 0 40% / 110% 120%,
-    linear-gradient(180deg,#1e4a1e 0%,#143a14 50%,#0e2a0e 100%);
-  border:none;
-  color:#35ed7e;
-  box-shadow:0 3px #0a1a0a,0 5px 8px rgba(0,0,0,0.5),
-    0 0 12px rgba(53,237,126,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    inset 0 -1px 2px rgba(0,0,0,0.5),
-    inset 2px 0 3px rgba(0,0,0,0.15),
-    inset -2px 0 3px rgba(0,0,0,0.15)}
-#fullscreenBtn:hover{
-  background:
-    linear-gradient(#fff2,#fff0) 100% 50% / 8% 16% no-repeat,
-    radial-gradient(at 20% 20%,#0000,rgba(0,30,0,0.3)) 0 40% / 110% 120%,
-    linear-gradient(180deg,#2a6a2a 0%,#1e5a1e 50%,#184a18 100%);
-  color:#66ff99;
-  box-shadow:0 3px #0a1a0a,0 5px 8px rgba(0,0,0,0.5),
-    0 0 24px rgba(53,237,126,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    inset 0 -1px 2px rgba(0,0,0,0.4),
-    inset 2px 0 3px rgba(0,0,0,0.12),
-    inset -2px 0 3px rgba(0,0,0,0.12);
-  transform:scale(1.03)}
+/* FULL/SPĒLE poga stili ir .power-pair-btn klasē */
 .power-top-row{display:flex;flex-direction:column;gap:8px;width:100%;flex-shrink:0;overflow:visible;position:relative}
-.power-top-row .power-btn-horizontal.fullscreen{aspect-ratio:auto;width:100%;height:36px;flex-direction:row;gap:6px;padding:4px 8px;border-radius:8px;justify-content:center;align-items:center}
+.power-btn-pair{display:flex;gap:6px;width:100%}
+.power-pair-btn{flex:1;height:52px;display:flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:8px;cursor:pointer;
+  font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
+.pair-btn-icon{width:18px;height:18px;flex-shrink:0}
+.pair-btn-icon-text{font-size:16px;line-height:1}
+.pair-btn-text{font-size:12px;letter-spacing:1.5px}
+/* FULL — zaļā poga */
+.power-pair-btn.fullscreen{
+  background:linear-gradient(180deg,#1e4a1e 0%,#143a14 50%,#0e2a0e 100%);
+  color:#35ed7e;
+  box-shadow:0 3px #0a1a0a,0 5px 8px rgba(0,0,0,0.5),0 0 12px rgba(53,237,126,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 2px rgba(0,0,0,0.5)}
+.power-pair-btn.fullscreen:hover{
+  background:linear-gradient(180deg,#2a6a2a 0%,#1e5a1e 50%,#184a18 100%);
+  color:#66ff99;box-shadow:0 3px #0a1a0a,0 5px 8px rgba(0,0,0,0.5),0 0 24px rgba(53,237,126,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.15);transform:scale(1.02)}
+.power-pair-btn.fullscreen.active{
+  background:linear-gradient(180deg,#2a6a2a,#1e5a1e);color:#66ff99;
+  box-shadow:0 1px #0a1a0a,inset 0 2px 4px rgba(0,0,0,0.6),0 0 18px rgba(53,237,126,0.3)}
+/* SPĒLE — violetā poga */
+.power-pair-btn.game-btn{
+  background:linear-gradient(180deg,#3a1e5a 0%,#2a1445 50%,#1e0e35 100%);
+  color:#b366ff;
+  box-shadow:0 3px #120a20,0 5px 8px rgba(0,0,0,0.5),0 0 12px rgba(155,77,255,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 2px rgba(0,0,0,0.5)}
+.power-pair-btn.game-btn:hover{
+  background:linear-gradient(180deg,#4a2a70 0%,#3a1e60 50%,#2a1450 100%);
+  color:#d0a0ff;box-shadow:0 3px #120a20,0 5px 8px rgba(0,0,0,0.5),0 0 24px rgba(155,77,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.15);transform:scale(1.02)}
+.power-pair-btn.game-btn.active{
+  background:linear-gradient(180deg,#4a2a70,#3a1e60);color:#d0a0ff;
+  box-shadow:0 1px #120a20,inset 0 2px 4px rgba(0,0,0,0.6),0 0 18px rgba(155,77,255,0.3)}
 .btn-icon-wrap{display:flex;align-items:center;justify-content:center;width:80%;aspect-ratio:1;position:relative}
 /* power-circle removed — replaced by .power-toggle */
 .full-square{border:none;border-radius:0;position:relative}
@@ -923,6 +945,19 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .info-popup-body strong{color:#35ed7e;font-weight:700}
 .info-popup-body .info-version{font-family:'Handjet',monospace;font-size:20px;color:rgba(53,237,126,0.7);
   letter-spacing:6px;margin-top:28px;display:block;text-transform:uppercase}
+/* Contact form in popup */
+.contact-form{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.contact-input{background:rgba(0,20,10,0.6);border:1px solid rgba(53,237,126,0.2);border-radius:6px;padding:10px 14px;
+  color:#caebd2;font-family:'Handjet',monospace;font-size:22px;letter-spacing:1px;outline:none;transition:border-color .2s}
+.contact-input::placeholder{color:rgba(53,237,126,0.35)}
+.contact-input:focus{border-color:rgba(53,237,126,0.5)}
+.contact-textarea{resize:vertical;min-height:60px}
+.contact-submit{background:linear-gradient(180deg,#1e4a1e,#0e2a0e);color:#35ed7e;border:1px solid rgba(53,237,126,0.3);
+  border-radius:6px;padding:12px;font-family:'Handjet',monospace;font-size:24px;letter-spacing:3px;cursor:pointer;
+  transition:all .2s;text-transform:uppercase}
+.contact-submit:hover{background:linear-gradient(180deg,#2a6a2a,#184a18);box-shadow:0 0 16px rgba(53,237,126,0.3)}
+.contact-submit:disabled{opacity:0.5;cursor:not-allowed}
+.contact-status{font-size:18px;color:#35ed7e;text-align:center;min-height:20px}
 /* Grid lines inside popup */
 .info-popup-body::before{content:'';position:absolute;inset:0;pointer-events:none;
   background:
@@ -1143,8 +1178,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* ====== SYNTHWAVE GAME CHANNEL ====== */
 .game-slot{position:absolute;inset:0;z-index:6;overflow:hidden;background:#0a0014}
 .sw-scene{position:absolute;inset:0;overflow:hidden}
-/* Hide screen logo when game is active */
-.game-slot~.screen-logo,.game-slot~.yt-blocker,.game-slot~.yt-bottom-hide{display:none}
+/* Hide screen logo when game is active (only when game-slot is visible) */
+.game-slot:not([style*="display:none"]):not([style*="display: none"])~.screen-logo,
+.game-slot:not([style*="display:none"]):not([style*="display: none"])~.yt-blocker,
+.game-slot:not([style*="display:none"]):not([style*="display: none"])~.yt-bottom-hide{display:none}
 /* Stars */
 .sw-stars{position:absolute;inset:0;z-index:0}
 .sw-star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:0.6;
@@ -1371,6 +1408,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
           <div class="vhs-osd-ch" id="vhsOsdCh">▶ POP</div>
           <div class="vhs-osd-time" id="vhsOsdTime">--:--</div>
         </div>
+        <!-- LIVE viewers + reaction buttons — labajā augšējā stūrī -->
+        <div class="tv-live-strip" id="tvLiveStrip">
+          <div class="tv-live-badge"><span class="tv-live-dot"></span>LIVE <span class="tv-live-count" id="tvLiveCount">147</span></div>
+          <div class="tv-reactions">
+            <button class="tv-react-btn tv-react-up" id="reactUp" title="Patīk">&#9650;</button>
+            <button class="tv-react-btn tv-react-down" id="reactDown" title="Nepatīk">&#9660;</button>
+            <button class="tv-react-btn tv-react-report" id="reactReport" title="Ziņot par problēmu">&#9888;</button>
+          </div>
+        </div>
         <!-- TV Info Overlay (Now Playing / Up Next / Just Played) -->
         <div class="tv-overlay" id="tvOverlay">
           <div class="tv-overlay-inner">
@@ -1414,14 +1460,17 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
             <div class="power-top-row">
               <!-- 3D Toggle Switch -->
               <input type="checkbox" class="power-toggle" id="powerToggleInput" role="switch" checked>
-              <!-- FULL poga zem toggle -->
-              <button class="power-btn-horizontal fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
-                <div class="btn-icon-wrap full-square">
-                  <span class="full-corner-tr"></span>
-                  <span class="full-corner-bl"></span>
-                  <span class="power-text">FULL</span>
-                </div>
-              </button>
+              <!-- FULL + SPĒLE pogas blakus zem toggle -->
+              <div class="power-btn-pair">
+                <button class="power-pair-btn fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
+                  <svg class="pair-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3h6v2H5v4H3zM15 3h6v6h-2V5h-4zM3 15v6h6v-2H5v-4zm18 0v4h-4v2h6v-6z"/></svg>
+                  <span class="pair-btn-text">FULL</span>
+                </button>
+                <button class="power-pair-btn game-btn" id="gamePanelBtn">
+                  <span class="pair-btn-icon-text">▶</span>
+                  <span class="pair-btn-text">SPĒLE</span>
+                </button>
+              </div>
             </div>
             <div class="indicator-bars">
               <div class="indicator-bar active"></div>
@@ -1540,6 +1589,23 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <p>Retro televīzijas formātā vari baudīt <mark class="text-highlight">labāko latviešu un ārzemju</mark> mūziku — no klasiskiem šlāgeriem līdz jaunākajiem hitiem. Sākam ar POP, ROKS un RETRO, bet vienmēr var pārslēgties uz ko košāku.</p>
       <p>Kanālu pārslēgšana, SMS rindas un dalīšanās pogas ir veidotas kā <mark class="text-highlight">TV paziņojumi</mark>, lai sajūta būtu tieši kā pie ekrāna: spied MUTE, VOL vai CH, un pamanīsi spilgtus ziņojumus, kas iegrimst fonā, bet <mark class="text-highlight">paliek skaidri salasāmi</mark>.</p>
       <p>Ja kas nestrādā vai vēlies ieteikumus nākamajai laidienai, <mark class="text-highlight">dod ziņu</mark> — uzturam ēteru kopā.</p>
+      <!-- Kontaktu forma (Formbase) -->
+      <div class="info-contact-form">
+        <div class="info-strap" style="margin-top:16px">SAZINIES AR MUMS</div>
+        <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
+          <input type="text" name="name" placeholder="Tavs vārds" required class="contact-input">
+          <input type="email" name="email" placeholder="E-pasts" required class="contact-input">
+          <select name="type" class="contact-input">
+            <option value="request">Pieprasi dziesmu</option>
+            <option value="feedback">Atsauksme</option>
+            <option value="bug">Kļūdas ziņojums</option>
+            <option value="other">Cits</option>
+          </select>
+          <textarea name="message" placeholder="Tava ziņa..." rows="3" required class="contact-input contact-textarea"></textarea>
+          <button type="submit" class="contact-submit" id="contactSubmitBtn">NOSŪTĪT</button>
+          <div class="contact-status" id="contactStatus"></div>
+        </form>
+      </div>
       <span class="info-version">/// ver 2.0 — kopš 2003 _</span>
     </div>
   </div>
@@ -1736,6 +1802,7 @@ async function loadFromSheets(){
 }
 
 let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady=false,smsMessages=[],progressInterval=null,isMuted=false,currentVolume=80,volumeBeforeMute=80;
+let lastMusicChannel=null; // Pēdējais mūzikas kanāls (ne spēle) — lai ieslēdzot atgriežas
 // Dual-player crossfade sistēma
 let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
@@ -1780,6 +1847,7 @@ function buildChannelGrid(){
   const grid=document.getElementById('channelGrid');
   grid.innerHTML='';
   channels.forEach((ch,i)=>{
+    if(isGameChannel(i))return; // Spēle ir atsevišķā pogā augšā, ne gridā
     // Atrast atbilstošo CHANNEL_CONFIG ierakstu
     const cfg=CHANNEL_CONFIG.find(c=>c.name===ch.name)||{icon:'📺',name:ch.name};
     const active=i===0?' active':'';
@@ -2086,13 +2154,13 @@ function switchChannel(ch){
   // Ja iepriekšējais bija spēle — apstādināt
   if(isGameChannel(currentChannel)){stopGame()}
   currentChannel=ch;
+  if(!isGameChannel(ch))lastMusicChannel=ch; // Atceries pēdējo mūzikas kanālu
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
   // VHS OSD — atjaunināt kanāla nosaukumu
   const osdCh=document.getElementById('vhsOsdCh');if(osdCh)osdCh.textContent='▶ '+channels[ch].name;
   if(isGameChannel(ch)){
-    // Spēles kanāls — pauzēt YouTube, startēt spēli
-    try{const ap=activeSlot==='a'?playerA:playerB;if(ap)ap.pauseVideo()}catch(e){}
+    // Spēles kanāls — YouTube NEpauzē (lofi skanēs caur to)
     showStatic(()=>{startGame()});
     return;
   }
@@ -2127,10 +2195,13 @@ function togglePower(){
     isPoweredOn=true;tog.checked=true;led.classList.remove('off');off.classList.remove('show');bars.forEach(b=>b.classList.add('active'));
     if(vhsOsd)vhsOsd.style.display='';
     setChatEnabled(true);
-    // Ja pašreizējais kanāls ir spēle — pārslēdzamies uz pirmo mūzikas kanālu
-    if(isGameChannel(currentChannel)){
-      switchChannel(0);
+    // Ja bija uz spēles vai tikko ienāca — random mūzikas kanāls (ne spēle)
+    if(isGameChannel(currentChannel)||!lastMusicChannel){
+      const musicChannels=channels.map((_,i)=>i).filter(i=>!isGameChannel(i));
+      const rndCh=musicChannels[Math.floor(Math.random()*musicChannels.length)]||0;
+      switchChannel(rndCh);
     } else {
+      // Atgriežas uz to pašu kanālu kur bija
       showStatic(()=>{
         const ap=activeSlot==='a'?playerA:playerB;
         if(playerReady&&ap)ap.playVideo();
@@ -2140,6 +2211,21 @@ function togglePower(){
 }
 document.getElementById('powerToggleInput').addEventListener('change',function(){
   if(this.checked!==isPoweredOn)togglePower();
+});
+// SPĒLE poga — atsevišķā panelī augšā
+document.getElementById('gamePanelBtn').addEventListener('click',function(){
+  if(!isPoweredOn)return;
+  // Atrast spēles kanāla indeksu
+  const gameIdx=channels.findIndex((_,i)=>isGameChannel(i));
+  if(gameIdx<0)return;
+  if(currentChannel===gameIdx){
+    // Ja jau uz spēles — atgriežamies uz pēdējo mūzikas kanālu
+    switchChannel(lastMusicChannel||0);
+    this.classList.remove('active');
+  }else{
+    switchChannel(gameIdx);
+    this.classList.add('active');
+  }
 });
 function toggleMute(){
   const btn=document.getElementById('muteBtn');
@@ -2282,6 +2368,48 @@ let smsTickerInterval=null;
 let smsFakeIdx=0;
 let smsStartTime=0;
 
+// ═══ LIVE VIEWERS COUNTER ═══
+// Simulē skatītāju skaitu: dienas laikā augstāk (~160-200), naktī zemāk (~100-130)
+function getLiveViewerBase(){
+  const h=new Date().getHours();
+  // Diena (10-22): augstāks, nakts (23-9): zemāks
+  if(h>=10&&h<14)return 165; // Pusdienlaiks
+  if(h>=14&&h<18)return 145; // Pēcpusdiena
+  if(h>=18&&h<22)return 185; // Pīķis vakarā
+  if(h>=22||h<2)return 130;  // Vēls vakars
+  return 108; // Nakts
+}
+function updateLiveCount(){
+  const el=document.getElementById('tvLiveCount');if(!el)return;
+  const base=getLiveViewerBase();
+  const jitter=Math.floor(Math.random()*21)-10; // ±10
+  el.textContent=Math.max(80,base+jitter);
+}
+updateLiveCount();
+setInterval(updateLiveCount,7000+Math.random()*6000); // Ik 7-13 sek
+
+// ═══ REACTION BUTTONS ═══
+document.querySelectorAll('.tv-react-btn').forEach(btn=>{
+  btn.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    btn.classList.add('reacted');
+    setTimeout(()=>btn.classList.remove('reacted'),300);
+    // Vizuālais feedback — mazs popup
+    const label=btn.id==='reactUp'?'+1':'';
+    if(label){
+      const pop=document.createElement('span');
+      pop.textContent=label;pop.style.cssText='position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:11px;color:#35ed7e;pointer-events:none;animation:floatUp .8s forwards';
+      btn.style.position='relative';btn.appendChild(pop);setTimeout(()=>pop.remove(),800);
+    }
+    // Report poga — parādīt nelielu paziņojumu
+    if(btn.id==='reactReport'){
+      const v=getCurrentVideo();
+      console.log('REPORT:',v?v.title:'?');
+      // TODO: Formbase submit
+    }
+  });
+});
+
 function initSMS(){
   smsMessages=[];smsFakeIdx=0;smsStartTime=Date.now();
   // Sākotnēji pievienot 3 ziņas lai ticker nav tukšs
@@ -2353,12 +2481,10 @@ function setChatEnabled(on){
   [name,text,btn].forEach(el=>{if(el)el.disabled=!on});
 }
 // ====== SYNTHWAVE GAME ENGINE ======
-const GAME_TRACKS=[
-  'https://cdn.pixabay.com/audio/2022/10/25/audio_33f0f26cfa.mp3',
-  'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
-  'https://cdn.pixabay.com/audio/2023/07/06/audio_e4d5a58e66.mp3'
-];
-let gameAudio=new Audio();
+// Lofi YouTube video priekš spēles fona audio (~12h)
+const GAME_LOFI_ID='nNgIMdc6wqU';
+const GAME_LOFI_DURATION=42600; // ~11h50min sekundēs
+let gameAudio=new Audio(); // Legacy fallback
 gameAudio.loop=true;gameAudio.volume=0.5;
 let gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=2,gameLastSpawn=0;
 let gameTouchStartX=0;
@@ -2383,9 +2509,7 @@ function startGame(){
   gameRunning=true;gameScore=0;gameCarLane=1;gameSpeed=2;gameLastSpawn=0;
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='block';
-  // Paslēpt YouTube slotus
-  document.getElementById('yt-slot-a').classList.add('yt-hidden');
-  document.getElementById('yt-slot-b').classList.add('yt-hidden');
+  // YouTube sloti paliek (audio skan fonā), bet video nav redzams aiz game-slot
   // Ģenerēt zvaigznes
   generateStars();
   // Notīrīt vecos obstacles
@@ -2396,8 +2520,10 @@ function startGame(){
   const sc=document.getElementById('swScore');if(sc)sc.textContent='0';
   // Paslēpt screen-logo (netraucē spēlei)
   const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='none';
-  // Audio
+  // Audio — lofi YouTube fonā
   startGameAudio();
+  // SPĒLE poga active
+  const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.add('active');
   // Game loop
   lastGameTime=0;
   gameLoop=requestAnimationFrame(gameTick);
@@ -2408,20 +2534,30 @@ function stopGame(){
   if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='none';
-  // Atkal rādīt aktīvo YouTube slotu un screen-logo
-  document.getElementById('yt-slot-'+activeSlot).classList.remove('yt-hidden');
+  // Screen-logo atkal redzams
   const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='';
+  // SPĒLE poga deactivate
+  const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.remove('active');
   stopGameAudio();
 }
 
 function startGameAudio(){
+  // Atskaņot lofi YouTube video fonā caur aktīvo YouTube slotu
   try{
-    gameAudio.src=GAME_TRACKS[Math.floor(Math.random()*GAME_TRACKS.length)];
-    gameAudio.volume=isMuted?0:currentVolume/100;
-    gameAudio.play().catch(()=>{});
+    const ap=activeSlot==='a'?playerA:playerB;
+    if(!ap||!playerReady)return;
+    // Pseudo-live: sāk no nejaušas pozīcijas (kā kanāls)
+    const now=Math.floor(Date.now()/1000);
+    const seekPos=now%GAME_LOFI_DURATION;
+    ap.loadVideoById({videoId:GAME_LOFI_ID,startSeconds:seekPos});
+    const vol=isMuted?0:currentVolume;
+    ap.setVolume(vol);
   }catch(e){}
 }
-function stopGameAudio(){try{gameAudio.pause();gameAudio.currentTime=0}catch(e){}}
+function stopGameAudio(){
+  // YouTube playeris tiks pārņemts atpakaļ ar switchChannel → playVideoLive
+  // Nav jāapstādina manuāli — switchChannel to izdarīs
+}
 
 let lastGameTime=0;
 function gameTick(ts){
@@ -2595,6 +2731,27 @@ function toggleInfoPopup(){
   }else{
     if(infoHighlightObserver){infoHighlightObserver.disconnect();infoHighlightObserver=null}
   }
+}
+
+// KONTAKTU FORMA — Formbase.dev submit
+// TODO: Nomainīt FORMBASE_ENDPOINT uz tavu reālo Formbase form ID
+const FORMBASE_ENDPOINT='https://formbase.dev/s/YOUR_FORM_ID';
+function submitContactForm(e){
+  e.preventDefault();
+  const form=document.getElementById('contactForm');
+  const btn=document.getElementById('contactSubmitBtn');
+  const status=document.getElementById('contactStatus');
+  const data=Object.fromEntries(new FormData(form));
+  btn.disabled=true;btn.textContent='SŪTA...';status.textContent='';
+  fetch(FORMBASE_ENDPOINT,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  }).then(r=>{
+    if(r.ok){status.textContent='Paldies! Ziņa nosūtīta.';status.style.color='#35ed7e';form.reset()}
+    else{status.textContent='Kļūda. Mēģini vēlreiz.';status.style.color='#ff6b6b'}
+  }).catch(()=>{
+    status.textContent='Nav savienojuma. Mēģini vēlreiz.';status.style.color='#ff6b6b';
+  }).finally(()=>{btn.disabled=false;btn.textContent='NOSŪTĪT'});
 }
 
 // ADMIN MODERĀCIJAS PANELIS — ?admin=1
