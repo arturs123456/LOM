@@ -120,7 +120,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .logo-container{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .logo-sub-wrap{display:flex;flex-direction:column;align-items:flex-start;position:relative}
 .logo-main{position:relative;display:flex;align-items:center;justify-content:center}
-.logo-letter{font-family:'Bowlby One SC',var(--font-display),sans-serif;font-size:200px;font-weight:400;letter-spacing:6px;animation:letterGlow 2.5s ease-in-out infinite, stripeScroll 5s linear infinite;text-transform:uppercase;position:relative;z-index:2;display:inline-flex;align-items:center;line-height:0.85;
+.logo-letter{font-family:'Bowlby One SC',var(--font-display),sans-serif;font-size:200px;font-weight:400;letter-spacing:6px;animation:letterGlow 2.5s ease-in-out infinite, stripeScroll 2.5s linear infinite;text-transform:uppercase;position:relative;z-index:2;display:inline-flex;align-items:center;line-height:0.85;
   /* IBM-style horizontal stripes — animated downward */
   background:repeating-linear-gradient(0deg,
     var(--neon-purple) 0px,var(--neon-purple) 16px,
@@ -136,7 +136,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   pointer-events:none;border-radius:12px;
   backdrop-filter:blur(2px)}
 .logo-o-sphere{display:inline-flex;align-items:center;justify-content:center;width:160px;height:200px;position:relative;margin:0 -4px;flex-shrink:0;perspective:600px}
-.logo-o-sphere .logo-sphere{--c:var(--neon-purple);width:160px;height:160px;margin:0;left:10px;top:20px;position:absolute;transform-style:preserve-3d;animation:sphereSpin 5s linear infinite}
+.logo-o-sphere .logo-sphere{--c:var(--neon-purple);width:160px;height:160px;margin:0;left:10px;top:20px;position:absolute;transform-style:preserve-3d;animation:sphereSpin 10s linear infinite}
 .logo-o-sphere .logo-sphere div{--sz:23%;--s:2s;--d:40;--dv:calc(var(--s)/var(--d));--dl:calc(var(--dv)*-1);width:var(--sz);height:var(--sz);position:absolute;border:0.15vmin solid var(--c);border-radius:100%;transform:rotateX(90deg) translateZ(86px);box-shadow:0 0 0.3vmin 0.3vmin var(--c),0 0 0.3vmin 0.3vmin var(--c) inset;animation:sphereShine var(--s) linear var(--dl) infinite;background:transparent;left:50%;top:50%;margin-left:calc(var(--sz)/-2);margin-top:calc(var(--sz)/-2)}
 .logo-o-sphere .logo-sphere div:nth-child(2){--sz:40%;--dl:calc(var(--dv)*-2);transform:rotateX(90deg) translateZ(79px)}
 .logo-o-sphere .logo-sphere div:nth-child(3){--sz:55%;--dl:calc(var(--dv)*-3);transform:rotateX(90deg) translateZ(72px)}
@@ -164,7 +164,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   display:inline-block;align-self:flex-start;
   -webkit-text-stroke:2px rgba(25,208,232,0.4)}
 .logo-sphere-wrap{position:absolute;inset:-25px;display:flex;align-items:center;justify-content:center;pointer-events:none;perspective:600px}
-.logo-sphere{--c:var(--neon-purple);position:absolute;width:160px;height:160px;transform-style:preserve-3d;animation:sphereSpin 5s linear infinite}
+.logo-sphere{--c:var(--neon-purple);position:absolute;width:160px;height:160px;transform-style:preserve-3d;animation:sphereSpin 10s linear infinite}
 .logo-sphere div{--sz:23%;--s:2s;--d:40;--dv:calc(var(--s)/var(--d));--dl:calc(var(--dv)*-1);width:var(--sz);height:var(--sz);position:absolute;border:0.15vmin solid var(--c);border-radius:100%;transform:rotateX(90deg) translateZ(78px);box-shadow:0 0 0.3vmin 0.3vmin var(--c),0 0 0.3vmin 0.3vmin var(--c) inset;animation:sphereShine var(--s) linear var(--dl) infinite;background:transparent;left:50%;top:50%;margin-left:calc(var(--sz)/-2);margin-top:calc(var(--sz)/-2)}
 .logo-sphere div:nth-child(2){--sz:40%;--dl:calc(var(--dv)*-2);transform:rotateX(90deg) translateZ(71px)}
 .logo-sphere div:nth-child(3){--sz:55%;--dl:calc(var(--dv)*-3);transform:rotateX(90deg) translateZ(64px)}
@@ -329,9 +329,9 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:repeating-linear-gradient(0deg,var(--neon-purple) 0px,var(--neon-purple) 5px,transparent 5px,transparent 7px);
   background-size:100% 7px;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 6px var(--neon-purple));
-  animation:miniStripeScroll 5s linear infinite}
+  animation:miniStripeScroll 2.5s linear infinite}
 .screen-logo-o-sphere{display:inline-flex;align-items:center;justify-content:center;width:60px;height:74px;position:relative;margin:0 -1px;flex-shrink:0;perspective:320px}
-.screen-logo-o-sphere .screen-logo-sphere{--c:var(--neon-purple);width:60px;height:60px;margin:0;left:1px;top:6px;position:absolute;transform-style:preserve-3d;animation:sphereSpin 5s linear infinite}
+.screen-logo-o-sphere .screen-logo-sphere{--c:var(--neon-purple);width:60px;height:60px;margin:0;left:1px;top:6px;position:absolute;transform-style:preserve-3d;animation:sphereSpin 10s linear infinite}
 .screen-logo-o-sphere .screen-logo-sphere div{--sz:23%;--s:2s;--d:40;--dv:calc(var(--s)/var(--d));--dl:calc(var(--dv)*-1);width:var(--sz);height:var(--sz);position:absolute;border:0.12vmin solid var(--c);border-radius:100%;transform:rotateX(90deg) translateZ(34px);box-shadow:0 0 0.24vmin 0.24vmin var(--c),0 0 0.24vmin 0.24vmin var(--c) inset;animation:sphereShine var(--s) linear var(--dl) infinite;background:transparent;left:50%;top:50%;margin-left:calc(var(--sz)/-2);margin-top:calc(var(--sz)/-2)}
 .screen-logo-o-sphere .screen-logo-sphere div:nth-child(2){--sz:40%;--dl:calc(var(--dv)*-2);transform:rotateX(90deg) translateZ(30px)}
 .screen-logo-o-sphere .screen-logo-sphere div:nth-child(3){--sz:55%;--dl:calc(var(--dv)*-3);transform:rotateX(90deg) translateZ(27px)}
@@ -357,7 +357,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:repeating-linear-gradient(0deg,var(--neon-purple) 0px,var(--neon-purple) 5px,transparent 5px,transparent 7px);
   background-size:100% 7px;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 6px var(--neon-purple));
-  animation:miniStripeScroll 5s linear infinite}
+  animation:miniStripeScroll 2.5s linear infinite}
 .screen-logo-tv{font-family:'Gveret Levin',cursive;font-size:28px;font-weight:400;color:var(--electric-blue);letter-spacing:1px;
   text-shadow:0 0 8px rgba(25,208,232,0.7);transform:rotate(-8deg);display:inline-block;margin-left:-10px;align-self:flex-start;position:relative;top:4px}
 .ch-switch-overlay{position:absolute;top:13px;right:14px;z-index:15;font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--light-blurple);text-shadow:0 0 14px rgba(88,101,242,0.9);opacity:0;transition:opacity .15s;background:rgba(0,0,0,0.75);padding:3px 14px;border:1px solid rgba(88,101,242,0.35);border-radius:4px;letter-spacing:2px}
@@ -1365,27 +1365,21 @@ function fireConfetti(){
   }
   setTimeout(()=>container.remove(),2000);
 }
-function launchTV(){fireConfetti();startTV()}
+function launchTV(){startTV()}
 function startTV(){
   if(startTV._started)return;startTV._started=true;
   const ss=document.getElementById('startScreen');
   ss.classList.add('fade-out');
   setTimeout(()=>{
     ss.classList.add('hidden');
-    // Show app immediately (TV is "ON" from the start)
     document.getElementById('app').style.display='block';
     isPoweredOn=true;
     document.getElementById('powerBtnHorizontal').classList.add('active');
     const pt=document.getElementById('powerText');if(pt)pt.textContent='OFF';
     document.getElementById('ledPower').classList.remove('off');
     document.querySelectorAll('.indicator-bar').forEach(b=>b.classList.add('active'));
-    // Show calibration bars INSIDE the TV screen for 0.5s
-    const calib=document.getElementById('calibScreen');
-    calib.classList.add('show');
-    setTimeout(()=>{
-      calib.classList.remove('show');
-      initYTPlayer();initSMS();startProgressTracker();
-    },500);
+    // Uzreiz sāk atskaņot — bez kalibrācijas joslām
+    initYTPlayer();initSMS();startProgressTracker();
   },600);
 }
 // Ielādē CMS datus sākuma ekrāna laikā, tad startē TV
