@@ -963,93 +963,119 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* ====== SYNTHWAVE GAME CHANNEL ====== */
 .game-slot{position:absolute;inset:0;z-index:6;overflow:hidden;background:#0a0014}
 .sw-scene{position:absolute;inset:0;overflow:hidden}
+/* Hide screen logo when game is active */
+.game-slot~.screen-logo,.game-slot~.yt-blocker,.game-slot~.yt-bottom-hide{display:none}
 /* Stars */
 .sw-stars{position:absolute;inset:0;z-index:0}
 .sw-star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:0.6;
   animation:swStarTwinkle 3s ease-in-out infinite alternate}
 @keyframes swStarTwinkle{0%{opacity:0.3;transform:scale(0.8)}100%{opacity:0.9;transform:scale(1.2)}}
-/* Sun */
-.sw-sun{position:absolute;bottom:38%;left:50%;transform:translateX(-50%);width:220px;height:220px;z-index:1;
-  background:radial-gradient(circle,#ff2975 0%,#ff6b2b 30%,#f5a623 50%,transparent 70%);
-  border-radius:50%;box-shadow:0 0 80px rgba(255,41,117,0.5),0 0 160px rgba(255,107,43,0.3);
-  mask-image:linear-gradient(to bottom,#000 45%,transparent 45%,transparent 48%,#000 48%,#000 52%,transparent 52%,transparent 55%,#000 55%,#000 59%,transparent 59%,transparent 62%,#000 62%,#000 66%,transparent 66%,transparent 70%,#000 70%,#000 76%,transparent 76%,transparent 82%,#000 82%);
-  -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent 45%,transparent 48%,#000 48%,#000 52%,transparent 52%,transparent 55%,#000 55%,#000 59%,transparent 59%,transparent 62%,#000 62%,#000 66%,transparent 66%,transparent 70%,#000 70%,#000 76%,transparent 76%,transparent 82%,#000 82%)}
-/* Grid floor */
-.sw-grid-wrap{position:absolute;bottom:0;left:-20%;width:140%;height:48%;z-index:2;overflow:hidden;
-  perspective:300px;perspective-origin:50% 70%}
-.sw-grid{position:absolute;inset:0;
+/* Sun — centered above horizon */
+.sw-sun{position:absolute;bottom:42%;left:50%;transform:translateX(-50%);width:200px;height:200px;z-index:1;
+  background:radial-gradient(circle,#ff2975 0%,#ff6b2b 30%,#f5a623 55%,transparent 72%);
+  border-radius:50%;box-shadow:0 0 60px rgba(255,41,117,0.6),0 0 120px rgba(255,107,43,0.3);
+  mask-image:linear-gradient(to bottom,#000 42%,transparent 42%,transparent 46%,#000 46%,#000 50%,transparent 50%,transparent 54%,#000 54%,#000 58%,transparent 58%,transparent 63%,#000 63%,#000 70%,transparent 70%,transparent 78%,#000 78%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 42%,transparent 42%,transparent 46%,#000 46%,#000 50%,transparent 50%,transparent 54%,#000 54%,#000 58%,transparent 58%,transparent 63%,#000 63%,#000 70%,transparent 70%,transparent 78%,#000 78%)}
+/* Horizon glow */
+.sw-horizon{position:absolute;bottom:44%;left:0;right:0;height:6px;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(255,41,117,0.6) 20%,rgba(255,107,43,0.8) 50%,rgba(255,41,117,0.6) 80%,transparent);
+  box-shadow:0 0 30px rgba(255,41,117,0.5);filter:blur(2px)}
+/* Grid floor — perspective ground */
+.sw-grid-wrap{position:absolute;bottom:0;left:0;right:0;height:46%;z-index:2;
+  overflow:hidden;perspective:400px;perspective-origin:50% 0%}
+.sw-grid{width:200%;height:200%;position:absolute;top:0;left:-50%;
   background:
-    linear-gradient(rgba(155,77,255,0.4) 1px,transparent 1px) 0 0 / 80px 40px,
-    linear-gradient(90deg,rgba(155,77,255,0.4) 1px,transparent 1px) 0 0 / 80px 40px;
-  transform:rotateX(65deg) translateZ(0);transform-origin:center top;
-  animation:swGridMove 1.5s linear infinite}
-@keyframes swGridMove{0%{background-position:0 0,0 0}100%{background-position:0 40px,0 0}}
-/* Road — 3 lanes */
-.sw-road{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:48%;z-index:3;
-  border-left:220px solid transparent;border-right:220px solid transparent;
-  border-bottom:none;
-  background:linear-gradient(to top,rgba(10,0,20,0.85),rgba(10,0,20,0.2));
-  clip-path:polygon(35% 0%,65% 0%,85% 100%,15% 100%)}
-.sw-lane{position:absolute;bottom:0;width:3px;height:100%;
-  background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 20px,transparent 20px,transparent 40px)}
-.sw-lane-l{position:absolute;bottom:0;left:38%;width:2px;height:48%;z-index:4;
-  background:repeating-linear-gradient(to top,rgba(255,41,117,0.5) 0px,rgba(255,41,117,0.5) 15px,transparent 15px,transparent 30px)}
-.sw-lane-r{position:absolute;bottom:0;left:62%;width:2px;height:48%;z-index:4;
-  background:repeating-linear-gradient(to top,rgba(255,41,117,0.5) 0px,rgba(255,41,117,0.5) 15px,transparent 15px,transparent 30px)}
+    repeating-linear-gradient(rgba(155,77,255,0.45) 0px,rgba(155,77,255,0.45) 1px,transparent 1px,transparent 30px),
+    repeating-linear-gradient(90deg,rgba(155,77,255,0.35) 0px,rgba(155,77,255,0.35) 1px,transparent 1px,transparent 60px);
+  background-size:60px 30px,60px 30px;
+  transform:rotateX(75deg);transform-origin:50% 0%;
+  animation:swGridMove 1s linear infinite}
+@keyframes swGridMove{0%{background-position:0 0,0 0}100%{background-position:0 30px,0 0}}
+/* Lane dividers — dashed pink lines */
+.sw-lane-l{position:absolute;bottom:0;left:38%;width:2px;height:46%;z-index:5;
+  background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 12px,transparent 12px,transparent 24px)}
+.sw-lane-r{position:absolute;bottom:0;left:62%;width:2px;height:46%;z-index:5;
+  background:repeating-linear-gradient(to top,rgba(255,41,117,0.6) 0px,rgba(255,41,117,0.6) 12px,transparent 12px,transparent 24px)}
+/* Road edge glow lines */
+.sw-road-edge-l{position:absolute;bottom:0;left:15%;width:2px;height:46%;z-index:5;
+  background:linear-gradient(to top,rgba(25,208,232,0.7),transparent 70%)}
+.sw-road-edge-r{position:absolute;bottom:0;right:15%;width:2px;height:46%;z-index:5;
+  background:linear-gradient(to top,rgba(25,208,232,0.7),transparent 70%)}
 /* Car */
-.sw-car{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);z-index:10;
-  width:60px;height:80px;transition:left 0.15s ease-out}
-.sw-car::before{content:'';position:absolute;bottom:0;left:5px;width:50px;height:20px;
-  background:linear-gradient(90deg,#ff2975,#9b4dff);border-radius:3px;
-  box-shadow:0 0 20px rgba(255,41,117,0.8),0 0 40px rgba(155,77,255,0.4)}
-.sw-car::after{content:'';position:absolute;bottom:18px;left:12px;width:36px;height:45px;
-  background:linear-gradient(180deg,#19d0e8 0%,#1a1a2e 40%);
-  clip-path:polygon(10% 100%,90% 100%,80% 30%,70% 0%,30% 0%,20% 30%);
-  box-shadow:0 -4px 15px rgba(25,208,232,0.5)}
-/* Car headlights */
-.sw-car-lights{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);width:70px;height:120px;z-index:9;
-  background:linear-gradient(to top,rgba(25,208,232,0.3),transparent);
-  clip-path:polygon(30% 100%,70% 100%,90% 0%,10% 0%);pointer-events:none;
-  filter:blur(4px);opacity:0.6}
+.sw-car{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);z-index:10;
+  width:60px;height:90px;transition:left 0.15s ease-out}
+/* Car body — bottom */
+.sw-car::before{content:'';position:absolute;bottom:0;left:2px;width:56px;height:24px;
+  background:linear-gradient(90deg,#ff2975,#ff2975 30%,#e91e8c 50%,#9b4dff 80%,#9b4dff);border-radius:4px 4px 2px 2px;
+  box-shadow:0 0 24px rgba(255,41,117,0.9),0 0 48px rgba(155,77,255,0.4),0 4px 12px rgba(0,0,0,0.6)}
+/* Car body — top/windshield */
+.sw-car::after{content:'';position:absolute;bottom:22px;left:8px;width:44px;height:52px;
+  background:linear-gradient(180deg,rgba(25,208,232,0.9) 0%,rgba(25,208,232,0.4) 25%,#1a1a2e 50%);
+  clip-path:polygon(8% 100%,92% 100%,82% 28%,68% 0%,32% 0%,18% 28%);
+  box-shadow:0 -6px 20px rgba(25,208,232,0.6)}
+/* Car headlights beam */
+.sw-car-lights{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);width:80px;height:140px;z-index:9;
+  background:linear-gradient(to top,rgba(25,208,232,0.25),transparent 80%);
+  clip-path:polygon(35% 100%,65% 100%,95% 0%,5% 0%);pointer-events:none;
+  filter:blur(6px);opacity:0.5}
+/* Car tail lights */
+.sw-car-tail{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:56px;height:4px;
+  background:linear-gradient(90deg,transparent 5%,#ff2975 15%,#ff2975 30%,transparent 45%,transparent 55%,#ff2975 70%,#ff2975 85%,transparent 95%);
+  box-shadow:0 2px 10px rgba(255,41,117,0.7);border-radius:1px;filter:blur(1px)}
+/* Obstacles container */
+#swObstacles{position:absolute;inset:0;z-index:8;pointer-events:none}
 /* Obstacles */
-.sw-obstacle{position:absolute;z-index:8;transition:none;pointer-events:none}
-.sw-palm{width:40px;height:70px}
-.sw-palm .sw-palm-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:8px;height:40px;background:linear-gradient(90deg,#4a2800,#6b3900,#4a2800);border-radius:2px}
-.sw-palm .sw-palm-top{position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:40px;height:35px;
-  background:radial-gradient(ellipse at center bottom,#0a6e0a 0%,#0d9e0d 50%,transparent 70%);
-  filter:drop-shadow(0 0 4px rgba(53,237,126,0.4))}
-.sw-building{background:linear-gradient(180deg,#ff2975 0%,#9b4dff 50%,#1a1a2e 100%);
-  border:1px solid rgba(155,77,255,0.5);position:relative}
-.sw-building::before{content:'';position:absolute;inset:4px;
-  background:repeating-linear-gradient(0deg,rgba(255,255,255,0.15) 0px,rgba(255,255,255,0.15) 6px,transparent 6px,transparent 12px);
-  opacity:0.5}
+.sw-obstacle{position:absolute;pointer-events:none;opacity:0}
+/* Palm tree */
+.sw-palm{width:50px;height:80px}
+.sw-palm-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:10px;height:45px;background:linear-gradient(90deg,#3d2200,#6b3900,#3d2200);border-radius:3px;
+  box-shadow:inset -2px 0 4px rgba(0,0,0,0.4)}
+.sw-palm-top{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:50px;height:40px;
+  background:radial-gradient(ellipse at 50% 80%,#0d9e0d 0%,#0a6e0a 40%,transparent 70%);
+  filter:drop-shadow(0 0 6px rgba(53,237,126,0.5))}
+/* Building — neon skyscraper */
+.sw-building{position:relative;
+  background:linear-gradient(180deg,#ff2975 0%,#9b4dff 40%,#1a1a2e 100%);
+  border:1px solid rgba(155,77,255,0.6);
+  box-shadow:0 0 12px rgba(155,77,255,0.4),inset 0 0 20px rgba(0,0,0,0.5)}
+.sw-building::before{content:'';position:absolute;inset:3px;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,0.2) 0px,rgba(255,255,255,0.2) 5px,transparent 5px,transparent 10px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 8px,transparent 8px,transparent 16px);
+  opacity:0.6}
+/* Mountain */
 .sw-mountain{clip-path:polygon(50% 0%,0% 100%,100% 100%);
-  background:linear-gradient(180deg,#2a1a4e,#0a0014);
-  border-bottom:2px solid rgba(155,77,255,0.4)}
+  background:linear-gradient(180deg,#3a1a6e 0%,#1a0a3e 60%,#0a0014 100%);
+  box-shadow:0 0 8px rgba(155,77,255,0.3)}
+/* Neon diamond collectible */
+.sw-diamond{width:24px;height:24px;
+  background:#35ed7e;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  box-shadow:0 0 16px rgba(53,237,126,0.8);
+  animation:swDiamondSpin 1s linear infinite}
+@keyframes swDiamondSpin{0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(40deg) brightness(1.3)}100%{filter:hue-rotate(0deg) brightness(1)}}
 /* Score */
 .sw-score{position:absolute;top:16px;right:20px;z-index:15;
-  font-family:'Handjet',var(--font-main),sans-serif;font-size:42px;font-weight:700;
+  font-family:'Handjet',var(--font-main),sans-serif;font-size:48px;font-weight:700;
   color:#35ed7e;letter-spacing:4px;
   text-shadow:0 0 16px rgba(53,237,126,0.7),0 0 32px rgba(53,237,126,0.3)}
-.sw-score::before{content:'SCORE';display:block;font-size:16px;letter-spacing:6px;
+.sw-score::before{content:'SCORE';display:block;font-size:14px;letter-spacing:8px;
   color:rgba(53,237,126,0.5);margin-bottom:2px}
-/* LOM brand */
-.sw-lom{position:absolute;top:16px;left:20px;z-index:15;
-  font-family:'Russo One',var(--font-display),sans-serif;font-size:28px;
-  color:var(--neon-purple);letter-spacing:8px;
-  text-shadow:0 0 20px rgba(155,77,255,0.7),0 0 40px rgba(155,77,255,0.3)}
+/* LOM brand — below score, not overlapping screen-logo */
+.sw-lom{position:absolute;bottom:16px;right:20px;z-index:15;
+  font-family:'Russo One',var(--font-display),sans-serif;font-size:22px;
+  color:rgba(155,77,255,0.5);letter-spacing:6px;
+  text-shadow:0 0 12px rgba(155,77,255,0.4)}
 /* Bonus flash */
-.sw-bonus{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;
-  font-family:'Handjet',var(--font-main),sans-serif;font-size:60px;font-weight:700;
+.sw-bonus{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);z-index:20;
+  font-family:'Handjet',var(--font-main),sans-serif;font-size:72px;font-weight:700;
   color:#f5a623;letter-spacing:8px;
-  text-shadow:0 0 20px rgba(245,166,35,0.8);
-  animation:swBonusPop 0.8s ease-out forwards;pointer-events:none}
-@keyframes swBonusPop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) translateY(-30px)}}
+  text-shadow:0 0 24px rgba(245,166,35,0.9),0 0 48px rgba(245,166,35,0.4);
+  animation:swBonusPop 1s ease-out forwards;pointer-events:none}
+@keyframes swBonusPop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.3)}40%{transform:translate(-50%,-50%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6) translateY(-40px)}}
 /* Car hit flash */
-@keyframes swCarHit{0%,100%{opacity:1}25%,75%{opacity:0.3}}
-.sw-car.hit{animation:swCarHit 0.4s ease}
+@keyframes swCarHit{0%,100%{opacity:1}25%,75%{opacity:0.2}}
+.sw-car.hit{animation:swCarHit 0.5s ease}
 /* Mobile game controls */
 .sw-touch-controls{position:absolute;bottom:0;left:0;right:0;height:50%;z-index:12;display:flex;pointer-events:auto}
 .sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
@@ -1067,12 +1093,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   background:linear-gradient(90deg,#35ed7e,#19d0e8);transition:width 0.15s linear}
 /* Magic stars on popup title */
 .info-popup-title{position:relative;display:inline-block}
-.magic-star{--size:clamp(12px,1.2vw,18px);display:block;height:var(--size);width:var(--size);
+.magic-star{--size:clamp(16px,2vw,26px);display:block;height:var(--size);width:var(--size);
   position:absolute;left:var(--star-left);top:var(--star-top);
-  animation:starScale 700ms ease forwards;pointer-events:none}
-.magic-star svg{animation:starRotate 1s linear infinite;display:block;opacity:0.7;width:100%;height:100%}
+  animation:starScale 800ms ease forwards;pointer-events:none;z-index:6}
+.magic-star svg{animation:starRotate 1.2s linear infinite;display:block;opacity:0.9;width:100%;height:100%;
+  filter:drop-shadow(0 0 4px rgba(53,237,126,0.8))}
 .magic-star svg path{fill:#35ed7e}
-@keyframes starScale{from,to{transform:scale(0)}50%{transform:scale(1)}}
+.magic-star:nth-child(2) svg path{fill:#19d0e8}
+.magic-star:nth-child(3) svg path{fill:#f5a623}
+@keyframes starScale{0%,100%{transform:scale(0)}50%{transform:scale(1.2)}}
 @keyframes starRotate{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
 </style>
 </head>
@@ -1125,12 +1154,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
           <div class="sw-scene">
             <div class="sw-stars" id="swStars"></div>
             <div class="sw-sun"></div>
+            <div class="sw-horizon"></div>
             <div class="sw-grid-wrap"><div class="sw-grid"></div></div>
             <div class="sw-lane-l"></div><div class="sw-lane-r"></div>
+            <div class="sw-road-edge-l"></div><div class="sw-road-edge-r"></div>
+            <div id="swObstacles"></div>
             <div class="sw-car" id="swCar">
               <div class="sw-car-lights"></div>
+              <div class="sw-car-tail"></div>
             </div>
-            <div id="swObstacles"></div>
             <div class="sw-score" id="swScore">0</div>
             <div class="sw-lom">LOM</div>
             <div class="sw-touch-controls"><div class="sw-touch-left" id="swTouchL"></div><div class="sw-touch-right" id="swTouchR"></div></div>
@@ -2153,9 +2185,12 @@ function startGame(){
   updateCarPosition();
   // Score
   const sc=document.getElementById('swScore');if(sc)sc.textContent='0';
+  // Paslēpt screen-logo (netraucē spēlei)
+  const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='none';
   // Audio
   startGameAudio();
   // Game loop
+  lastGameTime=0;
   gameLoop=requestAnimationFrame(gameTick);
 }
 
@@ -2164,8 +2199,9 @@ function stopGame(){
   if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='none';
-  // Atkal rādīt aktīvo YouTube slotu
+  // Atkal rādīt aktīvo YouTube slotu un screen-logo
   document.getElementById('yt-slot-'+activeSlot).classList.remove('yt-hidden');
+  const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='';
   stopGameAudio();
 }
 
@@ -2206,22 +2242,19 @@ function gameTick(ts){
 function spawnObstacle(){
   const container=document.getElementById('swObstacles');if(!container)return;
   const lane=Math.floor(Math.random()*3); // 0,1,2
-  const types=['palm','building','mountain'];
+  const types=['palm','palm','building','building','mountain','diamond'];
   const type=types[Math.floor(Math.random()*types.length)];
   const el=document.createElement('div');
   el.className='sw-obstacle sw-'+type;
   el.dataset.lane=lane;
-  el.dataset.y=0; // progress 0..110
-  // Lane X positions (% of container width)
-  const laneX=[20,50,80];
-  el.style.left=laneX[lane]+'%';
-  el.style.transform='translateX(-50%) translateY(0px) scale(0.3)';
-  el.style.top='35%'; // horizon
+  el.dataset.y=0;
+  el.dataset.type=type;
   // Size by type
-  if(type==='palm'){el.style.width='30px';el.style.height='50px';
+  if(type==='palm'){el.style.width='50px';el.style.height='80px';
     el.innerHTML='<div class="sw-palm-trunk"></div><div class="sw-palm-top"></div>'}
-  else if(type==='building'){el.style.width=(15+Math.random()*20)+'px';el.style.height=(30+Math.random()*40)+'px'}
-  else{el.style.width=(40+Math.random()*30)+'px';el.style.height=(25+Math.random()*20)+'px'}
+  else if(type==='building'){el.style.width=(25+Math.random()*25)+'px';el.style.height=(50+Math.random()*50)+'px'}
+  else if(type==='diamond'){el.style.width='24px';el.style.height='24px'}
+  else{el.style.width=(60+Math.random()*40)+'px';el.style.height=(35+Math.random()*25)+'px'}
   container.appendChild(el);
 }
 
@@ -2232,32 +2265,40 @@ function moveObstacles(){
   for(let i=0;i<obstacles.length;i++){
     const el=obstacles[i];
     let y=parseFloat(el.dataset.y)||0;
-    y+=gameSpeed*0.8;
+    y+=gameSpeed*0.7;
     el.dataset.y=y;
-    // Perspective: starts at horizon (35% top), moves to bottom, scaling up
-    const progress=Math.min(y/100,1.1);
-    const topPct=35+progress*60; // 35% → 95%
-    const scale=0.3+progress*1.2; // 0.3 → 1.5
-    const laneX=[20,50,80];
+    const progress=Math.min(y/100,1.15);
+    // Horizon at ~54% from top (matches sw-sun bottom:42% + sun height)
+    const topPct=50+progress*46; // 50% → 96%
+    const scale=0.15+progress*1.4; // small at horizon → big at bottom
+    const laneX=[22,50,78];
     const lane=parseInt(el.dataset.lane);
-    // Lanes spread apart as they come closer
-    const spread=1+progress*0.8;
+    // Lanes spread apart as objects come closer (perspective)
+    const spread=1+progress*1.2;
     const centerX=50;
     const laneOffset=(laneX[lane]-centerX)*spread+centerX;
     el.style.top=topPct+'%';
     el.style.left=laneOffset+'%';
     el.style.transform='translateX(-50%) scale('+scale.toFixed(2)+')';
-    el.style.opacity=Math.min(1,progress*2);
-    // Collision check — if obstacle is at car position (progress ~0.85-1.0) and same lane
-    if(progress>0.82&&progress<0.98&&lane===gameCarLane){
-      // Hit! Flash car, but keep going
-      const car=document.getElementById('swCar');
-      if(car&&!car.classList.contains('hit')){
-        car.classList.add('hit');
-        setTimeout(()=>car.classList.remove('hit'),400);
+    el.style.opacity=Math.min(1,progress*3);
+    // Collision zone: progress ~0.80-0.95 and same lane
+    if(progress>0.78&&progress<0.95&&lane===gameCarLane){
+      const type=el.dataset.type;
+      if(type==='diamond'){
+        // Collect diamond! Bonus points
+        gameScore+=50;
+        toRemove.push(el);
+        showGameBonus();
+      }else{
+        // Hit obstacle — flash car but continue
+        const car=document.getElementById('swCar');
+        if(car&&!car.classList.contains('hit')){
+          car.classList.add('hit');
+          setTimeout(()=>car.classList.remove('hit'),500);
+        }
       }
     }
-    if(y>120)toRemove.push(el);
+    if(y>125)toRemove.push(el);
   }
   toRemove.forEach(el=>el.remove());
 }
