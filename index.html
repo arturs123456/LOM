@@ -323,7 +323,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 
 /* SCREEN OVERLAYS */
 @keyframes logoPulse{0%,100%{text-shadow:0 0 8px var(--neon-purple),0 0 16px rgba(155,77,255,0.4)}50%{text-shadow:0 0 14px var(--neon-purple),0 0 28px rgba(155,77,255,0.7)}}
-.screen-logo{position:absolute;top:16px;left:20px;z-index:10;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,0.7);border:1px solid rgba(155,77,255,0.3);padding:12px 22px 12px 16px;border-radius:6px;backdrop-filter:blur(6px);box-shadow:0 0 20px rgba(155,77,255,0.2),inset 0 1px 0 rgba(255,255,255,0.08)}
+.screen-logo{position:absolute;top:16px;left:20px;z-index:10;display:flex;align-items:center;gap:3px;background:none;border:none;padding:12px 22px 12px 16px;border-radius:0}
 @keyframes miniStripeScroll{0%{background-position:0 0}100%{background-position:0 7px}}
 .screen-logo-l{font-family:'Bowlby One SC',sans-serif;font-size:58px;font-weight:400;letter-spacing:2px;line-height:1;text-transform:uppercase;
   background:repeating-linear-gradient(0deg,var(--neon-purple) 0px,var(--neon-purple) 5px,transparent 5px,transparent 7px);
@@ -944,7 +944,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         <!-- TV Info Overlay (Now Playing / Up Next / Just Played) -->
         <div class="tv-overlay" id="tvOverlay">
           <div class="tv-overlay-inner">
-            <div class="tv-overlay-label" id="tvOvLabel">NOW PLAYING</div>
+            <div class="tv-overlay-label" id="tvOvLabel">TAGAD SKAN</div>
             <div class="tv-overlay-title" id="tvOvTitle">—</div>
             <div class="tv-overlay-artist" id="tvOvArtist">—</div>
             <div class="tv-overlay-meta" id="tvOvMeta"></div>
@@ -1570,11 +1570,10 @@ function showOverlay(phase,videoData,duration){
   const ov=document.getElementById('tvOverlay');
   const meta=parseVideoMeta(videoData);
   ov.className='tv-overlay phase-'+phase;
-  document.getElementById('tvOvLabel').textContent=phase==='now'?'NOW PLAYING':phase==='next'?'UP NEXT':'JUST PLAYED';
+  document.getElementById('tvOvLabel').textContent=phase==='now'?'TAGAD SKAN':phase==='next'?'NĀKAMAIS':'TIKKO SKANĒJA';
   document.getElementById('tvOvTitle').textContent=meta.title;
   document.getElementById('tvOvArtist').textContent=meta.artist;
-  const yr=videoData.decade==='vintage'?'60s-70s':videoData.decade==='vcr'?'80s-90s':'';
-  document.getElementById('tvOvMeta').textContent=yr?yr+' \u2022 '+channels[currentChannel].name:channels[currentChannel].name;
+  document.getElementById('tvOvMeta').textContent='';
   // Show
   requestAnimationFrame(()=>{ov.classList.add('show')});
   // Auto-hide
