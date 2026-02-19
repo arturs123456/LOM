@@ -372,7 +372,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .tv-overlay.phase-just .tv-overlay-label{color:var(--hot-pink);text-shadow:0 0 12px rgba(255,76,210,0.7),0 0 24px rgba(255,76,210,0.3)}
 .tv-overlay-title{font-family:'Russo One',var(--font-display),sans-serif;font-size:26px;font-weight:400;color:#fff;margin-bottom:6px;line-height:1.15;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
-.tv-overlay-artist{font-family:'Caveat','Sigmar One',var(--font-main),sans-serif;font-size:22px;font-weight:600;color:rgba(224,227,255,0.8);
+.tv-overlay-artist{font-family:'Russo One',var(--font-display),sans-serif;font-size:20px;font-weight:400;color:rgba(200,210,240,0.75);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-style:normal;letter-spacing:0.5px}
 .tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:15px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:3px;margin-top:5px}
 /* Legacy now-playing compat — keep for channel display */
@@ -384,8 +384,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .sms-ticker-inner{display:flex;position:absolute;top:0;left:0;height:100%;white-space:nowrap;align-items:center;animation:tickerScroll 60s linear infinite}
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .sms-item{font-family:var(--font-main);font-size:18px;font-weight:500;padding:0 28px;flex-shrink:0}
-.sms-name{color:var(--light-blurple);font-weight:700}
-.sms-text{color:rgba(200,210,255,0.8)}
+.sms-name{color:rgba(130,140,170,0.65);font-weight:700}
+.sms-text{color:rgba(140,148,175,0.5)}
 .sms-sep{color:var(--blurple);margin:0 8px;opacity:0.6}
 /* Volume OSD — NMTV green blocks style */
 .vol-osd{position:absolute;bottom:80px;left:30px;z-index:18;display:none;flex-direction:column;gap:6px;
@@ -791,6 +791,87 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 @media(max-width:900px){:root{--panel-w:260px}.tv-screen-area{top:10px;bottom:10px;left:10px;right:calc(var(--panel-w)+8px)}.tv-screen{top:9px;bottom:9px;left:9px;right:9px}.ch-btn{height:50px}}
 @media(max-width:540px){:root{--panel-w:220px}.channel-grid{grid-template-columns:repeat(2,1fr)}.ch-btn{height:44px}.panel-logo-lom{font-size:20px}}
 
+/* MOBILE — sākuma ekrāna logo samazināšana */
+@media(max-width:540px){
+  .logo-letter{font-size:120px !important}
+  .logo-letter.logo-M{font-size:130px !important}
+  .logo-o-sphere{width:100px;height:130px}
+  .logo-tv{font-size:65px}
+  .lomk-sub{font-size:18px}
+  .start-btn{width:90px;height:90px;margin-top:24px}
+  .start-btn .play-tri{border-width:20px 0 20px 35px}
+  .start-btn-label{font-size:12px;bottom:-28px}
+}
+@media(max-width:400px){
+  .logo-letter{font-size:80px !important}
+  .logo-letter.logo-M{font-size:90px !important}
+  .logo-o-sphere{width:70px;height:90px}
+  .logo-tv{font-size:42px}
+  .lomk-sub{font-size:15px;letter-spacing:3px}
+  .start-btn{width:76px;height:76px;margin-top:18px}
+  .start-btn .play-tri{border-width:16px 0 16px 28px}
+  .start-sub{font-size:14px}
+}
+
+/* MOBILE LANDSCAPE — TV skats optimizēts */
+@media(max-width:900px) and (orientation:landscape){
+  :root{--panel-w:200px}
+  .tv-screen-area{top:4px;bottom:4px;left:4px;right:calc(var(--panel-w)+4px)}
+  .tv-screen{top:4px;bottom:4px;left:4px;right:4px}
+  .tv-overlay{bottom:56px;left:8px;max-width:60%}
+  .tv-overlay-inner{padding:10px 16px 8px}
+  .tv-overlay-title{font-size:16px}
+  .tv-overlay-artist{font-size:14px}
+  .tv-overlay-label{font-size:14px;letter-spacing:3px;margin-bottom:4px}
+  .sms-ticker-screen{height:40px}
+  .sms-item{font-size:13px;padding:0 16px}
+  .screen-progress{bottom:18px}
+  .channel-grid{gap:3px;padding:4px}
+  .ch-btn{height:32px;border-radius:5px}
+  .ch-btn-front,.ch-btn-back{font-size:11px;letter-spacing:0.5px}
+  .panel-logo-lom{font-size:14px}
+  .controls-section{padding:2px 8px}
+  .ctrl-btn{height:28px;font-size:11px}
+  .ch-vertical-btn{min-height:60px;width:44px}
+  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
+  .ch-vertical-btn-center{font-size:12px}
+  .power-top-row{gap:4px}
+  .power-btn-horizontal{font-size:12px}
+  .power-btn-horizontal .power-icon{font-size:16px}
+  .panel-header-wrapper{padding:4px 8px}
+  .panel-divider{margin:2px 0}
+  .speaker-grille{display:none}
+  .sms-panel{padding:4px}
+  .sms-panel-row{gap:4px}
+  .sms-send-btn{font-size:12px;padding:6px 8px}
+  .sms-name-input{font-size:14px;padding:4px 6px}
+  .sms-text-input{min-height:30px;font-size:13px;padding:4px 6px}
+  .util-btns-bottom .wood-btn{height:36px;font-size:14px}
+  .screen-logo{top:6px;left:8px;padding:6px 10px 6px 8px}
+  .screen-logo-letter{font-size:18px}
+  .screen-logo-o-sphere{width:14px;height:18px}
+  .screen-logo-tv{font-size:10px}
+}
+@media(max-height:400px) and (orientation:landscape){
+  .sms-ticker-screen{height:32px}
+  .sms-item{font-size:11px;padding:0 12px}
+  .tv-overlay{bottom:40px}
+  .screen-progress{bottom:14px}
+}
+
+/* "PAGRIEZ TELEFONU" OVERLAY — tikai portrait mobilajā */
+@keyframes rotatePhoneAnim{0%,100%{transform:rotate(0deg)}30%,70%{transform:rotate(-90deg)}}
+.rotate-overlay{display:none;position:fixed;inset:0;z-index:500;background:#020808;
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;text-align:center;padding:20px}
+.rotate-phone-icon{font-size:64px;animation:rotatePhoneAnim 3s ease-in-out infinite}
+.rotate-text{font-family:'Russo One',var(--font-display),sans-serif;font-size:22px;color:var(--neon-purple);
+  text-shadow:0 0 12px rgba(155,77,255,0.5)}
+.rotate-sub{font-family:var(--font-main);font-size:14px;color:rgba(200,210,240,0.5);max-width:280px}
+@media(max-width:768px) and (orientation:portrait){
+  .rotate-overlay{display:flex !important}
+  #app{display:none !important}
+}
+
 /* CIRCULAR VOLUME KNOB — Discord style */
 @property --vc-pct{syntax:'<number>';inherits:false;initial-value:0.8}
 .vol-circle-section{display:none}
@@ -906,6 +987,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 </div>
 
 <!-- CALIBRATION moved inside tv-screen -->
+
+<!-- ROTATE PHONE OVERLAY (mobile portrait) -->
+<div class="rotate-overlay" id="rotateOverlay">
+  <div class="rotate-phone-icon">📱</div>
+  <div class="rotate-text">Pagriez telefonu horizontāli</div>
+  <div class="rotate-sub">LOM TV vislabāk skatāms landscape režīmā</div>
+</div>
 
 <!-- APP -->
 <div id="app">
@@ -1289,7 +1377,7 @@ let currentChannel=0,currentVideoIdx={},isPoweredOn=true,player=null,playerReady
 let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
-const CROSSFADE_DURATION=3000; // 3 sek crossfade
+const CROSSFADE_DURATION=4000; // 4 sek crossfade — abi skan paralēli
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 
 // ═══════════════════════════════════════
@@ -1484,15 +1572,15 @@ function crossfadeTo(v){
   crossfadeTimer=setInterval(()=>{
     step++;
     const pct=step/steps;
-    const fadeOutVol=Math.round(currVol*(1-pct));
-    const fadeInVol=Math.round(vol*pct);
+    // Smooth crossfade: abi vienlaicīgi, vidū abi ~70%
+    const fadeOutVol=Math.round(currVol*Math.cos(pct*Math.PI/2));
+    const fadeInVol=Math.round(vol*Math.sin(pct*Math.PI/2));
     try{currPlayer.setVolume(fadeOutVol)}catch(e){}
     try{nextPlayer.setVolume(fadeInVol)}catch(e){}
-    // CSS opacity transition notiek automātiski ar klasi
-    if(step===1)currEl.classList.add('yt-hidden'); // sāk CSS fade out
+    // CSS opacity: pakāpenisks, ne uzreiz
+    if(step===Math.round(steps*0.3))currEl.classList.add('yt-hidden');
     if(step>=steps){
       clearInterval(crossfadeTimer);
-      // Pabeigt crossfade
       try{currPlayer.pauseVideo()}catch(e){}
       activeSlot=nextSlot;
       player=nextPlayer;
@@ -1601,14 +1689,14 @@ function startProgressTracker(){
       if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
-      // Pre-fade: pēdējās 10 sek pakāpeniski samazina volume (100%→30%)
-      if(remaining<=10&&remaining>3.5&&!crossfading&&!isMuted){
-        const fadeProgress=(remaining-3.5)/6.5; // 1.0 pie 10s → 0.0 pie 3.5s
-        const fadeVol=Math.round(currentVolume*(0.3+0.7*fadeProgress));
+      // Pre-fade: pēdējās 7 sek pakāpeniski samazina volume (100%→40%)
+      if(remaining<=7&&remaining>4&&!crossfading&&!isMuted){
+        const fadeProgress=(remaining-4)/3; // 1.0 pie 7s → 0.0 pie 4s
+        const fadeVol=Math.round(currentVolume*(0.4+0.6*fadeProgress));
         try{ap.setVolume(fadeVol)}catch(e){}
       }
-      // Crossfade: 3.5 sek pirms beigām sāk pāreju uz nākamo
-      if(remaining<=3.5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
+      // Crossfade: 4 sek pirms beigām sāk pāreju uz nākamo (4s paralēli abi skan)
+      if(remaining<=4&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
     }catch(e){}
   },500);
 }
@@ -1742,32 +1830,52 @@ document.getElementById('vcInput').addEventListener('input',function(){
 setTimeout(()=>{setVolume(80)},400);
 // SMS/Chat sistēma — viltotās ziņas pa 1/min, īstās uzreiz
 const fakeSMS=[
-  {name:'Jānis',text:'Sveiki visiem no Liepājas!'},
-  {name:'Kristīne',text:'Šī dziesma ir vienkārši lieliska!'},
-  {name:'Andris',text:'Palieliniet skaļumu!!'},
-  {name:'Māra',text:'Sveiciens manam mīļotajam Rīgā'},
-  {name:'Pēteris',text:'Latvija nr.1'},
-  {name:'Ilze',text:'Kur var nopirkt šo albumu??'},
-  {name:'Gatis',text:'Atceros šo dziesmu no bērnības...'},
-  {name:'Laura',text:'LOM TV ir labākais'},
-  {name:'Roberts',text:'Pārslēdziet uz ROKS kanālu!!'},
-  {name:'Inga',text:'Labvakar visiem!'},
-  {name:'Mārtiņš',text:'Šī ir labākā lapa internetā. Punkts.'},
-  {name:'Diāna',text:'Iesakiet labas dziesmas!!'},
-  {name:'Edgars',text:'Brainstorm forever!'},
-  {name:'Zane',text:'Sveiciens no Valmieras!'},
-  {name:'Aivars',text:'Agrāk TV bija labāks...'},
-  {name:'Elīna',text:'Kāds dzird no Jelgavas?'},
-  {name:'Kārlis',text:'Super dziesma, gribu vēl!'},
-  {name:'Dace',text:'Mīlu šo kanālu!'},
-  {name:'Raimonds',text:'Lūdzu vairāk retro!'},
-  {name:'Santa',text:'Kas zina šīs dziesmas nosaukumu?'},
-  {name:'Jēkabs',text:'Labākā mūzika tiešraidē'},
-  {name:'Agnese',text:'Sveiciens no Ventspils!'},
-  {name:'Toms',text:'Kāda jauka atmosfēra šovakar'},
-  {name:'Līga',text:'Mana mīļākā dziesma!'},
+  {name:'Jānis',text:'Sveiki visiem no Liepājas'},
+  {name:'Kristīne',text:'Vai kāds atceras šo dziesmu'},
+  {name:'Andris',text:'Palieliniet skaļumu'},
+  {name:'Māra',text:'Kas par aukstu laiku šovakar'},
+  {name:'Pēteris',text:'The Hobos bija brutāli'},
+  {name:'Ilze',text:'Kur var nopirkt šo albumu'},
+  {name:'Gatis',text:'Atceros šo dziesmu no bērnības'},
+  {name:'Laura',text:'Piekrītu kur aizlīdām'},
+  {name:'Roberts',text:'Pārslēdziet uz ROKS kanālu'},
+  {name:'Inga',text:'Labvakar visiem'},
+  {name:'Mārtiņš',text:'Vai te kāds ir no Ventspils'},
+  {name:'Diāna',text:'Iesakiet labas dziesmas'},
+  {name:'Edgars',text:'Prāta Vētra rulē'},
+  {name:'Zane',text:'Sveiciens no Valmieras'},
+  {name:'Aivars',text:'Agrāk TV bija labāks'},
+  {name:'Elīna',text:'Kāds dzird no Jelgavas'},
+  {name:'Kārlis',text:'Gribu vēl tādas dziesmas'},
+  {name:'Dace',text:'Labākais kanāls šobrīd'},
+  {name:'Raimonds',text:'Lūdzu vairāk retro'},
+  {name:'Santa',text:'Kas ir šīs dziesmas autors'},
+  {name:'Jēkabs',text:'Dzirdu pirmo reizi forši'},
+  {name:'Agnese',text:'Šī bija mūsu izlaiduma dziesma'},
+  {name:'Toms',text:'Vakar arī klausījos te'},
+  {name:'Līga',text:'Mana mīļākā dziesma'},
   {name:'Oskars',text:'Šeit vienmēr laba mūzika'}
 ];
+// Bad-words filtrs — ielādē no localStorage vai tukšs
+let BAD_WORDS=[];
+try{const bw=localStorage.getItem('lom_badwords');if(bw)BAD_WORDS=JSON.parse(bw)}catch(e){}
+function filterBadWords(text){
+  let c=text;
+  BAD_WORDS.forEach(w=>{if(w.length<2)return;const re=new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');c=c.replace(re,'\u2605'.repeat(Math.min(w.length,5)))});
+  return c;
+}
+// Sanitizācija — tikai plain teksts, nekādu URL/email/kodu
+function sanitizeChat(text){
+  let s=text.replace(/<[^>]*>/g,''); // noņem HTML tagus
+  s=s.replace(/https?:\/\/\S+/gi,''); // noņem URL ar http
+  s=s.replace(/www\.\S+/gi,''); // noņem www.
+  s=s.replace(/\S+\.(com|lv|org|net|io|eu|ru|de|uk|info|biz|me)\b/gi,''); // noņem domēnus
+  s=s.replace(/\S+@\S+\.\S+/gi,''); // noņem email
+  s=s.replace(/(\+?\d[\d\s\-]{6,})/g,''); // noņem tālruņu numurus (7+ cipari)
+  s=s.replace(/[{}\[\]<>\\\/`]/g,''); // noņem koda simbolus
+  s=s.replace(/\s+/g,' ').trim();
+  return filterBadWords(s);
+}
 // smsMessages jau deklarēts augstāk (globālajā let blokā)
 let smsTickerInterval=null;
 let smsFakeIdx=0;
@@ -1803,9 +1911,20 @@ function sendSMS(){
   if(!isPoweredOn)return;
   const n=document.getElementById('smsName'),t=document.getElementById('smsText');
   if(!n.value.trim()||!t.value.trim())return;
-  const msg={name:n.value.trim(),text:t.value.trim()};
-  // Pievienot uzreiz
+  const cleanName=sanitizeChat(n.value.trim()).substring(0,15);
+  const cleanText=sanitizeChat(t.value.trim()).substring(0,280);
+  if(!cleanName||!cleanText)return;
+  const msg={name:cleanName,text:cleanText,ts:Date.now(),real:true};
   smsMessages.push(msg);renderTicker();
+  // Saglabāt localStorage
+  try{
+    let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');
+    stored.push(msg);
+    // Noņemt vecākos par 1h
+    const cutoff=Date.now()-3600000;
+    stored=stored.filter(m=>m.ts>cutoff);
+    localStorage.setItem('lom_chat',JSON.stringify(stored));
+  }catch(e){}
   // Pirmajās 2 minūtēs — atkārtot pēc 30 sek
   const elapsed=Date.now()-smsStartTime;
   if(elapsed<120000){setTimeout(()=>{smsMessages.push(msg);renderTicker()},30000)}
@@ -1832,6 +1951,88 @@ function setChatEnabled(on){
   const name=document.getElementById('smsName'),text=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
   [name,text,btn].forEach(el=>{if(el)el.disabled=!on});
 }
+// ADMIN MODERĀCIJAS PANELIS — ?admin=1
+(function(){
+  if(!new URLSearchParams(location.search).has('admin'))return;
+  const css=document.createElement('style');
+  css.textContent=`
+    .admin-panel{position:fixed;top:0;right:0;width:380px;max-height:100vh;overflow-y:auto;z-index:9999;
+      background:rgba(10,10,20,0.96);border-left:2px solid var(--neon-purple);padding:16px;font-family:var(--font-main);font-size:14px;color:#ccc}
+    .admin-panel h3{color:var(--neon-purple);margin-bottom:12px;font-size:18px}
+    .admin-msg{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+    .admin-msg-text{flex:1;word-break:break-word}
+    .admin-msg-name{color:var(--electric-blue);font-weight:700}
+    .admin-msg-time{color:rgba(255,255,255,0.3);font-size:11px;flex-shrink:0}
+    .admin-del{background:#ff4444;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:12px;flex-shrink:0}
+    .admin-del:hover{background:#ff6666}
+    .admin-section{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15)}
+    .admin-section h4{color:var(--electric-blue);margin-bottom:8px}
+    .admin-textarea{width:100%;height:80px;background:#1a1a2a;color:#ccc;border:1px solid rgba(155,77,255,0.3);border-radius:6px;padding:8px;font-size:13px;resize:vertical}
+    .admin-btn{background:var(--neon-purple);color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;margin-top:6px}
+    .admin-btn:hover{opacity:0.85}
+    .admin-close{position:absolute;top:8px;right:12px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+  `;
+  document.head.appendChild(css);
+  const panel=document.createElement('div');
+  panel.className='admin-panel';
+  panel.id='adminPanel';
+  panel.innerHTML=`
+    <button class="admin-close" onclick="document.getElementById('adminPanel').style.display='none'">&times;</button>
+    <h3>Cata moderacija</h3>
+    <div id="adminMsgList"><em>Nav zinu</em></div>
+    <div class="admin-section">
+      <h4>Aizliegto vardu saraksts</h4>
+      <textarea class="admin-textarea" id="adminBadWords" placeholder="Viens vards per rindinu..."></textarea>
+      <button class="admin-btn" onclick="saveBadWords()">Saglabat vardus</button>
+      <input type="file" id="adminBadFile" accept=".txt" style="margin-top:6px;color:#ccc" onchange="loadBadFile(event)">
+    </div>
+  `;
+  document.body.appendChild(panel);
+  // Ielādēt bad words textarea
+  try{const bw=localStorage.getItem('lom_badwords');if(bw){document.getElementById('adminBadWords').value=JSON.parse(bw).join('\n')}}catch(e){}
+  // Atjaunot ziņu sarakstu
+  function refreshAdmin(){
+    const list=document.getElementById('adminMsgList');
+    let stored=[];
+    try{stored=JSON.parse(localStorage.getItem('lom_chat')||'[]')}catch(e){}
+    const cutoff=Date.now()-3600000;
+    stored=stored.filter(m=>m.ts>cutoff);
+    if(stored.length===0){list.innerHTML='<em>Nav zinu pedeja 1h</em>';return}
+    let h='';
+    stored.forEach((m,i)=>{
+      const t=new Date(m.ts);const time=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0');
+      h+=`<div class="admin-msg"><span class="admin-msg-time">${time}</span><span class="admin-msg-name">${m.name}:</span><span class="admin-msg-text">${m.text}</span><button class="admin-del" onclick="adminDeleteMsg(${i})">X</button></div>`;
+    });
+    list.innerHTML=h;
+  }
+  refreshAdmin();
+  setInterval(refreshAdmin,10000);
+  window.adminDeleteMsg=function(idx){
+    try{
+      let stored=JSON.parse(localStorage.getItem('lom_chat')||'[]');
+      const cutoff=Date.now()-3600000;
+      stored=stored.filter(m=>m.ts>cutoff);
+      stored.splice(idx,1);
+      localStorage.setItem('lom_chat',JSON.stringify(stored));
+      refreshAdmin();
+    }catch(e){}
+  };
+  window.saveBadWords=function(){
+    const words=document.getElementById('adminBadWords').value.split('\n').map(w=>w.trim()).filter(w=>w.length>1);
+    BAD_WORDS=words;
+    localStorage.setItem('lom_badwords',JSON.stringify(words));
+    alert('Saglabati '+words.length+' vardi');
+  };
+  window.loadBadFile=function(e){
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      document.getElementById('adminBadWords').value=ev.target.result;
+      saveBadWords();
+    };
+    reader.readAsText(file);
+  };
+})();
 </script>
 </body>
 </html>
