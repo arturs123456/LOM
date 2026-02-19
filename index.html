@@ -79,21 +79,28 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .start-screen{transition:opacity 0.6s ease}
 .start-screen.fade-out{opacity:0;pointer-events:none}
 .start-screen.hidden{display:none}
-.start-btn{position:relative;z-index:10;margin-top:40px;width:100px;height:100px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,rgba(155,77,255,0.25),rgba(155,77,255,0.08));border:3px solid var(--neon-purple);cursor:pointer;
-  box-shadow:0 0 30px rgba(155,77,255,0.4),0 0 60px rgba(155,77,255,0.15),inset 0 0 25px rgba(155,77,255,0.12);
-  transition:all .3s ease;animation:startBtnPulse 2s ease-in-out infinite}
-.start-btn:hover{background:linear-gradient(145deg,rgba(155,77,255,0.45),rgba(155,77,255,0.2));
-  box-shadow:0 0 40px rgba(155,77,255,0.6),0 0 80px rgba(155,77,255,0.25),inset 0 0 30px rgba(155,77,255,0.2);transform:scale(1.1)}
-.start-btn svg{width:48px;height:48px;filter:drop-shadow(0 0 10px rgba(155,77,255,0.8))}
-.start-btn-label{position:absolute;bottom:-32px;left:50%;transform:translateX(-50%);white-space:nowrap;
-  font-family:'Handjet',var(--font-main);font-size:14px;letter-spacing:4px;color:rgba(155,77,255,0.7);text-transform:uppercase}
-@keyframes startBtnPulse{0%,100%{box-shadow:0 0 30px rgba(155,77,255,0.4),0 0 60px rgba(155,77,255,0.15)}50%{box-shadow:0 0 50px rgba(155,77,255,0.6),0 0 100px rgba(155,77,255,0.25)}}
+.start-btn{position:relative;z-index:10;margin-top:44px;width:120px;height:120px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;padding-left:8px;
+  background:linear-gradient(145deg,rgba(155,77,255,0.2),rgba(20,20,30,0.9));
+  border:3px solid rgba(155,77,255,0.6);cursor:pointer;
+  box-shadow:0 0 30px rgba(155,77,255,0.35),0 0 60px rgba(155,77,255,0.12),inset 0 0 30px rgba(155,77,255,0.08),0 8px 32px rgba(0,0,0,0.5);
+  transition:all .3s ease;animation:startBtnPulse 2.5s ease-in-out infinite}
+.start-btn:hover{
+  background:linear-gradient(145deg,rgba(155,77,255,0.35),rgba(30,20,50,0.95));
+  border-color:rgba(155,77,255,0.9);
+  box-shadow:0 0 50px rgba(155,77,255,0.5),0 0 100px rgba(155,77,255,0.2),inset 0 0 40px rgba(155,77,255,0.12),0 8px 32px rgba(0,0,0,0.5);
+  transform:scale(1.08)}
+.start-btn:active{transform:scale(0.95);box-shadow:0 0 20px rgba(155,77,255,0.4),inset 0 0 20px rgba(155,77,255,0.15)}
+.start-btn .play-tri{width:0;height:0;border-style:solid;border-width:28px 0 28px 48px;
+  border-color:transparent transparent transparent #fff;
+  filter:drop-shadow(0 0 12px rgba(155,77,255,0.8)) drop-shadow(0 0 24px rgba(155,77,255,0.4))}
+.start-btn-label{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Handjet',var(--font-main);font-size:15px;letter-spacing:5px;color:rgba(155,77,255,0.6);text-transform:uppercase}
+@keyframes startBtnPulse{0%,100%{box-shadow:0 0 30px rgba(155,77,255,0.35),0 0 60px rgba(155,77,255,0.12),inset 0 0 30px rgba(155,77,255,0.08),0 8px 32px rgba(0,0,0,0.5);border-color:rgba(155,77,255,0.6)}50%{box-shadow:0 0 45px rgba(155,77,255,0.5),0 0 90px rgba(155,77,255,0.2),inset 0 0 35px rgba(155,77,255,0.12),0 8px 32px rgba(0,0,0,0.5);border-color:rgba(155,77,255,0.85)}}
 /* Konfeti */
 .confetti-container{position:fixed;inset:0;z-index:400;pointer-events:none;overflow:hidden}
-.confetti{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 2.5s ease-out forwards}
-@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotateZ(0deg) scale(1)}30%{opacity:1}100%{opacity:0;transform:translateY(100vh) rotateZ(720deg) scale(0.3)}}
+.confetti{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 1.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotateZ(0deg) scale(1.2)}20%{opacity:1}100%{opacity:0;transform:translateY(80vh) rotateZ(540deg) scale(0.2)}}
 @keyframes sphereSpin{0%{transform:rotateX(-210deg) rotateY(0deg) rotateZ(185deg)}100%{transform:rotateX(-210deg) rotateY(360deg) rotateZ(185deg)}}
 @keyframes sphereShine{50%,100%{border-color:transparent;box-shadow:0 0 1px 1px transparent,0 0 1px 1px transparent inset;filter:hue-rotate(180deg)}}
 @keyframes letterGlow{
@@ -870,8 +877,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
     </div>
   </div>
   <button class="start-btn" id="startBtn" onclick="launchTV()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#b366ff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v6"/><path d="M16.24 7.76a6 6 0 1 1-8.49 0"/></svg>
-    <span class="start-btn-label">nospied</span>
+    <div class="play-tri"></div>
+    <span class="start-btn-label">play</span>
   </button>
 </div>
 
@@ -1298,24 +1305,24 @@ buildChannelGrid();
 
 function fireConfetti(){
   const container=document.createElement('div');container.className='confetti-container';document.body.appendChild(container);
-  const colors=['#9b4dff','#19d0e8','#ff4cd2','#35ed7e','#ffdd57','#ff6b6b','#c0c0c0','#fff'];
+  const colors=['#9b4dff','#19d0e8','#ff4cd2','#35ed7e','#ffdd57','#ff6b6b','#fff','#b366ff','#00e5ff'];
   const shapes=['circle','square','strip'];
-  for(let i=0;i<80;i++){
+  for(let i=0;i<150;i++){
     const c=document.createElement('div');c.className='confetti';
     const color=colors[Math.floor(Math.random()*colors.length)];
     const shape=shapes[Math.floor(Math.random()*shapes.length)];
-    const size=6+Math.random()*10;
-    c.style.left=(15+Math.random()*70)+'%';
-    c.style.top=(30+Math.random()*20)+'%';
+    const size=4+Math.random()*12;
+    c.style.left=(5+Math.random()*90)+'%';
+    c.style.top=(20+Math.random()*30)+'%';
     c.style.width=shape==='strip'?size/3+'px':size+'px';
-    c.style.height=shape==='strip'?size*2+'px':size+'px';
+    c.style.height=shape==='strip'?size*2.5+'px':size+'px';
     c.style.background=color;
     c.style.borderRadius=shape==='circle'?'50%':shape==='strip'?'2px':'0';
-    c.style.animationDelay=(Math.random()*0.6)+'s';
-    c.style.animationDuration=(1.5+Math.random()*1.5)+'s';
+    c.style.animationDelay=(Math.random()*0.3)+'s';
+    c.style.animationDuration=(0.8+Math.random()*1)+'s';
     container.appendChild(c);
   }
-  setTimeout(()=>container.remove(),3500);
+  setTimeout(()=>container.remove(),2000);
 }
 function launchTV(){fireConfetti();startTV()}
 function startTV(){
