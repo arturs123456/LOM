@@ -2127,6 +2127,8 @@ function preloadNext(){
 function crossfadeTo(v){
   if(!playerReady)return;
   if(crossfading)return;
+  // Saglabā pašreizējo dziesmu kā "iepriekšējo" pirms pārslēgšanas
+  try{previousVideo=channels[currentChannel].videos[currentVideoIdx[currentChannel]]}catch(e){previousVideo=null}
   crossfading=true;
   const trimS=v.trimStart||5,trimE=v.trimEnd||10,dur=v.duration||0;
   const opts={videoId:v.id,startSeconds:trimS};
@@ -2177,6 +2179,15 @@ function crossfadeTo(v){
     }
   },interval);
   updateNowPlaying();resetOverlayPhases();
+  // Pēc crossfade: rāda "TIKKO SKANĒJA" ar iepriekšējo dziesmu (5s pēc crossfade sākuma)
+  const prevV=previousVideo;
+  if(prevV){
+    const t1=setTimeout(()=>{showOverlay('just',prevV,10);try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}},3000);
+    ovTimers.push(t1);
+  }
+  // Pēc 35s rāda "TAGAD SKAN" ar jauno dziesmu
+  const t2=setTimeout(()=>{if(!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,12)}},35000);
+  ovTimers.push(t2);
 }
 function playVideo(v){crossfadeTo(v)}
 function playVideoLive(v,seekTo){
@@ -2231,9 +2242,10 @@ function parseVideoMeta(v){
   if(parts2.length>=2)return{artist:parts2[0].trim(),title:parts2.slice(1).join(' - ').trim()};
   return{artist:'',title:v.title};
 }
-// TV Overlay — 3 phase system
-let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false,xfade:false};
-function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay();const dim=document.getElementById('tvDimOverlay');if(dim)dim.classList.remove('dimming')}
+// TV Overlay — 4 phase system with previous video tracking
+let ovTimers=[];let ovPhasesDone={now:false,next:false,just:false,xfade:false,newNow:false};
+let previousVideo=null; // Saglabā iepriekšējo dziesmu priekš "TIKKO SKANĒJA"
+function resetOverlayPhases(){ovPhasesDone={now:false,next:false,just:false,xfade:false,newNow:false};ovTimers.forEach(t=>clearTimeout(t));ovTimers=[];hideOverlay();const dim=document.getElementById('tvDimOverlay');if(dim)dim.classList.remove('dimming')}
 function showOverlay(phase,videoData,duration){
   const ov=document.getElementById('tvOverlay');
   const meta=parseVideoMeta(videoData);
@@ -2275,12 +2287,12 @@ function startProgressTracker(){
       const remaining=effectiveEnd-c; // Laiks līdz efektīvajām beigām
       const p=(c/effectiveEnd)*100+'%';document.getElementById('npProgressFill').style.width=p;
       const dimOv=document.getElementById('tvDimOverlay');
-      // Phase 1: NOW PLAYING — pēc 15 sek. no sākuma, rāda 15 sek.
-      if(c>=15&&c<30&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,15)}
-      // Phase 2: UP NEXT — 35 sek. pirms beigām, rāda 15 sek. + preload nākamo
-      if(remaining<=35&&remaining>20&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
-      // Phase 3: JUST PLAYED — 15 sek. pirms beigām (kad jaunais parādās) + TTS ētera balss
-      if(remaining<=15&&remaining>10&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10);try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}}
+      // Phase 1: TAGAD SKAN — pēc 30 sek. no sākuma (lai ir atstarpe no iepriekšējiem)
+      if(c>=30&&c<50&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,12)}
+      // Phase 2: NĀKAMAIS — 40 sek. pirms beigām + preload
+      if(remaining<=40&&remaining>25&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),12);preloadNext()}
+      // Phase 3: TIKKO SKANĒJA — parādās 5s pēc crossfade sākuma (rāda IEPRIEKŠĒJO dziesmu) + TTS
+      // Šo triggerē crossfadeTo() caur setTimeout (skatīt zemāk)
       // ═══ JAUNA CROSSFADE MEHĀNIKA: 20s → 15s → 10s ═══
       // 20s pirms beigām: Ekrāns sāk aptumšoties + volume lēnām samazinās
       if(remaining<=20&&remaining>15&&!crossfading&&!isMuted){
