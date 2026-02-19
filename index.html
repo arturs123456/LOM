@@ -1315,8 +1315,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* ====== SYNTHWAVE GAME CHANNEL ====== */
 .game-slot{position:absolute;inset:0;z-index:6;overflow:hidden;background:#0a0014}
 .sw-scene{position:absolute;inset:0;overflow:hidden}
-/* Hide screen logo when game is active (only when game-slot is visible) */
-.game-slot:not([style*="display:none"]):not([style*="display: none"])~.screen-logo,
+/* Hide YT overlays when game is active (logo paliek redzams!) */
 .game-slot:not([style*="display:none"]):not([style*="display: none"])~.yt-blocker,
 .game-slot:not([style*="display:none"]):not([style*="display: none"])~.yt-bottom-hide{display:none}
 /* Stars */
@@ -3014,8 +3013,6 @@ function startGame(){
   // Hiscore no localStorage
   try{gameHiscore=parseInt(localStorage.getItem('lomGameHiscore'))||0}catch(e){}
   const hi=document.getElementById('swHiscore');if(hi)hi.textContent=gameHiscore;
-  // Paslēpt screen-logo (netraucē spēlei)
-  const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='none';
   // Audio — lofi YouTube fonā
   startGameAudio();
   // SPĒLE poga active
@@ -3046,8 +3043,6 @@ function stopGame(){
   if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='none';
-  // Screen-logo atkal redzams
-  const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='';
   // SPĒLE poga deactivate
   const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.remove('active');
   stopGameAudio();
