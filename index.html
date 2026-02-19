@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LOM TV — Latvijas Online Mūzika</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#9b4dff">
+<meta name="description" content="Latvijas Online Mūzikas kanāls. Retro TV formātā baudi labāko latviešu un ārzemju mūziku.">
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LOM TV">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a0a0a'/><text x='256' y='200' font-family='sans-serif' font-size='120' font-weight='900' fill='%239b4dff' text-anchor='middle'>LOM</text><text x='256' y='350' font-family='sans-serif' font-size='140' font-weight='900' fill='%2335ed7e' text-anchor='middle'>TV</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Bowlby+One+SC&family=Russo+One&family=Caveat:wght@400;500;600;700&family=Sigmar+One&family=Gveret+Levin&family=Handjet:wght@400;500;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
@@ -1538,8 +1547,36 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .sw-touch-controls{position:absolute;bottom:0;left:0;right:0;height:50%;z-index:12;display:flex;pointer-events:auto}
 .sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
 
-/* ====== INFO POPUP TEXT HIGHLIGHT ====== */
-/* (text-highlight, progress bar, magic-star removed — vienkāršots stils) */
+/* ====== PWA INSTALL POPUP ====== */
+.pwa-overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.pwa-overlay.show{display:flex}
+.pwa-popup{width:420px;max-width:92vw;background:rgba(10,10,10,0.96);border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,0.7);animation:infoGlitchIn 0.35s ease-out}
+.pwa-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px}
+.pwa-header-title{font-family:var(--font-main);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ddd}
+.pwa-close{width:34px;height:34px;border-radius:50%;border:none;background:rgba(180,40,40,0.7);color:#fff;font-size:18px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;box-shadow:inset 0 -2px 4px rgba(0,0,0,0.4)}
+.pwa-close:hover{background:rgba(220,50,50,0.85)}
+.pwa-body{padding:4px 20px 20px}
+.pwa-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 18px;
+  margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s}
+.pwa-card:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.16)}
+.pwa-card-icon{width:40px;height:40px;border:1.5px solid rgba(255,200,50,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;color:#ffc832}
+.pwa-card-text{flex:1}
+.pwa-card-title{font-weight:700;font-size:14px;color:#eee;margin-bottom:2px}
+.pwa-card-desc{font-size:12px;color:#888}
+.pwa-footer{text-align:center;padding:10px 20px 16px;font-size:12px;color:#666}
+/* PWA Install Instructions (2. solis) */
+.pwa-instructions{display:none;padding:0 20px 20px}
+.pwa-instructions.show{display:block}
+.pwa-back{background:none;border:none;color:var(--electric-blue);cursor:pointer;font-size:13px;font-family:var(--font-main);
+  padding:4px 0;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.pwa-back:hover{text-decoration:underline}
+.pwa-instructions p{font-size:13px;color:#bbb;margin-bottom:12px}
+.pwa-step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 16px;margin-bottom:8px}
+.pwa-step strong{color:#ffc832;font-size:13px}
+.pwa-step span{display:block;font-size:12px;color:#aaa;margin-top:2px}
 </style>
 </head>
 <body>
@@ -1821,6 +1858,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
       <div class="panel-bottom-zone">
         <div class="util-btns-bottom">
           <button class="wood-btn" onclick="shareApp()"><span>📤</span> Dalīties</button>
+          <button class="wood-btn" onclick="openPwaPopup()"><span>📲</span> Iegūt App</button>
         </div>
       </div>
     </div>
@@ -3458,6 +3496,115 @@ function submitInfoSuggestion(e){
     document.getElementById('adminTtsText').value='';
   };
 })();
+</script>
+
+<!-- PWA INSTALL POPUP -->
+<div class="pwa-overlay" id="pwaOverlay" onclick="if(event.target===this)closePwaPopup()">
+  <div class="pwa-popup">
+    <div class="pwa-header">
+      <span class="pwa-header-title">Iegūt LOM TV</span>
+      <button class="pwa-close" onclick="closePwaPopup()">✕</button>
+    </div>
+    <!-- Galvenais skats — 2 opcijas -->
+    <div class="pwa-body" id="pwaMain">
+      <div class="pwa-card" id="pwaInstallBtn" onclick="pwaInstallNative()">
+        <div class="pwa-card-icon">📱</div>
+        <div class="pwa-card-text">
+          <div class="pwa-card-title">Instalēt šajā ierīcē</div>
+          <div class="pwa-card-desc">Pievieno LOM TV savam ekrānam</div>
+        </div>
+      </div>
+      <div class="pwa-card" onclick="window.open('https://github.com/arturs123456/LOM','_blank')">
+        <div class="pwa-card-icon">💻</div>
+        <div class="pwa-card-text">
+          <div class="pwa-card-title">Atvērt GitHub</div>
+          <div class="pwa-card-desc">Pirmkods un Android TV APK</div>
+        </div>
+      </div>
+    </div>
+    <!-- Instrukcijas (2. solis — ja nav native prompt) -->
+    <div class="pwa-instructions" id="pwaInstructions">
+      <button class="pwa-back" onclick="pwaShowMain()">← Atpakaļ</button>
+      <p id="pwaInstrText">Lai instalētu LOM TV:</p>
+      <div id="pwaSteps"></div>
+    </div>
+    <div class="pwa-footer">
+      Patīk LOM TV? Dalies ar draugiem!
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== PWA SERVICE WORKER + INSTALL ======
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(()=>{
+    console.log('SW reģistrēts');
+  }).catch(e=>console.warn('SW kļūda:',e));
+}
+
+let deferredPwaPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredPwaPrompt=e;
+  console.log('PWA install prompt saglabāts');
+});
+
+function openPwaPopup(){
+  document.getElementById('pwaOverlay').classList.add('show');
+  document.getElementById('pwaMain').style.display='';
+  document.getElementById('pwaInstructions').classList.remove('show');
+}
+function closePwaPopup(){
+  document.getElementById('pwaOverlay').classList.remove('show');
+}
+function pwaShowMain(){
+  document.getElementById('pwaMain').style.display='';
+  document.getElementById('pwaInstructions').classList.remove('show');
+}
+function pwaInstallNative(){
+  // Ja ir native prompt (Chrome/Edge) — izmantojam to
+  if(deferredPwaPrompt){
+    deferredPwaPrompt.prompt();
+    deferredPwaPrompt.userChoice.then(r=>{
+      console.log('PWA install:',r.outcome);
+      deferredPwaPrompt=null;
+      if(r.outcome==='accepted')closePwaPopup();
+    });
+    return;
+  }
+  // Ja nav — rādam instrukcijas atkarībā no ierīces
+  showPwaInstructions();
+}
+function showPwaInstructions(){
+  document.getElementById('pwaMain').style.display='none';
+  const instr=document.getElementById('pwaInstructions');
+  instr.classList.add('show');
+  const steps=document.getElementById('pwaSteps');
+  const ua=navigator.userAgent;
+  const isIOS=/iPad|iPhone|iPod/.test(ua);
+  const isMac=/Macintosh/.test(ua);
+  const isSafari=/Safari/.test(ua)&&!/Chrome/.test(ua);
+  const isChrome=/Chrome/.test(ua)&&!/Edg/.test(ua);
+  const isEdge=/Edg/.test(ua);
+  const isFirefox=/Firefox/.test(ua);
+
+  let html='';
+  if(isIOS){
+    document.getElementById('pwaInstrText').textContent='Lai instalētu LOM TV uz iPhone/iPad:';
+    html='<div class="pwa-step"><strong>Safari:</strong><span>Spied "Dalīties" pogu (⬆) → "Pievienot sākuma ekrānam"</span></div>';
+  }else if(isMac){
+    document.getElementById('pwaInstrText').textContent='Lai instalētu LOM TV uz Mac:';
+    if(isSafari)html='<div class="pwa-step"><strong>Safari:</strong><span>File → Add to Dock...</span></div>';
+    if(isChrome||!isSafari)html+='<div class="pwa-step"><strong>Chrome:</strong><span>Spied instalēšanas ikonu ⬇ adreses joslā</span></div>';
+  }else{
+    document.getElementById('pwaInstrText').textContent='Lai instalētu LOM TV:';
+    if(isChrome)html='<div class="pwa-step"><strong>Chrome:</strong><span>Spied ⋮ → "Instalēt lietotni" vai ⬇ ikonu adreses joslā</span></div>';
+    else if(isEdge)html='<div class="pwa-step"><strong>Edge:</strong><span>Spied ⋯ → "Lietotnes" → "Instalēt šo vietni kā lietotni"</span></div>';
+    else if(isFirefox)html='<div class="pwa-step"><strong>Firefox:</strong><span>Firefox pagaidām neatbalsta PWA instalāciju. Izmanto Chrome vai Edge.</span></div>';
+    else html='<div class="pwa-step"><strong>Pārlūks:</strong><span>Meklē "Instalēt" vai "Pievienot sākuma ekrānam" opciju izvēlnē</span></div>';
+  }
+  steps.innerHTML=html;
+}
 </script>
 </body>
 </html>
