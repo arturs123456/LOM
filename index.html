@@ -1484,15 +1484,18 @@ function crossfadeTo(v){
   nextPlayer.unMute();
   // Rādi nākamo slotu (vēl caurspīdīgs)
   nextEl.classList.remove('yt-hidden');
-  // Volume fade: curr 80→0, next 0→80 pa CROSSFADE_DURATION
+  // Volume fade: curr (pre-faded)→0, next 0→full pa CROSSFADE_DURATION
   const steps=20,interval=CROSSFADE_DURATION/steps;
   let step=0;
   const vol=isMuted?0:currentVolume;
+  // Nolasīt faktisko volume (var būt samazināts ar pre-fade)
+  let currVol=vol;
+  try{currVol=currPlayer.getVolume()||vol}catch(e){}
   clearInterval(crossfadeTimer);
   crossfadeTimer=setInterval(()=>{
     step++;
     const pct=step/steps;
-    const fadeOutVol=Math.round(vol*(1-pct));
+    const fadeOutVol=Math.round(currVol*(1-pct));
     const fadeInVol=Math.round(vol*pct);
     try{currPlayer.setVolume(fadeOutVol)}catch(e){}
     try{nextPlayer.setVolume(fadeInVol)}catch(e){}
@@ -1609,7 +1612,13 @@ function startProgressTracker(){
       if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
-      // Crossfade: 2.5 sek pirms beigām sāk pāreju uz nākamo
+      // Pre-fade: pēdējās 10 sek pakāpeniski samazina volume (100%→30%)
+      if(remaining<=10&&remaining>3.5&&!crossfading&&!isMuted){
+        const fadeProgress=(remaining-3.5)/6.5; // 1.0 pie 10s → 0.0 pie 3.5s
+        const fadeVol=Math.round(currentVolume*(0.3+0.7*fadeProgress));
+        try{ap.setVolume(fadeVol)}catch(e){}
+      }
+      // Crossfade: 3.5 sek pirms beigām sāk pāreju uz nākamo
       if(remaining<=3.5&&remaining>0&&!ovPhasesDone.xfade&&!crossfading){ovPhasesDone.xfade=true;nextVideo()}
     }catch(e){}
   },500);
