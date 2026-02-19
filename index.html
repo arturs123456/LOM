@@ -1050,7 +1050,14 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
   .ch-vertical-btn-center{font-size:12px}
   .power-top-row{gap:4px}
+  .power-btn-pair{gap:4px}
+  .power-pair-btn{height:40px}
+  .pair-btn-icon{width:14px;height:14px}
+  .pair-btn-text{font-size:10px;letter-spacing:1px}
   .power-toggle{font-size:0.25em}
+  .tv-live-strip{top:8px;right:8px;gap:6px}
+  .tv-live-badge{font-size:8px;padding:3px 6px}
+  .tv-react-btn{font-size:10px;padding:3px 5px}
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
   .vhs-osd-time{top:60px;left:14px}
   .panel-header-wrapper{padding:4px 8px}
@@ -1293,6 +1300,44 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 /* Car hit flash */
 @keyframes swCarHit{0%,100%{opacity:1}25%,75%{opacity:0.2}}
 .sw-car.hit{animation:swCarHit 0.5s ease}
+/* Hit screen flash — sarkans blīkšķis */
+.sw-hit-flash{position:absolute;inset:0;z-index:18;pointer-events:none;background:rgba(255,0,0,0);transition:background .05s;border-radius:inherit}
+.sw-hit-flash.flash{background:rgba(255,0,0,0.3)}
+/* Lives — sirdis augšā kreisajā */
+.sw-lives{position:absolute;top:16px;left:20px;z-index:15;display:flex;gap:6px}
+.sw-heart{font-size:24px;filter:drop-shadow(0 0 6px rgba(255,41,117,0.8));transition:all .3s}
+.sw-heart.lost{opacity:0.2;transform:scale(0.7);filter:none}
+/* High score zem score */
+.sw-hiscore{position:absolute;top:82px;right:20px;z-index:15;
+  font-family:'Handjet',var(--font-main),sans-serif;font-size:18px;color:rgba(245,166,35,0.6);letter-spacing:2px}
+.sw-hiscore::before{content:'HI ';color:rgba(245,166,35,0.4)}
+/* GAME OVER ekrāns */
+.sw-gameover{position:absolute;inset:0;z-index:25;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 70%,rgba(10,0,20,0.85),rgba(10,0,20,0.97));
+  opacity:0;pointer-events:none;transition:opacity .5s ease}
+.sw-gameover.show{opacity:1;pointer-events:auto}
+.sw-go-title{font-family:'Handjet',var(--font-main),sans-serif;font-size:clamp(48px,8vw,86px);font-weight:700;
+  color:#ff2975;letter-spacing:8px;text-transform:uppercase;
+  text-shadow:0 0 30px rgba(255,41,117,0.8),0 0 60px rgba(255,41,117,0.4),0 4px 0 #9b4dff;
+  animation:swGoGlow 2s ease-in-out infinite alternate}
+@keyframes swGoGlow{0%{text-shadow:0 0 30px rgba(255,41,117,0.8),0 0 60px rgba(255,41,117,0.4),0 4px 0 #9b4dff}
+  100%{text-shadow:0 0 50px rgba(255,41,117,1),0 0 100px rgba(255,41,117,0.6),0 4px 0 #b366ff,0 0 20px rgba(155,77,255,0.5)}}
+.sw-go-score{font-family:'Handjet',var(--font-main),sans-serif;font-size:clamp(28px,4vw,42px);
+  color:#35ed7e;letter-spacing:4px;margin-top:12px;
+  text-shadow:0 0 16px rgba(53,237,126,0.7)}
+.sw-go-hiscore{font-family:'Handjet',var(--font-main),sans-serif;font-size:clamp(18px,2.5vw,24px);
+  color:#f5a623;letter-spacing:3px;margin-top:6px;opacity:0.8}
+.sw-go-restart{font-family:'Handjet',var(--font-main),sans-serif;font-size:clamp(22px,3vw,32px);
+  color:#19d0e8;letter-spacing:4px;margin-top:28px;cursor:pointer;
+  text-shadow:0 0 12px rgba(25,208,232,0.6);padding:12px 32px;
+  border:2px solid rgba(25,208,232,0.4);border-radius:8px;background:rgba(25,208,232,0.08);
+  transition:all .2s;text-transform:uppercase}
+.sw-go-restart:hover{background:rgba(25,208,232,0.15);border-color:rgba(25,208,232,0.7);
+  box-shadow:0 0 24px rgba(25,208,232,0.3);transform:scale(1.05)}
+/* Neon dekoratīva josla game over */
+.sw-go-line{width:200px;height:3px;margin:16px 0;
+  background:linear-gradient(90deg,transparent,#ff2975 20%,#9b4dff 50%,#19d0e8 80%,transparent);
+  box-shadow:0 0 12px rgba(255,41,117,0.5)}
 /* Mobile game controls */
 .sw-touch-controls{position:absolute;bottom:0;left:0;right:0;height:50%;z-index:12;display:flex;pointer-events:auto}
 .sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
@@ -1381,9 +1426,21 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
               <div class="sw-car-lights"></div>
               <div class="sw-car-tail"></div>
             </div>
+            <div class="sw-hit-flash" id="swHitFlash"></div>
+            <div class="sw-lives" id="swLives"></div>
             <div class="sw-score" id="swScore">0</div>
+            <div class="sw-hiscore" id="swHiscore">0</div>
             <div class="sw-lom">LOM</div>
             <div class="sw-touch-controls"><div class="sw-touch-left" id="swTouchL"></div><div class="sw-touch-right" id="swTouchR"></div></div>
+            <!-- GAME OVER -->
+            <div class="sw-gameover" id="swGameover">
+              <div class="sw-go-title">GAME OVER</div>
+              <div class="sw-go-line"></div>
+              <div class="sw-go-score" id="swGoScore">SCORE: 0</div>
+              <div class="sw-go-hiscore" id="swGoHiscore">BEST: 0</div>
+              <div class="sw-go-line"></div>
+              <button class="sw-go-restart" id="swGoRestart">SPĒLĒT VĒL</button>
+            </div>
           </div>
         </div>
         <div class="yt-blocker" id="ytBlocker"></div>
@@ -2486,7 +2543,8 @@ const GAME_LOFI_ID='nNgIMdc6wqU';
 const GAME_LOFI_DURATION=42600; // ~11h50min sekundēs
 let gameAudio=new Audio(); // Legacy fallback
 gameAudio.loop=true;gameAudio.volume=0.5;
-let gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=2,gameLastSpawn=0;
+let gameRunning=false,gameScore=0,gameCarLane=1,gameLoop=null,gameSpeed=1.2,gameLastSpawn=0;
+let gameLives=3,gameHiscore=0,gameInvincible=false;
 let gameTouchStartX=0;
 
 function generateStars(){
@@ -2506,27 +2564,49 @@ function generateStars(){
 }
 
 function startGame(){
-  gameRunning=true;gameScore=0;gameCarLane=1;gameSpeed=2;gameLastSpawn=0;
+  gameRunning=true;gameScore=0;gameCarLane=1;gameSpeed=1.2;gameLastSpawn=0;
+  gameLives=3;gameInvincible=false;
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='block';
-  // YouTube sloti paliek (audio skan fonā), bet video nav redzams aiz game-slot
+  // Paslēpt game over ekrānu
+  const go=document.getElementById('swGameover');if(go)go.classList.remove('show');
   // Ģenerēt zvaigznes
   generateStars();
   // Notīrīt vecos obstacles
   const ob=document.getElementById('swObstacles');if(ob)ob.innerHTML='';
   // Auto pozīcija — centrs
   updateCarPosition();
-  // Score
+  // Score & Lives
   const sc=document.getElementById('swScore');if(sc)sc.textContent='0';
+  renderLives();
+  // Hiscore no localStorage
+  try{gameHiscore=parseInt(localStorage.getItem('lomGameHiscore'))||0}catch(e){}
+  const hi=document.getElementById('swHiscore');if(hi)hi.textContent=gameHiscore;
   // Paslēpt screen-logo (netraucē spēlei)
   const slogo=document.querySelector('.screen-logo');if(slogo)slogo.style.display='none';
   // Audio — lofi YouTube fonā
   startGameAudio();
   // SPĒLE poga active
   const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.add('active');
+  // Grid ātrums — CSS custom property
+  updateGridSpeed();
   // Game loop
   lastGameTime=0;
   gameLoop=requestAnimationFrame(gameTick);
+}
+function renderLives(){
+  const c=document.getElementById('swLives');if(!c)return;
+  c.innerHTML='';
+  for(let i=0;i<3;i++){
+    const h=document.createElement('span');h.className='sw-heart'+(i>=gameLives?' lost':'');
+    h.textContent='\u2764';c.appendChild(h);
+  }
+}
+function updateGridSpeed(){
+  // Grid animācijas ātrums atkarīgs no spēles ātruma
+  const gridDur=Math.max(0.3,1.2-gameSpeed*0.15);
+  const grid=document.querySelector('.sw-grid');
+  if(grid)grid.style.animationDuration=gridDur.toFixed(2)+'s';
 }
 
 function stopGame(){
@@ -2562,15 +2642,17 @@ function stopGameAudio(){
 let lastGameTime=0;
 function gameTick(ts){
   if(!gameRunning)return;
-  // Delta time ~60fps
   if(!lastGameTime)lastGameTime=ts;
   const dt=Math.min(ts-lastGameTime,50);
   lastGameTime=ts;
   // Score +1 katru frame (~60/sek)
   gameScore++;
-  gameSpeed=2+Math.floor(gameScore/800)*0.3;
-  // Spawn obstacles
-  const spawnRate=Math.max(45,110-Math.floor(gameScore/150));
+  // Ātrums aug pakāpeniski: 1.2 → ~4.0 pie 3000 punktiem
+  gameSpeed=1.2+Math.min(gameScore/1000,2.8);
+  // Atjaunina grid ātrumu katru 60. kadru
+  if(gameScore%60===0)updateGridSpeed();
+  // Spawn obstacles — lēnāk sākumā
+  const spawnRate=Math.max(50,130-Math.floor(gameScore/120));
   if(gameScore-gameLastSpawn>=spawnRate){
     gameLastSpawn=gameScore;
     spawnObstacle();
@@ -2579,8 +2661,8 @@ function gameTick(ts){
   moveObstacles();
   // Update score display
   if(gameScore%3===0){const sc=document.getElementById('swScore');if(sc)sc.textContent=gameScore}
-  // Bonus!
-  if(gameScore>0&&gameScore%500===0){showGameBonus()}
+  // Bonus katrus 500 punktus
+  if(gameScore>0&&gameScore%500===0){showGameBonus('+500')}
   gameLoop=requestAnimationFrame(gameTick);
 }
 
@@ -2627,19 +2709,31 @@ function moveObstacles(){
     el.style.transform='translateX(-50%) scale('+scale.toFixed(2)+')';
     el.style.opacity=Math.min(1,progress*3);
     // Collision zone: progress ~0.80-0.95 and same lane
-    if(progress>0.78&&progress<0.95&&lane===gameCarLane){
+    if(progress>0.78&&progress<0.95&&lane===gameCarLane&&!el.dataset.hit){
       const type=el.dataset.type;
       if(type==='diamond'){
-        // Collect diamond! Bonus points
-        gameScore+=50;
+        // Collect diamond! +100 bonus
+        gameScore+=100;
         toRemove.push(el);
-        showGameBonus();
-      }else{
-        // Hit obstacle — flash car but continue
+        showGameBonus('+100');
+      }else if(!gameInvincible){
+        // Hit obstacle — zaudē dzīvību
+        el.dataset.hit='1';
+        gameLives--;
+        renderLives();
+        // Sarkans ekrāna flash
+        const flash=document.getElementById('swHitFlash');
+        if(flash){flash.classList.add('flash');setTimeout(()=>flash.classList.remove('flash'),200)}
+        // Auto flash
         const car=document.getElementById('swCar');
-        if(car&&!car.classList.contains('hit')){
-          car.classList.add('hit');
-          setTimeout(()=>car.classList.remove('hit'),500);
+        if(car){car.classList.add('hit');setTimeout(()=>car.classList.remove('hit'),500)}
+        // Invincibility 1 sek pēc trāpījuma
+        gameInvincible=true;
+        setTimeout(()=>{gameInvincible=false},1000);
+        if(gameLives<=0){
+          // GAME OVER
+          gameOver();
+          return;
         }
       }
     }
@@ -2655,12 +2749,34 @@ function updateCarPosition(){
   car.style.transform='translateX(-50%)';
 }
 
-function showGameBonus(){
+function showGameBonus(text){
   const scene=document.querySelector('.sw-scene');if(!scene)return;
-  const b=document.createElement('div');b.className='sw-bonus';b.textContent='+'+gameScore;
+  const b=document.createElement('div');b.className='sw-bonus';b.textContent=text||'+'+gameScore;
   scene.appendChild(b);
   setTimeout(()=>b.remove(),900);
 }
+function gameOver(){
+  gameRunning=false;
+  if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}
+  // Hiscore
+  if(gameScore>gameHiscore){
+    gameHiscore=gameScore;
+    try{localStorage.setItem('lomGameHiscore',gameHiscore)}catch(e){}
+  }
+  // Game Over ekrāns
+  const go=document.getElementById('swGameover');
+  const goScore=document.getElementById('swGoScore');
+  const goHi=document.getElementById('swGoHiscore');
+  if(goScore)goScore.textContent='SCORE: '+gameScore;
+  if(goHi)goHi.textContent='BEST: '+gameHiscore;
+  if(go)go.classList.add('show');
+}
+// Restart poga
+document.getElementById('swGoRestart').addEventListener('click',function(){
+  const go=document.getElementById('swGameover');if(go)go.classList.remove('show');
+  // Restart spēli
+  startGame();
+});
 
 // Keyboard controls
 document.addEventListener('keydown',function(e){
