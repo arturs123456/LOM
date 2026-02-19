@@ -1564,10 +1564,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
           <div class="tv-reactions" style="position:relative">
             <button class="tv-react-btn tv-react-report" id="reactReport" title="Ziņot par dziesmu">&#9888;</button>
             <div class="tv-report-popup" id="reportPopup">
-              <div class="tv-report-q">Vai dziesma kas šobrīd skan ir neatbilstoša šim kanālam?</div>
+              <div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div>
               <div class="tv-report-btns">
-                <button class="tv-report-btn yes" id="reportYes">JĀ</button>
-                <button class="tv-report-btn no" id="reportNo">NĒ</button>
+                <button class="tv-report-btn no" id="reportYes">neatbilst</button>
+                <button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button>
               </div>
             </div>
           </div>
@@ -2559,7 +2559,7 @@ document.getElementById('reportYes').addEventListener('click',(e)=>{
   // Rādām pateicību
   popup.innerHTML='<div class="tv-report-thanks">Paldies! Atzīmēts.</div>';
   setTimeout(()=>{popup.classList.remove('show');
-    popup.innerHTML='<div class="tv-report-q">Vai dziesma kas šobrīd skan ir neatbilstoša šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn yes" id="reportYes">JĀ</button><button class="tv-report-btn no" id="reportNo">NĒ</button></div>';
+    popup.innerHTML='<div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn no" id="reportYes">neatbilst</button><button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button></div>';
     // Re-attach listeners
     attachReportListeners();
   },1500);
@@ -2578,7 +2578,7 @@ function attachReportListeners(){
     console.log('REPORT: dziesma neatbilst kanālam',chName,v?v.title:'?',v?v.id:'');
     popup.innerHTML='<div class="tv-report-thanks">Paldies! Atzīmēts.</div>';
     setTimeout(()=>{popup.classList.remove('show');
-      popup.innerHTML='<div class="tv-report-q">Vai dziesma kas šobrīd skan ir neatbilstoša šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn yes" id="reportYes">JĀ</button><button class="tv-report-btn no" id="reportNo">NĒ</button></div>';
+      popup.innerHTML='<div class="tv-report-q">Vai dziesma atbilst šim kanālam?</div><div class="tv-report-btns"><button class="tv-report-btn no" id="reportYes">neatbilst</button><button class="tv-report-btn yes" id="reportNo" style="border-color:rgba(53,237,126,0.4);color:#35ed7e">atbilst</button></div>';
       attachReportListeners();
     },1500);
   });
@@ -2696,7 +2696,7 @@ function generateStars(){
 
 function startGame(){
   gameRunning=true;gameScore=0;gameCarLane=1;gameSpeed=1.2;gameLastSpawn=0;
-  gameLives=3;gameInvincible=false;
+  gameInvincible=false;
   const gs=document.getElementById('game-slot');
   if(gs)gs.style.display='block';
   // Paslēpt game over ekrānu
@@ -2707,9 +2707,11 @@ function startGame(){
   const ob=document.getElementById('swObstacles');if(ob)ob.innerHTML='';
   // Auto pozīcija — centrs
   updateCarPosition();
-  // Score & Lives
+  // Score
   const sc=document.getElementById('swScore');if(sc)sc.textContent='0';
-  renderLives();
+  // Paslēpt lives un gameover (nav vajadzīgi)
+  const livesEl=document.getElementById('swLives');if(livesEl)livesEl.style.display='none';
+  const goEl=document.getElementById('swGameover');if(goEl){goEl.classList.remove('show');goEl.style.display='none'}
   // Hiscore no localStorage
   try{gameHiscore=parseInt(localStorage.getItem('lomGameHiscore'))||0}catch(e){}
   const hi=document.getElementById('swHiscore');if(hi)hi.textContent=gameHiscore;
@@ -2852,24 +2854,17 @@ function moveObstacles(){
         toRemove.push(el);
         showGameBonus('+100');
       }else if(!gameInvincible){
-        // Hit obstacle — zaudē dzīvību
+        // Hit obstacle — flash efekts, spēle turpinās
         el.dataset.hit='1';
-        gameLives--;
-        renderLives();
         // Sarkans ekrāna flash
         const flash=document.getElementById('swHitFlash');
         if(flash){flash.classList.add('flash');setTimeout(()=>flash.classList.remove('flash'),200)}
         // Auto flash
         const car=document.getElementById('swCar');
         if(car){car.classList.add('hit');setTimeout(()=>car.classList.remove('hit'),500)}
-        // Invincibility 1 sek pēc trāpījuma
+        // Īsa invincibility lai netrāpa divas reizes pēc kārtas
         gameInvincible=true;
-        setTimeout(()=>{gameInvincible=false},1000);
-        if(gameLives<=0){
-          // GAME OVER
-          gameOver();
-          return;
-        }
+        setTimeout(()=>{gameInvincible=false},800);
       }
     }
     if(y>125)toRemove.push(el);
