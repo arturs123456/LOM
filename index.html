@@ -458,6 +458,18 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   text-shadow:0 0 10px rgba(53,237,126,0.6);animation:vhsRgbText 1.5s steps(9) infinite alternate}
 .mute-osd-sub{font-family:'Press Start 2P',monospace;font-size:10px;font-weight:400;color:#35ed7e;letter-spacing:1px;opacity:0.7;text-transform:uppercase}
 
+/* TV Color Bars — rādās kad video nav pieejams */
+.tv-color-bars{position:absolute;inset:0;z-index:19;background:#111;display:none;flex-direction:column;align-items:center;justify-content:center;border-radius:inherit;overflow:hidden}
+.tv-color-bars.show{display:flex}
+.tv-color-bars .bars-row{display:flex;width:100%;flex:1}
+.tv-color-bars .bar{flex:1}
+.tv-color-bars .bars-text{
+  position:absolute;bottom:22%;left:0;right:0;text-align:center;
+  font-family:'Press Start 2P',monospace;font-size:clamp(10px,1.3vw,14px);color:#fff;
+  text-shadow:2px 2px 0 #000,-1px -1px 0 #000;
+  animation:barsTextBlink 1.2s steps(1) infinite;
+}
+@keyframes barsTextBlink{0%,80%{opacity:1}81%,100%{opacity:0}}
 .static-noise{position:absolute;inset:0;z-index:20;background:#000;display:none;align-items:center;justify-content:center;border-radius:inherit}
 .static-noise.show{display:flex}
 .static-noise canvas{width:100%;height:100%;border-radius:inherit}
@@ -1583,6 +1595,19 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
         </div>
         <div class="screen-progress"><div class="screen-progress-fill" id="npProgressFill"></div></div>
         <div class="sms-ticker-screen"><div class="sms-ticker-inner" id="smsTicker"></div></div>
+        <!-- Color bars — parādās kad video nav pieejams -->
+        <div class="tv-color-bars" id="tvColorBars">
+          <div class="bars-row">
+            <div class="bar" style="background:#fff"></div>
+            <div class="bar" style="background:#fc0"></div>
+            <div class="bar" style="background:#0ff"></div>
+            <div class="bar" style="background:#0f0"></div>
+            <div class="bar" style="background:#f0f"></div>
+            <div class="bar" style="background:#f00"></div>
+            <div class="bar" style="background:#00f"></div>
+          </div>
+          <div class="bars-text" id="barsText">MEKLĒ NĀKAMO DZIESMU…</div>
+        </div>
         <div class="static-noise" id="staticNoise"><canvas id="noiseCanvas"></canvas></div>
         <!-- Volume OSD -->
         <div class="vol-osd" id="volOsd">
@@ -1965,6 +1990,43 @@ let crossfading=false,crossfadeTimer=null;
 const CROSSFADE_DURATION=5000; // 5 sek crossfade — jaunais aug, vecais izplēn
 let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 
+// ═══ BROKEN VIDEO TRACKING & WATCHDOG ═══
+const brokenVideoIds=new Set(); // Video ID kas nestrādā — izlaiž nākotnē
+let watchdogTimer=null; // Watchdog — ja 12s video nesāk spēlēt, skip
+let lastWatchdogVideoId=null; // Pēdējais video ID ko watchdog pārbauda
+let skipChain=0; // Cik video pēc kārtas izlaisti — ja >5, apstājas (lai nebūtu infinite loop)
+const MAX_SKIP_CHAIN=5; // Max pēc kārtas izlaistie pirms apstāšanās
+
+function markBrokenVideo(videoId,reason){
+  if(!videoId)return;
+  brokenVideoIds.add(videoId);
+  console.warn('⛔ Video atzīmēts kā broken:',videoId,reason||'');
+}
+function isVideoBroken(videoId){return brokenVideoIds.has(videoId)}
+
+// Watchdog: pēc video ielādes sāk skaitīt 12s — ja PLAYING state nav sasniegts, skip
+function startWatchdog(videoId){
+  clearTimeout(watchdogTimer);
+  lastWatchdogVideoId=videoId;
+  watchdogTimer=setTimeout(()=>{
+    if(!isPoweredOn||crossfading)return;
+    // Pārbaudīt vai aktīvais player tiešām spēlē
+    try{
+      const ap=activeSlot==='a'?playerA:playerB;
+      const state=ap.getPlayerState();
+      // YT states: -1=unstarted, 0=ended, 1=playing, 2=paused, 3=buffering, 5=cued
+      if(state===1)return; // Viss ok, spēlē
+      // Ja nav PLAYING pēc 12s — broken
+      console.warn('⏱ Watchdog: video',videoId,'nesāka spēlēt 12s laikā (state='+state+')');
+      markBrokenVideo(videoId,'watchdog timeout state='+state);
+      showColorBars('VIDEO NAV PIEEJAMS — MEKLĒ NĀKAMO…');
+      if(skipChain<MAX_SKIP_CHAIN){skipChain++;setTimeout(()=>nextVideo(),500)}
+      else{console.warn('⚠ Pārāk daudz skip pēc kārtas — apstājos');skipChain=0;showColorBars('KANĀLA KĻŪDA — PĀRSLĒDZ KANĀLU')}
+    }catch(e){}
+  },12000);
+}
+function clearWatchdog(){clearTimeout(watchdogTimer);lastWatchdogVideoId=null}
+
 // ═══════════════════════════════════════
 // PSEUDO-LIVE: Visi lietotāji dzird to pašu dziesmu vienlaicīgi
 // ═══════════════════════════════════════
@@ -2082,9 +2144,15 @@ window.onYouTubeIframeAPIReady=function(){
       onStateChange:(e)=>{
         if(activeSlot==='a'){
           if(e.data===YT.PlayerState.ENDED&&!crossfading)nextVideo();
-          if(e.data===YT.PlayerState.PLAYING){document.getElementById('ledPower').classList.remove('off');try{playerA.unloadModule('captions')}catch(ex){}}
+          if(e.data===YT.PlayerState.PLAYING){skipChain=0;clearWatchdog();hideColorBars();document.getElementById('ledPower').classList.remove('off');try{playerA.unloadModule('captions')}catch(ex){}}
           if(e.data===YT.PlayerState.PAUSED&&isPoweredOn&&!crossfading){setTimeout(()=>{try{playerA.playVideo()}catch(ex){}},1500)}
         }
+      },
+      onError:(e)=>{
+        console.warn('YT Player A kļūda:',e.data,'— skip uz nākamo');
+        clearWatchdog();showColorBars('VIDEO NAV PIEEJAMS — MEKLĒ NĀKAMO…');
+        try{const vid=channels[currentChannel].videos[currentVideoIdx[currentChannel]];if(vid)markBrokenVideo(vid.id,'YT error '+e.data)}catch(ex){}
+        if(activeSlot==='a'&&!crossfading){if(skipChain<MAX_SKIP_CHAIN){skipChain++;setTimeout(()=>nextVideo(),800)}else{skipChain=0;console.warn('⚠ Pārāk daudz kļūdu pēc kārtas')}}
       }
     }
   });
@@ -2096,9 +2164,15 @@ window.onYouTubeIframeAPIReady=function(){
       onStateChange:(e)=>{
         if(activeSlot==='b'){
           if(e.data===YT.PlayerState.ENDED&&!crossfading)nextVideo();
-          if(e.data===YT.PlayerState.PLAYING){document.getElementById('ledPower').classList.remove('off');try{playerB.unloadModule('captions')}catch(ex){}}
+          if(e.data===YT.PlayerState.PLAYING){skipChain=0;clearWatchdog();hideColorBars();document.getElementById('ledPower').classList.remove('off');try{playerB.unloadModule('captions')}catch(ex){}}
           if(e.data===YT.PlayerState.PAUSED&&isPoweredOn&&!crossfading){setTimeout(()=>{try{playerB.playVideo()}catch(ex){}},1500)}
         }
+      },
+      onError:(e)=>{
+        console.warn('YT Player B kļūda:',e.data,'— skip uz nākamo');
+        clearWatchdog();showColorBars('VIDEO NAV PIEEJAMS — MEKLĒ NĀKAMO…');
+        try{const vid=channels[currentChannel].videos[currentVideoIdx[currentChannel]];if(vid)markBrokenVideo(vid.id,'YT error '+e.data)}catch(ex){}
+        if(activeSlot==='b'&&!crossfading){if(skipChain<MAX_SKIP_CHAIN){skipChain++;setTimeout(()=>nextVideo(),800)}else{skipChain=0;console.warn('⚠ Pārāk daudz kļūdu pēc kārtas')}}
       }
     }
   });
@@ -2179,6 +2253,7 @@ function crossfadeTo(v){
     }
   },interval);
   updateNowPlaying();resetOverlayPhases();
+  startWatchdog(v.id); // Watchdog: ja 12s nesāk spēlēt — auto-skip
   // Pēc crossfade: rāda "TIKKO SKANĒJA" ar iepriekšējo dziesmu (5s pēc crossfade sākuma)
   const prevV=previousVideo;
   if(prevV){
@@ -2202,6 +2277,7 @@ function playVideoLive(v,seekTo){
   const vol=isMuted?0:currentVolume;
   try{currPlayer.setVolume(vol)}catch(e){}
   updateNowPlaying();resetOverlayPhases();
+  startWatchdog(v.id);
 }
 function playVideoHard(v){
   // Bez crossfade — tūlītēja pārslēgšana (kanāla maiņa ar static)
@@ -2215,12 +2291,21 @@ function playVideoHard(v){
   const vol=isMuted?0:currentVolume;
   try{currPlayer.setVolume(vol)}catch(e){}
   updateNowPlaying();resetOverlayPhases();
+  startWatchdog(v.id);
 }
 function getCurrentVideo(){return channels[currentChannel].videos[currentVideoIdx[currentChannel]]}
 function nextVideo(){
   const ch=currentChannel;
-  // Pseudo-live: nākamā dziesma pēc kārtas (crossfade brīdī tā jau ir pareizā)
-  currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;
+  const total=channels[ch].videos.length;
+  // Meklē nākamo strādājošo video (izlaiž broken)
+  let tried=0;
+  do{
+    currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%total;
+    tried++;
+    if(!isVideoBroken(channels[ch].videos[currentVideoIdx[ch]].id))break;
+    console.log('⏭ Izlaižu broken video:',channels[ch].videos[currentVideoIdx[ch]].title);
+  }while(tried<total);
+  if(tried>=total){console.warn('⚠ Visi video šajā kanālā ir broken!');skipChain=0;return}
   crossfadeTo(channels[ch].videos[currentVideoIdx[ch]]);
 }
 function prevVideo(){
@@ -2318,6 +2403,7 @@ function isGameChannel(ch){
 }
 function switchChannel(ch){
   if(ch<0||ch>=channels.length)return;
+  hideColorBars();clearWatchdog();skipChain=0; // Reset error state
   // Ja iepriekšējais bija spēle — apstādināt
   if(isGameChannel(currentChannel)){stopGame()}
   currentChannel=ch;
@@ -2340,6 +2426,17 @@ function switchChannel(ch){
   });
 }
 function changeChannel(dir){let n=currentChannel+dir;if(n<0)n=channels.length-1;if(n>=channels.length)n=0;switchChannel(n)}
+// Color Bars — parādās kad video nav pieejams (error/broken)
+function showColorBars(msg){
+  const el=document.getElementById('tvColorBars'),txt=document.getElementById('barsText');
+  if(!el)return;
+  if(txt)txt.textContent=msg||'MEKLĒ NĀKAMO DZIESMU…';
+  el.classList.add('show');
+}
+function hideColorBars(){
+  const el=document.getElementById('tvColorBars');
+  if(el)el.classList.remove('show');
+}
 function showStatic(cb){
   const el=document.getElementById('staticNoise'),canvas=document.getElementById('noiseCanvas'),ctx=canvas.getContext('2d');
   el.classList.add('show');canvas.width=400;canvas.height=300;let f=0;
