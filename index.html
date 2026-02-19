@@ -310,24 +310,24 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .ch-switch-overlay{position:absolute;top:13px;right:14px;z-index:15;font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--light-blurple);text-shadow:0 0 14px rgba(88,101,242,0.9);opacity:0;transition:opacity .15s;background:rgba(0,0,0,0.75);padding:3px 14px;border:1px solid rgba(88,101,242,0.35);border-radius:4px;letter-spacing:2px}
 .ch-switch-overlay.show{opacity:1}
 /* TV Info Overlay — 3 phase system */
-.tv-overlay{position:absolute;bottom:110px;left:20px;z-index:14;pointer-events:none;
-  transform:translateX(-110%);opacity:0;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .4s ease;
-  max-width:380px}
+.tv-overlay{position:absolute;bottom:100px;left:24px;z-index:14;pointer-events:none;
+  transform:translateX(-110%);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease;
+  max-width:520px}
 .tv-overlay.show{transform:translateX(0);opacity:1}
-.tv-overlay-inner{background:rgba(0,0,0,0.82);backdrop-filter:blur(8px);border-left:3px solid var(--neon-purple);
-  padding:12px 18px 10px;border-radius:0 6px 6px 0;
-  box-shadow:0 4px 20px rgba(0,0,0,0.6),0 0 20px rgba(155,77,255,0.15)}
-.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:4px;
-  color:var(--neon-purple);text-shadow:0 0 8px rgba(155,77,255,0.6)}
-.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue)}
-.tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 8px rgba(25,208,232,0.6)}
-.tv-overlay.phase-just .tv-overlay-inner{border-left-color:var(--hot-pink);opacity:0.8}
-.tv-overlay.phase-just .tv-overlay-label{color:var(--hot-pink);text-shadow:0 0 8px rgba(255,76,210,0.6)}
-.tv-overlay-title{font-family:var(--font-main);font-size:17px;font-weight:700;color:#fff;margin-bottom:2px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
-.tv-overlay-artist{font-family:var(--font-main);font-size:14px;font-weight:500;color:rgba(224,227,255,0.75);
+.tv-overlay-inner{background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);border-left:5px solid var(--neon-purple);
+  padding:20px 28px 16px;border-radius:0 10px 10px 0;
+  box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(155,77,255,0.2),0 0 60px rgba(155,77,255,0.08)}
+.tv-overlay-label{font-family:'Handjet',var(--font-main),sans-serif;font-size:22px;font-weight:700;letter-spacing:6px;text-transform:uppercase;margin-bottom:8px;
+  color:var(--neon-purple);text-shadow:0 0 12px rgba(155,77,255,0.7),0 0 24px rgba(155,77,255,0.3)}
+.tv-overlay.phase-next .tv-overlay-inner{border-left-color:var(--electric-blue);box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(25,208,232,0.2),0 0 60px rgba(25,208,232,0.08)}
+.tv-overlay.phase-next .tv-overlay-label{color:var(--electric-blue);text-shadow:0 0 12px rgba(25,208,232,0.7),0 0 24px rgba(25,208,232,0.3)}
+.tv-overlay.phase-just .tv-overlay-inner{border-left-color:var(--hot-pink);opacity:0.85;box-shadow:0 6px 30px rgba(0,0,0,0.7),0 0 30px rgba(255,76,210,0.2),0 0 60px rgba(255,76,210,0.08)}
+.tv-overlay.phase-just .tv-overlay-label{color:var(--hot-pink);text-shadow:0 0 12px rgba(255,76,210,0.7),0 0 24px rgba(255,76,210,0.3)}
+.tv-overlay-title{font-family:var(--font-display);font-size:28px;font-weight:800;color:#fff;margin-bottom:4px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 16px rgba(155,77,255,0.15)}
+.tv-overlay-artist{font-family:var(--font-main);font-size:20px;font-weight:600;color:rgba(224,227,255,0.85);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:12px;font-weight:500;color:rgba(224,227,255,0.45);letter-spacing:2px;margin-top:3px}
+.tv-overlay-meta{font-family:'Handjet',var(--font-main),sans-serif;font-size:15px;font-weight:500;color:rgba(224,227,255,0.5);letter-spacing:3px;margin-top:5px}
 /* Legacy now-playing compat — keep for channel display */
 .now-playing{display:none}
 .screen-progress{position:absolute;bottom:28px;left:0;right:0;z-index:10;height:3px;background:rgba(255,255,255,0.05);pointer-events:none}
@@ -1235,9 +1235,10 @@ setTimeout(startTV,6000);
 function initYTPlayer(){const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
 window.onYouTubeIframeAPIReady=function(){
   const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
+  const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
   player=new YT.Player('yt-player',{
     videoId:v.id,
-    playerVars:{autoplay:1,mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin},
+    playerVars:{autoplay:1,mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,cc_load_policy:0,playsinline:1,origin:location.origin,start:trimS,end:dur>trimE?dur-trimE:undefined},
     events:{
       onReady:(e)=>{playerReady=true;e.target.playVideo();updateNowPlaying();
         // Sāk muted — rāda unmute overlay, gaidīs pirmo klikšķi
@@ -1260,9 +1261,17 @@ window.onYouTubeIframeAPIReady=function(){
   });
 };
 
-function playVideo(id){if(!playerReady)return;player.loadVideoById(id);updateNowPlaying();resetOverlayPhases()}
-function nextVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]].id)}
-function prevVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]].id)}
+function playVideo(v){
+  if(!playerReady)return;
+  const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
+  const opts={videoId:v.id,startSeconds:trimS};
+  if(dur>trimE)opts.endSeconds=dur-trimE;
+  player.loadVideoById(opts);
+  updateNowPlaying();resetOverlayPhases();
+}
+function getCurrentVideo(){return channels[currentChannel].videos[currentVideoIdx[currentChannel]]}
+function nextVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]+1)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]])}
+function prevVideo(){const ch=currentChannel;currentVideoIdx[ch]=(currentVideoIdx[ch]-1+channels[ch].videos.length)%channels[ch].videos.length;playVideo(channels[ch].videos[currentVideoIdx[ch]])}
 function getNextVideoInfo(){
   const ch=currentChannel,nextIdx=(currentVideoIdx[ch]+1)%channels[ch].videos.length;
   return channels[ch].videos[nextIdx];
@@ -1333,7 +1342,7 @@ function switchChannel(ch){
   currentChannel=ch;
   document.querySelectorAll('#channelGrid .ch-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.ch)===ch));
   const ov=document.getElementById('chOverlay');ov.textContent='KAN '+(ch+1);ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1500);
-  showStatic(()=>playVideo(channels[ch].videos[currentVideoIdx[ch]].id));
+  showStatic(()=>playVideo(channels[ch].videos[currentVideoIdx[ch]]));
 }
 function changeChannel(dir){let n=currentChannel+dir;if(n<0)n=channels.length-1;if(n>=channels.length)n=0;switchChannel(n)}
 function showStatic(cb){
