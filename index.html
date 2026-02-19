@@ -1222,6 +1222,7 @@ let playerA=null,playerB=null,playerAReady=false,playerBReady=false;
 let activeSlot='a'; // 'a' vai 'b' — kurš player pašlaik ir aktīvs
 let crossfading=false,crossfadeTimer=null;
 const CROSSFADE_DURATION=2000; // 2 sek crossfade
+let preloadedVideoId=null; // video ID kas jau ir ielādēts otrajā slotā
 channels.forEach((ch,i)=>{currentVideoIdx[i]=Math.floor(Math.random()*ch.videos.length)});
 
 function fireConfetti(){
@@ -1318,6 +1319,26 @@ window.onYouTubeIframeAPIReady=function(){
   });
 };
 
+// Preload nākamo dziesmu otrajā playerī (muted)
+function preloadNext(){
+  if(crossfading)return;
+  const nextV=getNextVideoInfo();
+  if(!nextV||preloadedVideoId===nextV.id)return;
+  const nextSlot=activeSlot==='a'?'b':'a';
+  const nextPlayer=nextSlot==='a'?playerA:playerB;
+  const nextReady=nextSlot==='a'?playerAReady:playerBReady;
+  if(!nextPlayer||!nextReady)return;
+  const trimS=nextV.trimStart||5,trimE=nextV.trimEnd||5,dur=nextV.duration||0;
+  const opts={videoId:nextV.id,startSeconds:trimS};
+  if(dur>trimE)opts.endSeconds=dur-trimE;
+  try{
+    nextPlayer.mute();
+    nextPlayer.setVolume(0);
+    nextPlayer.loadVideoById(opts);
+    preloadedVideoId=nextV.id;
+    console.log('Preload:',nextV.title);
+  }catch(e){}
+}
 function crossfadeTo(v){
   if(!playerReady)return;
   if(crossfading)return;
@@ -1331,8 +1352,13 @@ function crossfadeTo(v){
   const currPlayer=activeSlot==='a'?playerA:playerB;
   const nextEl=document.getElementById('yt-slot-'+nextSlot);
   const currEl=document.getElementById('yt-slot-'+activeSlot);
-  // Ielādē video nākamajā slotā
-  nextPlayer.loadVideoById(opts);
+  // Ja video jau ir preloaded — nav jāielādē no jauna, tikai seeko uz sākumu
+  if(preloadedVideoId===v.id){
+    try{nextPlayer.seekTo(trimS,true)}catch(e){}
+  }else{
+    nextPlayer.loadVideoById(opts);
+  }
+  preloadedVideoId=null;
   nextPlayer.setVolume(0);
   nextPlayer.unMute();
   // Rādi nākamo slotu (vēl caurspīdīgs)
@@ -1367,7 +1393,7 @@ function playVideo(v){crossfadeTo(v)}
 function playVideoHard(v){
   // Bez crossfade — tūlītēja pārslēgšana (kanāla maiņa ar static)
   if(!playerReady)return;
-  crossfading=false;clearInterval(crossfadeTimer);
+  crossfading=false;clearInterval(crossfadeTimer);preloadedVideoId=null;
   const trimS=v.trimStart||5,trimE=v.trimEnd||5,dur=v.duration||0;
   const opts={videoId:v.id,startSeconds:trimS};
   if(dur>trimE)opts.endSeconds=dur-trimE;
@@ -1435,8 +1461,8 @@ function startProgressTracker(){
       const v=channels[currentChannel].videos[currentVideoIdx[currentChannel]];
       // Phase 1: NOW PLAYING — pēc 15 sek. no sākuma, rāda 15 sek.
       if(c>=15&&c<30&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,15)}
-      // Phase 2: UP NEXT — 30 sek. pirms beigām, rāda 15 sek.
-      if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15)}
+      // Phase 2: UP NEXT — 30 sek. pirms beigām, rāda 15 sek. + preload nākamo
+      if(remaining<=30&&remaining>15&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),15);preloadNext()}
       // Phase 3: JUST PLAYED — 5 sek. pirms beigām, rāda 10 sek.
       if(remaining<=5&&remaining>0&&!ovPhasesDone.just){ovPhasesDone.just=true;showOverlay('just',v,10)}
       // Crossfade: 2.5 sek pirms beigām sāk pāreju uz nākamo
