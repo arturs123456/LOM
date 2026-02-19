@@ -2716,11 +2716,12 @@ document.addEventListener('click',(e)=>{
 function initSMS(){
   smsMessages=[];smsFakeIdx=0;smsStartTime=Date.now();
   // Sākotnēji pievienot 3 ziņas lai ticker nav tukšs
-  for(let i=0;i<3;i++){smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++}
+  if(typeof fakeSMS!=='undefined'&&fakeSMS)for(let i=0;i<3;i++){smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++}
   renderTicker();
   // Ik 60 sek pievienot jaunu viltotu ziņu
   if(smsTickerInterval)clearInterval(smsTickerInterval);
   smsTickerInterval=setInterval(()=>{
+    if(!fakeSMS||!fakeSMS.length)return;
     smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++;
     // Noņemt vecākās ja par daudz (max 20 redzamas)
     if(smsMessages.length>20)smsMessages.shift();
