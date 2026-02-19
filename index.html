@@ -2562,7 +2562,8 @@ function changeVolume(delta){
   }
   else{setVolume(currentVolume+delta)}
 }
-document.getElementById('vcInput').addEventListener('input',function(){
+var _vcI=document.getElementById('vcInput');
+if(_vcI)_vcI.addEventListener('input',function(){
   const v=parseInt(this.value);
   setVolume(v);
 });
