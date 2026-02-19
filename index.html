@@ -1742,19 +1742,77 @@ document.getElementById('vcInput').addEventListener('input',function(){
 });
 // Initial volume set (will be applied on startTV)
 setTimeout(()=>{setVolume(80)},400);
-const defaultSMS=[{name:'Jānis',text:'Sveiki visiem no Liepājas! 🎵'},{name:'Kristīne',text:'Šī dziesma ir vienkārši lieliska! ❤️'},{name:'Andris',text:'Palieliniet skaļumu!! 🔊🔊🔊'},{name:'Māra',text:'Sveiciens manam mīļotajam Rīgā 💕'},{name:'Pēteris',text:'Latvija nr.1 🇱🇻🇱🇻🇱🇻'},{name:'Ilze',text:'Kur var nopirkt šo albumu?? 💿'},{name:'Gatis',text:'Atceros šo dziesmu no bērnības...'},{name:'Laura',text:'LOM TV > viss pārējais 📺'},{name:'Roberts',text:'Pārslēdziet uz ROKS kanālu!! 🎸'},{name:'Inga',text:'Labvakar visiem! 🌙'},{name:'Mārtiņš',text:'Šī ir labākā lapa internetā. Punkts.'},{name:'Diāna',text:'Iesakiet labas dziesmas!! 🎶'},{name:'Edgars',text:'Brainstorm forever! 🧠⚡'},{name:'Zane',text:'Sveiciens no Valmieras! 👋'},{name:'Aivars',text:'Agrāk TV bija labāks... 📼'}];
-function initSMS(){smsMessages=[...defaultSMS];renderTicker();const n=document.getElementById('smsName'),t=document.getElementById('smsText');if(n&&t){n.addEventListener('input',checkSMSForm);t.addEventListener('input',checkSMSForm);checkSMSForm()}}
+// SMS/Chat sistēma — viltotās ziņas pa 1/min, īstās uzreiz
+const fakeSMS=[
+  {name:'Jānis',text:'Sveiki visiem no Liepājas!'},
+  {name:'Kristīne',text:'Šī dziesma ir vienkārši lieliska!'},
+  {name:'Andris',text:'Palieliniet skaļumu!!'},
+  {name:'Māra',text:'Sveiciens manam mīļotajam Rīgā'},
+  {name:'Pēteris',text:'Latvija nr.1'},
+  {name:'Ilze',text:'Kur var nopirkt šo albumu??'},
+  {name:'Gatis',text:'Atceros šo dziesmu no bērnības...'},
+  {name:'Laura',text:'LOM TV ir labākais'},
+  {name:'Roberts',text:'Pārslēdziet uz ROKS kanālu!!'},
+  {name:'Inga',text:'Labvakar visiem!'},
+  {name:'Mārtiņš',text:'Šī ir labākā lapa internetā. Punkts.'},
+  {name:'Diāna',text:'Iesakiet labas dziesmas!!'},
+  {name:'Edgars',text:'Brainstorm forever!'},
+  {name:'Zane',text:'Sveiciens no Valmieras!'},
+  {name:'Aivars',text:'Agrāk TV bija labāks...'},
+  {name:'Elīna',text:'Kāds dzird no Jelgavas?'},
+  {name:'Kārlis',text:'Super dziesma, gribu vēl!'},
+  {name:'Dace',text:'Mīlu šo kanālu!'},
+  {name:'Raimonds',text:'Lūdzu vairāk retro!'},
+  {name:'Santa',text:'Kas zina šīs dziesmas nosaukumu?'},
+  {name:'Jēkabs',text:'Labākā mūzika tiešraidē'},
+  {name:'Agnese',text:'Sveiciens no Ventspils!'},
+  {name:'Toms',text:'Kāda jauka atmosfēra šovakar'},
+  {name:'Līga',text:'Mana mīļākā dziesma!'},
+  {name:'Oskars',text:'Šeit vienmēr laba mūzika'}
+];
+let smsMessages=[];
+let smsTickerInterval=null;
+let smsFakeIdx=0;
+let smsStartTime=0;
+
+function initSMS(){
+  smsMessages=[];smsFakeIdx=0;smsStartTime=Date.now();
+  // Sākotnēji pievienot 3 ziņas lai ticker nav tukšs
+  for(let i=0;i<3;i++){smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++}
+  renderTicker();
+  // Ik 60 sek pievienot jaunu viltotu ziņu
+  if(smsTickerInterval)clearInterval(smsTickerInterval);
+  smsTickerInterval=setInterval(()=>{
+    smsMessages.push(fakeSMS[smsFakeIdx%fakeSMS.length]);smsFakeIdx++;
+    // Noņemt vecākās ja par daudz (max 20 redzamas)
+    if(smsMessages.length>20)smsMessages.shift();
+    renderTicker();
+  },60000);
+  const n=document.getElementById('smsName'),t=document.getElementById('smsText');
+  if(n&&t){n.addEventListener('input',checkSMSForm);t.addEventListener('input',checkSMSForm);checkSMSForm()}
+}
 function renderTicker(){
   const t=document.getElementById('smsTicker');let h='';
   for(let r=0;r<2;r++)smsMessages.forEach(m=>{h+='<span class="sms-item"><span class="sms-name">'+m.name+':</span> <span class="sms-text">'+m.text+'</span><span class="sms-sep">★</span></span>'});
-  t.innerHTML=h;t.style.animationDuration=Math.max(60,t.scrollWidth/2/30)+'s';
+  t.innerHTML=h;t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
 }
 function checkSMSForm(){
   const n=document.getElementById('smsName'),t=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
   if(n.value.trim()&&t.value.trim()){btn.classList.add('active')}
   else{btn.classList.remove('active')}
 }
-function sendSMS(){if(!isPoweredOn)return;const n=document.getElementById('smsName'),t=document.getElementById('smsText');if(!n.value.trim()||!t.value.trim())return;smsMessages.push({name:n.value.trim(),text:t.value.trim()});renderTicker();n.value='';t.value='';checkSMSForm()}
+function sendSMS(){
+  if(!isPoweredOn)return;
+  const n=document.getElementById('smsName'),t=document.getElementById('smsText');
+  if(!n.value.trim()||!t.value.trim())return;
+  const msg={name:n.value.trim(),text:t.value.trim()};
+  // Pievienot uzreiz
+  smsMessages.push(msg);renderTicker();
+  // Pirmajās 2 minūtēs — atkārtot pēc 30 sek
+  const elapsed=Date.now()-smsStartTime;
+  if(elapsed<120000){setTimeout(()=>{smsMessages.push(msg);renderTicker()},30000)}
+  n.value='';t.value='';checkSMSForm();
+}
 function shareApp(){const u=location.href;if(navigator.share)navigator.share({title:'LOM TV',text:'LOM TV — Latvijas Online Mūzika 📺🇱🇻',url:u}).catch(()=>{});else navigator.clipboard.writeText(u).catch(()=>{})}
 // Click on screen = toggle mute
 document.getElementById('tvScreen').addEventListener('click',(e)=>{
