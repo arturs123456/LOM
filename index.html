@@ -719,8 +719,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 #muteBtn.active{background:linear-gradient(145deg,rgba(53,237,126,0.3),rgba(53,237,126,0.15));
   color:rgba(53,237,126,0.95);box-shadow:0 3px rgba(20,80,40,0.8),0 4px 4px rgba(0,0,0,0.4),0 0 8px rgba(53,237,126,0.15)}
 
-/* VOL− / VOL+ — taller buttons aligned to CH bottom */
-#volDownBtn,#volUpBtn{height:52px;font-size:16px;letter-spacing:1px}
+/* Visas ctrl pogas — vienāds augstums */
+#muteBtn,#infoBtn,#volDownBtn,#volUpBtn{height:52px;font-size:16px;letter-spacing:1px}
 
 /* CH vertical button */
 .ch-vertical-btn{width:60px;height:auto;min-height:96px;
@@ -1715,7 +1715,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
                 <span class="ctrl-label">MUTE</span>
               </button>
               <button class="ctrl-btn" id="volDownBtn" onclick="changeVolume(-5)">
-                <span class="ctrl-arrow">◄</span>
+                <span class="ctrl-arrow">◀</span>
                 <span class="ctrl-label">VOL −</span>
               </button>
             </div>
@@ -1732,7 +1732,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
               </button>
               <button class="ctrl-btn" id="volUpBtn" onclick="changeVolume(5)">
                 <span class="ctrl-label">VOL +</span>
-                <span class="ctrl-arrow">►</span>
+                <span class="ctrl-arrow">▶</span>
               </button>
             </div>
           </div>
@@ -2295,12 +2295,12 @@ function crossfadeTo(v){
   },interval);
   updateNowPlaying();resetOverlayPhases();
   startWatchdog(v.id); // Watchdog: ja 12s nesāk spēlēt — auto-skip
-  // Pēc crossfade: rāda "TAGAD SKAN" ar jauno dziesmu ~12s
+  // Pēc crossfade: rāda "TAGAD SKAN" ar jauno dziesmu ~12s (aizkave 13s no crossfade sākuma)
   const t1=setTimeout(()=>{
     showOverlay('now',v,12); // 12s un pazūd
     ovPhasesDone.now=true;
     try{if(window._ttsPlayPending)window._ttsPlayPending()}catch(e){}
-  },3000);
+  },13000);
   ovTimers.push(t1);
 }
 function playVideo(v){crossfadeTo(v)}
@@ -2412,7 +2412,7 @@ function startProgressTracker(){
       const p=(c/effectiveEnd)*100+'%';document.getElementById('npProgressFill').style.width=p;
       const dimOv=document.getElementById('tvDimOverlay');
       // TAGAD SKAN — backup: ja crossfade taimeris nebija parādījis
-      if(c>=30&&c<50&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,10)}
+      if(c>=40&&c<60&&!ovPhasesDone.now){ovPhasesDone.now=true;showOverlay('now',v,10)}
       // NĀKAMAIS — 40 sek. pirms beigām + preload
       if(remaining<=40&&remaining>25&&!ovPhasesDone.next){ovPhasesDone.next=true;showOverlay('next',getNextVideoInfo(),8);preloadNext()}
       // ═══ JAUNA CROSSFADE MEHĀNIKA: 20s → 15s → 10s ═══
@@ -2463,7 +2463,17 @@ function switchChannel(ch){
     playVideoLive(v,live.seekTo);
   });
 }
-function changeChannel(dir){let n=currentChannel+dir;if(n<0)n=channels.length-1;if(n>=channels.length)n=0;switchChannel(n)}
+function changeChannel(dir){
+  // Izlaižam game/CHILL kanālus — tikai mūzikas kanāli riņķī
+  let n=currentChannel;
+  const total=channels.length;
+  for(let i=0;i<total;i++){
+    n+=dir;
+    if(n<0)n=total-1;
+    if(n>=total)n=0;
+    if(!isGameChannel(n)){switchChannel(n);return}
+  }
+}
 // Color Bars — parādās kad video nav pieejams (error/broken)
 function showColorBars(msg){
   const el=document.getElementById('tvColorBars'),txt=document.getElementById('barsText');
@@ -2869,7 +2879,9 @@ document.getElementById('tvScreen').addEventListener('click',(e)=>{
 });
 document.addEventListener('keydown',(e)=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
-  const n=parseInt(e.key);if(n>=1&&n<=9&&n<=channels.length)switchChannel(n-1);if(e.key==='0'&&channels.length>=10)switchChannel(9);
+  const n=parseInt(e.key);
+  if(n>=1&&n<=9&&n<=channels.length&&!isGameChannel(n-1))switchChannel(n-1);
+  if(e.key==='0'&&channels.length>=10&&!isGameChannel(9))switchChannel(9);
   // Kad spēle aktīva — bultiņas kontrolē tikai spēli, ne skaļumu/kanālus
   if(!gameRunning){
     if(e.key==='ArrowUp'){e.preventDefault();changeChannel(-1)}if(e.key==='ArrowDown'){e.preventDefault();changeChannel(1)}
