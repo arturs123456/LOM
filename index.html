@@ -1782,6 +1782,11 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 </div>
 
 <script>
+// ═══ FIREBASE REĀLLAIKA ČATS — mainīgie (jābūt augšā, pirms initSMS izsaukuma) ═══
+var FIREBASE_CONFIG={apiKey:"AIzaSyBPn0GZ47qig6ydO1WD_vx8Qve9XMWna70",authDomain:"lom-tv-chat.firebaseapp.com",databaseURL:"https://lom-tv-chat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"lom-tv-chat",storageBucket:"lom-tv-chat.firebasestorage.app",messagingSenderId:"633916715129",appId:"1:633916715129:web:5d3c65b1d5471e99c524a8"};
+var firebaseDB=null,firebaseChatRef=null,firebaseConnected=false,firebaseMessages=[];
+var CHAT_RATE={min:5000,perMin:6,perHour:60,ts:[]};
+
 // ===== GOOGLE SHEETS CMS =====
 // Tabulas formāts: YouTube ID | Izpildītājs | Dziesma | Albums | Gads | Garums (sek) | Era | Trim Start | Trim End | POP | ROKS | ŠLĀGERI | RETRO | ĀRZEMJU | 2020+ | HIPHOP | KONKURSI | LIVE | BĒRNI
 // Publicē tabulu: File → Share → Publish to web → Sheet1 → CSV
@@ -2613,11 +2618,7 @@ var smsTickerInterval=null;
 var smsFakeIdx=0;
 var smsStartTime=0;
 
-// ═══ FIREBASE REĀLLAIKA ČATS ═══
-var FIREBASE_CONFIG={apiKey:"AIzaSyBPn0GZ47qig6ydO1WD_vx8Qve9XMWna70",authDomain:"lom-tv-chat.firebaseapp.com",databaseURL:"https://lom-tv-chat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"lom-tv-chat",storageBucket:"lom-tv-chat.firebasestorage.app",messagingSenderId:"633916715129",appId:"1:633916715129:web:5d3c65b1d5471e99c524a8"};
-var firebaseDB=null,firebaseChatRef=null,firebaseConnected=false,firebaseMessages=[];
-var CHAT_RATE={min:5000,perMin:6,perHour:60,ts:[]};
-
+// ═══ FIREBASE REĀLLAIKA ČATS — funkcijas ═══
 function canSendMsg(){
   var now=Date.now();
   CHAT_RATE.ts=CHAT_RATE.ts.filter(function(t){return t>now-3600000});
