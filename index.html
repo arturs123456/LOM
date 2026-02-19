@@ -1125,34 +1125,37 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   .sms-ticker-screen{height:40px}
   .sms-item{font-size:13px;padding:0 16px}
   .screen-progress{bottom:18px}
-  /* Kanālu grid */
+  /* Kanālu grid — slēpj ikonas lai nosaukums ietilpst */
   .channel-grid{gap:3px;padding:4px}
-  .ch-btn{height:36px;border-radius:5px}
-  .ch-face .ch-icon{font-size:18px}
+  .ch-btn{height:30px;border-radius:5px}
+  .ch-face .ch-icon{display:none}
   .ch-face .ch-name{font-size:11px;letter-spacing:0.5px}
+  .ch-face{gap:0;padding:0 6px}
   /* Panel header */
   .panel-logo-lom{font-size:14px}
   .panel-header-wrapper{padding:4px 6px}
   .panel-divider{margin:2px 0}
-  /* Controls — kompaktāks */
-  .controls-section{padding:4px 6px}
-  .controls-3col{gap:4px}
-  .ctrl-btn{height:36px;font-size:12px}
-  #muteBtn,#infoBtn,#volDownBtn,#volUpBtn{height:36px;font-size:12px}
-  .ctrl-btn .ctrl-arrow{font-size:20px}
-  #volDownBtn .ctrl-arrow{font-size:28px}
-  #volUpBtn .ctrl-arrow{font-size:24px}
-  .ch-vertical-btn{min-height:76px;width:40px}
-  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:22px}
-  .ch-vertical-btn-center{font-size:11px}
+  /* Controls — kompaktāks, šaurāks CH lai ietilpst 200px */
+  .controls-section{padding:4px 4px}
+  .controls-3col{gap:2px}
+  .ctrl-col{gap:3px}
+  .ctrl-btn{height:32px;font-size:11px;letter-spacing:0.5px;padding:0 4px}
+  #muteBtn,#infoBtn,#volDownBtn,#volUpBtn{height:32px;font-size:11px}
+  .ctrl-btn .ctrl-arrow{font-size:16px}
+  #volDownBtn .ctrl-arrow{font-size:22px;margin-left:-2px;margin-right:0}
+  #volUpBtn .ctrl-arrow{font-size:20px;margin-right:-2px;margin-left:0}
+  .ctrl-btn .ctrl-label{font-size:10px}
+  .ch-vertical-btn{min-height:68px;width:32px}
+  .ch-vertical-btn-top,.ch-vertical-btn-bottom{font-size:18px}
+  .ch-vertical-btn-center{font-size:9px}
   /* ON/OFF + FULL/CHILL */
-  .power-top-row{gap:3px}
-  .power-btn-pair{gap:3px}
-  .power-pair-btn{height:34px}
-  .pair-btn-icon{width:14px;height:20px}
-  .pair-btn-icon-text{font-size:18px}
-  .pair-btn-text{font-size:11px;letter-spacing:1px}
-  .power-toggle{font-size:0.22em}
+  .power-top-row{gap:2px}
+  .power-btn-pair{gap:2px}
+  .power-pair-btn{height:28px}
+  .pair-btn-icon{width:12px;height:16px}
+  .pair-btn-icon-text{font-size:14px}
+  .pair-btn-text{font-size:10px;letter-spacing:0.5px}
+  .power-toggle{font-size:0.18em}
   /* Live strip */
   .tv-live-strip{top:6px;right:10px;gap:5px}
   .tv-live-badge{font-size:7px;padding:3px 6px}
@@ -1162,12 +1165,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
   /* VHS OSD */
   .vhs-osd{font-size:clamp(6px,1vw,10px)}
   .vhs-osd-time{top:60px;left:14px}
-  /* SMS panelis — kompaktāks */
-  .sms-panel{padding:4px 6px}
-  .sms-panel-row{gap:4px}
-  .sms-send-btn{font-size:11px;padding:5px 8px}
-  .sms-name-input{font-size:13px;padding:4px 6px}
-  .sms-text-input{min-height:28px;font-size:12px;padding:4px 6px;rows:1}
+  /* SMS panelis — kompaktāks, vertikāls layout */
+  .sms-panel{padding:4px 5px}
+  .sms-panel-row{gap:3px;flex-direction:column}
+  .sms-send-btn{font-size:11px;padding:5px 8px;width:100%}
+  .sms-name-input{font-size:12px;padding:4px 6px;width:100%;box-sizing:border-box}
+  .sms-text-input{min-height:24px;font-size:12px;padding:4px 6px}
   /* Apakšējās pogas */
   .util-btns-bottom .wood-btn{height:32px;font-size:13px}
   .util-btns-bottom .wood-btn span{font-size:18px}
