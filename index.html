@@ -840,7 +840,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .power-pair-btn.fullscreen{
   background:linear-gradient(180deg,#1e4a1e 0%,#143a14 50%,#0e2a0e 100%);
   color:#35ed7e;
-  position:relative;left:-12px;
+  position:relative;left:-8px;
   box-shadow:0 3px #0a1a0a,0 5px 8px rgba(0,0,0,0.5),0 0 12px rgba(53,237,126,0.15),
     inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 2px rgba(0,0,0,0.5)}
 .power-pair-btn.fullscreen:hover{
@@ -854,7 +854,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .power-pair-btn.game-btn{
   background:linear-gradient(180deg,#3a1e5a 0%,#2a1445 50%,#1e0e35 100%);
   color:#b366ff;
-  position:relative;left:12px;
+  position:relative;left:9px;
   box-shadow:0 3px #120a20,0 5px 8px rgba(0,0,0,0.5),0 0 12px rgba(155,77,255,0.15),
     inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -1px 2px rgba(0,0,0,0.5)}
 .power-pair-btn.game-btn:hover{
@@ -1468,6 +1468,32 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 .sw-touch-controls{position:absolute;bottom:0;left:0;right:0;height:50%;z-index:12;display:flex;pointer-events:auto}
 .sw-touch-left,.sw-touch-right{flex:1;-webkit-tap-highlight-color:transparent}
 
+/* ====== TWITCH CHAT OVERLAY (CHILL) ====== */
+.game-chat-overlay{
+  position:absolute;bottom:60px;left:12px;right:40%;
+  max-height:55%;z-index:16;pointer-events:none;
+  overflow:hidden;display:flex;flex-direction:column;
+  justify-content:flex-end;gap:4px;
+}
+.game-chat-bubble{
+  pointer-events:none;display:inline-flex;align-items:baseline;
+  gap:6px;max-width:100%;padding:4px 10px;
+  background:rgba(10,0,20,0.55);border-radius:6px;
+  font-family:var(--font-main);font-size:14px;line-height:1.3;
+  animation:gchatFadeIn 0.3s ease-out forwards;
+  opacity:0;transform:translateY(8px);align-self:flex-start;
+  word-break:break-word;backdrop-filter:blur(2px);
+  border-left:2px solid rgba(155,77,255,0.5);
+}
+@keyframes gchatFadeIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+.game-chat-bubble.fade-out{animation:gchatFadeOut 0.6s ease-in forwards}
+@keyframes gchatFadeOut{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-12px)}}
+.game-chat-name{font-weight:700;color:var(--neon-purple);white-space:nowrap;font-size:13px;text-shadow:0 0 6px rgba(155,77,255,0.4)}
+.game-chat-text{color:rgba(230,235,255,0.9)}
+.tv-casing.fs-mode .game-chat-bubble{font-size:18px;padding:6px 14px}
+.tv-casing.fs-mode .game-chat-overlay{bottom:80px;left:20px;max-height:50%}
+@media(max-width:700px){.game-chat-bubble{font-size:12px;padding:3px 8px}.game-chat-overlay{bottom:50px;left:8px;right:30%}}
+
 /* ====== PWA INSTALL POPUP ====== */
 .pwa-overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center}
 .pwa-overlay.show{display:flex}
@@ -1566,6 +1592,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
             <div class="sw-hiscore" id="swHiscore">0</div>
             <div class="sw-lom">LOM</div>
             <div class="sw-touch-controls"><div class="sw-touch-left" id="swTouchL"></div><div class="sw-touch-right" id="swTouchR"></div></div>
+            <!-- TWITCH CHAT OVERLAY -->
+            <div class="game-chat-overlay" id="gameChatOverlay"></div>
             <!-- GAME OVER -->
             <div class="sw-gameover" id="swGameover">
               <div class="sw-go-title">GAME OVER</div>
@@ -1788,6 +1816,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-main);ba
 var FIREBASE_CONFIG={apiKey:"AIzaSyBPn0GZ47qig6ydO1WD_vx8Qve9XMWna70",authDomain:"lom-tv-chat.firebaseapp.com",databaseURL:"https://lom-tv-chat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"lom-tv-chat",storageBucket:"lom-tv-chat.firebasestorage.app",messagingSenderId:"633916715129",appId:"1:633916715129:web:5d3c65b1d5471e99c524a8"};
 var firebaseDB=null,firebaseChatRef=null,firebaseConnected=false,firebaseMessages=[];
 var CHAT_RATE={min:5000,perMin:6,perHour:60,ts:[]};
+var gameChatTimers=[];
+var gameChatLastKey=null;
 // Bad-words filtrs (jābūt augšā pirms sanitizeChat izsaukuma)
 var BAD_WORDS=[];
 try{var bw=localStorage.getItem('lom_badwords');if(bw)BAD_WORDS=JSON.parse(bw)}catch(e){}
@@ -2826,17 +2856,32 @@ function renderTicker(){
   t.style.animationDuration=Math.max(40,t.scrollWidth/2/35)+'s';
   renderLedChat();
 }
-function renderLedChat(){
-  const el=document.getElementById('ledMarqueeText');if(!el)return;
-  el.textContent='';
-  const msgs=smsMessages.length>0?smsMessages:[{name:'LOM TV',text:'Sūti ziņu — tā parādīsies šeit!'}];
-  for(let r=0;r<2;r++)msgs.forEach(m=>{
-    const name=document.createElement('span');name.className='chat-name';name.textContent=m.name+':';
-    const text=document.createTextNode(' '+m.text);
-    const sep=document.createElement('span');sep.className='chat-sep';sep.textContent='·';
-    el.append(name,text,sep);
-  });
-  el.style.animationDuration=Math.max(50,el.scrollWidth/2/25)+'s';
+function renderLedChat(){ renderGameChat(); }
+function renderGameChat(){
+  if(typeof isGameChannel==='undefined'||typeof currentChannel==='undefined')return;
+  if(!isGameChannel(currentChannel))return;
+  var overlay=document.getElementById('gameChatOverlay');if(!overlay)return;
+  if(!smsMessages||smsMessages.length===0)return;
+  var last=smsMessages[smsMessages.length-1];if(!last)return;
+  // Deduplikācija — nepievienot to pašu ziņu divreiz
+  var msgKey=(last._key||'')+'|'+last.name+'|'+last.text;
+  if(msgKey===gameChatLastKey)return;
+  gameChatLastKey=msgKey;
+  // Izveidot bubble
+  var bubble=document.createElement('div');bubble.className='game-chat-bubble';
+  var nameEl=document.createElement('span');nameEl.className='game-chat-name';nameEl.textContent=last.name+':';
+  var textEl=document.createElement('span');textEl.className='game-chat-text';textEl.textContent=' '+last.text;
+  bubble.appendChild(nameEl);bubble.appendChild(textEl);
+  overlay.appendChild(bubble);
+  // Max 8 burbuļi
+  while(overlay.children.length>8){overlay.removeChild(overlay.firstChild)}
+  // Auto-noņem pēc 8s
+  var tid=setTimeout(function(){
+    bubble.classList.add('fade-out');
+    var tid2=setTimeout(function(){if(bubble.parentNode)bubble.parentNode.removeChild(bubble)},600);
+    gameChatTimers.push(tid2);
+  },8000);
+  gameChatTimers.push(tid);
 }
 function checkSMSForm(){
   const n=document.getElementById('smsName'),t=document.getElementById('smsText'),btn=document.getElementById('smsSendBtn');
@@ -2982,6 +3027,26 @@ function startGame(){
   const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.add('active');
   // Grid ātrums — CSS custom property
   updateGridSpeed();
+  // Chat overlay — reset un seed ar pēdējām ziņām
+  gameChatLastKey=null;
+  var chatOvr=document.getElementById('gameChatOverlay');
+  if(chatOvr){
+    chatOvr.innerHTML='';
+    // Seed ar pēdējām 4 ziņām (lai nav tukšs ekrāns)
+    if(smsMessages&&smsMessages.length>0){
+      var seedMsgs=smsMessages.slice(-4);
+      for(var si=0;si<seedMsgs.length;si++){
+        var sm=seedMsgs[si];
+        var sb=document.createElement('div');sb.className='game-chat-bubble';
+        var sn=document.createElement('span');sn.className='game-chat-name';sn.textContent=sm.name+':';
+        var st=document.createElement('span');st.className='game-chat-text';st.textContent=' '+sm.text;
+        sb.appendChild(sn);sb.appendChild(st);chatOvr.appendChild(sb);
+        // Seed burbuļus arī noņem pēc 8s
+        (function(b){var tt=setTimeout(function(){b.classList.add('fade-out');var tt2=setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b)},600);gameChatTimers.push(tt2)},8000);gameChatTimers.push(tt)})(sb);
+      }
+      gameChatLastKey=(seedMsgs[seedMsgs.length-1]._key||'')+'|'+seedMsgs[seedMsgs.length-1].name+'|'+seedMsgs[seedMsgs.length-1].text;
+    }
+  }
   // Game loop
   lastGameTime=0;
   gameLoop=requestAnimationFrame(gameTick);
@@ -3009,6 +3074,12 @@ function stopGame(){
   // SPĒLE poga deactivate
   const gb=document.getElementById('gamePanelBtn');if(gb)gb.classList.remove('active');
   stopGameAudio();
+  // Chat overlay cleanup
+  var chatOvr=document.getElementById('gameChatOverlay');
+  if(chatOvr)chatOvr.innerHTML='';
+  for(var i=0;i<gameChatTimers.length;i++){clearTimeout(gameChatTimers[i])}
+  gameChatTimers=[];
+  gameChatLastKey=null;
 }
 
 function startGameAudio(){
